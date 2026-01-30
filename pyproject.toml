@@ -1,7 +1,7 @@
 [project]
 name = "awake"
 version = "0.1.0"
-description = "Add your description here"
+description = "Android Wiki of Attacks, Knowledge & Exploits"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
