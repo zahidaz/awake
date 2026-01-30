@@ -1,1 +1,111 @@
-site_name: My Docs
+site_name: AWAKE
+site_description: Android Wiki of Attacks, Knowledge & Exploits - A comprehensive documentation of Android security vulnerabilities, permission exploits, and malware analysis
+site_url: https://zahidaz.github.io/awake/
+repo_url: https://github.com/zahidaz/awake
+repo_name: zahidaz/awake
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: orange
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep-orange
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+
+nav:
+  - Home: index.md
+  - Permissions:
+      - permissions/index.md
+      - Calendar:
+          - permissions/calendar/index.md
+          - READ_CALENDAR: permissions/calendar/read-calendar.md
+          - WRITE_CALENDAR: permissions/calendar/write-calendar.md
+      - Call Log:
+          - permissions/call-log/index.md
+          - READ_CALL_LOG: permissions/call-log/read-call-log.md
+          - WRITE_CALL_LOG: permissions/call-log/write-call-log.md
+          - PROCESS_OUTGOING_CALLS: permissions/call-log/process-outgoing-calls.md
+      - Camera:
+          - permissions/camera/index.md
+          - CAMERA: permissions/camera/camera.md
+      - Contacts:
+          - permissions/contacts/index.md
+          - READ_CONTACTS: permissions/contacts/read-contacts.md
+          - WRITE_CONTACTS: permissions/contacts/write-contacts.md
+          - GET_ACCOUNTS: permissions/contacts/get-accounts.md
+      - Location:
+          - permissions/location/index.md
+          - ACCESS_FINE_LOCATION: permissions/location/access-fine-location.md
+          - ACCESS_COARSE_LOCATION: permissions/location/access-coarse-location.md
+          - ACCESS_BACKGROUND_LOCATION: permissions/location/access-background-location.md
+      - Microphone:
+          - permissions/microphone/index.md
+          - RECORD_AUDIO: permissions/microphone/record-audio.md
+      - Phone:
+          - permissions/phone/index.md
+          - READ_PHONE_STATE: permissions/phone/read-phone-state.md
+          - READ_PHONE_NUMBERS: permissions/phone/read-phone-numbers.md
+          - CALL_PHONE: permissions/phone/call-phone.md
+          - ANSWER_PHONE_CALLS: permissions/phone/answer-phone-calls.md
+          - ADD_VOICEMAIL: permissions/phone/add-voicemail.md
+          - USE_SIP: permissions/phone/use-sip.md
+          - ACCEPT_HANDOVER: permissions/phone/accept-handover.md
+      - Sensors:
+          - permissions/sensors/index.md
+          - BODY_SENSORS: permissions/sensors/body-sensors.md
+          - BODY_SENSORS_BACKGROUND: permissions/sensors/body-sensors-background.md
+      - Activity Recognition:
+          - permissions/activity-recognition/index.md
+          - ACTIVITY_RECOGNITION: permissions/activity-recognition/activity-recognition.md
+      - SMS:
+          - permissions/sms/index.md
+          - SEND_SMS: permissions/sms/send-sms.md
+          - RECEIVE_SMS: permissions/sms/receive-sms.md
+          - READ_SMS: permissions/sms/read-sms.md
+          - RECEIVE_WAP_PUSH: permissions/sms/receive-wap-push.md
+          - RECEIVE_MMS: permissions/sms/receive-mms.md
+      - Storage:
+          - permissions/storage/index.md
+          - READ_EXTERNAL_STORAGE: permissions/storage/read-external-storage.md
+          - WRITE_EXTERNAL_STORAGE: permissions/storage/write-external-storage.md
+          - READ_MEDIA_IMAGES: permissions/storage/read-media-images.md
+          - READ_MEDIA_VIDEO: permissions/storage/read-media-video.md
+          - READ_MEDIA_AUDIO: permissions/storage/read-media-audio.md
+      - Nearby Devices:
+          - permissions/nearby-devices/index.md
+          - BLUETOOTH_SCAN: permissions/nearby-devices/bluetooth-scan.md
+          - BLUETOOTH_ADVERTISE: permissions/nearby-devices/bluetooth-advertise.md
+          - BLUETOOTH_CONNECT: permissions/nearby-devices/bluetooth-connect.md
+          - NEARBY_WIFI_DEVICES: permissions/nearby-devices/nearby-wifi-devices.md
+          - UWB_RANGING: permissions/nearby-devices/uwb-ranging.md

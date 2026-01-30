@@ -1,17 +1,25 @@
-# Welcome to MkDocs
+# AWAKE
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+**Android Wiki of Attacks, Knowledge & Exploits**
 
-## Commands
+A comprehensive documentation of Android security vulnerabilities, permission exploits, and malware analysis.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## About
 
-## Project layout
+AWAKE is a curated knowledge base dedicated to Android security research, documenting various attack vectors, vulnerabilities, and exploitation techniques. This resource serves as a reference for security researchers, penetration testers, and developers interested in understanding Android security mechanisms and their weaknesses.
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+## What You'll Find Here
+
+- **Permission Exploits**: Documentation of Android permission system vulnerabilities and bypass techniques
+- **Attack Vectors**: Analysis of various attack methods targeting Android applications and the OS
+- **Malware Analysis**: In-depth examination of Android malware families and their behaviors
+- **Security Mechanisms**: Understanding Android's security features and their limitations
+- **Vulnerability Research**: Detailed writeups of discovered vulnerabilities
+
+## Contributing
+
+This is an evolving documentation project. Contributions, corrections, and additions are welcome.
+
+## Disclaimer
+
+This documentation is provided for educational and defensive security purposes only. The information contained herein should be used responsibly and ethically, in accordance with applicable laws and regulations.
