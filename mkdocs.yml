@@ -109,3 +109,6 @@ nav:
           - BLUETOOTH_CONNECT: permissions/nearby-devices/bluetooth-connect.md
           - NEARBY_WIFI_DEVICES: permissions/nearby-devices/nearby-wifi-devices.md
           - UWB_RANGING: permissions/nearby-devices/uwb-ranging.md
+  - Packers:
+      - packers/index.md
+      - Virbox: packers/virbox.md
