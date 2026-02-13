@@ -1,95 +1,84 @@
-# Android Dangerous Permissions
+# Android Permissions
 
-## Overview
+Android's permission system controls access to sensitive data and device capabilities. Permissions define what an app can do once installed, and what an attacker gains when a user grants them.
 
-Android's permission system is designed to protect user privacy and system security by controlling access to sensitive data and device features. Permissions are categorized into different protection levels, with **dangerous permissions** being those that could potentially affect user privacy or device operation.
+This section covers permissions across all protection levels relevant to security research, not just the "dangerous" category.
 
-Dangerous permissions are runtime permissions that must be explicitly granted by the user. However, these permissions are frequently abused by malicious applications and are common targets for exploitation.
+## Permission Categories
 
-## Permission Model
+### Dangerous Permissions (Runtime)
 
-Starting from Android 6.0 (API level 23), dangerous permissions must be requested at runtime rather than being granted at install time. Users can revoke these permissions at any time through system settings.
+Require explicit user grant. Most malware requests several of these.
 
-### Protection Levels
+| Category | Abuse Scenarios |
+|----------|----------------|
+| [Calendar](calendar/index.md) | Event data exfiltration, schedule reconnaissance |
+| [Call Log](call-log/index.md) | Call history theft, contact mapping |
+| [Camera](camera/index.md) | Covert photo/video capture |
+| [Contacts](contacts/index.md) | Contact exfiltration, social graph mapping |
+| [Location](location/index.md) | Real-time tracking, geofencing |
+| [Microphone](microphone/index.md) | Audio surveillance |
+| [Phone](phone/index.md) | IMEI harvesting, call interception, premium dialing |
+| [Sensors](sensors/index.md) | Biometric data theft |
+| [Activity Recognition](activity-recognition/index.md) | User behavior profiling |
+| [SMS](sms/index.md) | OTP interception, premium SMS fraud, C2 channel |
+| [Storage](storage/index.md) | File exfiltration, payload dropping |
+| [Nearby Devices](nearby-devices/index.md) | Device tracking, proximity attacks |
 
-- **Normal**: Low-risk permissions granted automatically
-- **Dangerous**: Runtime permissions that access sensitive user data
-- **Signature**: Only granted to apps signed with the same certificate
-- **SignatureOrSystem**: Reserved for system apps
+### Special Permissions
 
-## Dangerous Permission Groups
+Require a settings toggle rather than a runtime dialog. Some of the most powerful permissions available.
 
-Android dangerous permissions are organized into logical groups. Granting one permission in a group automatically grants all other permissions in that same group (for targetSdkVersion < 23).
+| Category | Abuse Scenarios |
+|----------|----------------|
+| [Special Permissions](special/index.md) | Overlay attacks, accessibility takeover, silent app installs, notification interception |
 
-### [Calendar](calendar/index.md)
-Access to calendar events and reminders.
+### Normal Permissions (Auto-Granted)
 
-### [Call Log](call-log/index.md)
-Read and write access to call history.
+Granted silently at install time. Often overlooked but critical for malware operation.
 
-### [Camera](camera/index.md)
-Access to device cameras for capturing photos and videos.
+| Category | Abuse Scenarios |
+|----------|----------------|
+| [Normal (Abusable)](normal/index.md) | Boot persistence, C2 communication, app enumeration, battery optimization bypass |
 
-### [Contacts](contacts/index.md)
-Access to user contact information and accounts.
+## Permission Escalation Patterns
 
-### [Location](location/index.md)
-Access to device location through GPS, network, or other sources.
+Malware rarely requests all permissions at install. Instead, it escalates through stages:
 
-### [Microphone](microphone/index.md)
-Access to audio capture from device microphones.
+| Stage | Permissions | Technique |
+|-------|-------------|-----------|
+| Install | `INTERNET`, `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK` | Normal permissions, auto-granted, establish persistence and C2 |
+| Social engineering | `BIND_ACCESSIBILITY_SERVICE` | Instructs user to enable in Settings, often with fake security prompts |
+| Accessibility-granted | `SYSTEM_ALERT_WINDOW`, `WRITE_SETTINGS`, `REQUEST_INSTALL_PACKAGES` | Accessibility service clicks through permission dialogs automatically |
+| Runtime prompts | `SMS`, `CONTACTS`, `PHONE`, `CAMERA` | Granted via fake explanations or accessibility auto-grant |
+| Special | `BIND_DEVICE_ADMIN`, `BIND_NOTIFICATION_LISTENER_SERVICE` | Enabled via Settings or accessibility for maximum device control |
 
-### [Phone](phone/index.md)
-Access to phone state, call management, and telephony features.
+[Accessibility abuse](../attacks/accessibility-abuse.md) is the key escalation vector. Once granted, it can auto-approve every other permission dialog, making it the single most critical permission for malware operations.
 
-### [Sensors](sensors/index.md)
-Access to body sensor data like heart rate monitors.
+## Android Version Impact
 
-### [Activity Recognition](activity-recognition/index.md)
-Access to user physical activity data.
+| Version | Permission Change | Impact on Malware |
+|---------|-------------------|-------------------|
+| Android 6 (API 23) | Runtime permissions introduced | Malware must request dangerous permissions individually |
+| Android 8 (API 26) | Background execution limits | Requires `FOREGROUND_SERVICE` for persistent operation |
+| Android 10 (API 29) | Background location restricted | Requires `ACCESS_BACKGROUND_LOCATION` as separate grant |
+| Android 11 (API 30) | Auto-revoke unused permissions, scoped storage | Malware must maintain active usage or request `MANAGE_EXTERNAL_STORAGE` |
+| Android 12 (API 31) | Approximate location option, Bluetooth permissions split | Additional permission prompts for location and nearby devices |
+| Android 13 (API 33) | Notification permission required, media permissions split | Must request `POST_NOTIFICATIONS` explicitly |
+| Android 14 (API 34) | Restricted implicit intents, foreground service types required | Must declare specific `foregroundServiceType` |
+| Android 15 (API 35) | Restricted settings enforcement | Multi-step process to enable accessibility for sideloaded apps |
 
-### [SMS](sms/index.md)
-Send, receive, and read SMS and MMS messages.
+## Minimum Viable Permission Sets
 
-### [Storage](storage/index.md)
-Read and write access to external storage and media files.
+The smallest permission set that enables each malware category:
 
-### [Nearby Devices](nearby-devices/index.md)
-Access to Bluetooth, Wi-Fi, and Ultra-Wideband for device discovery.
+| Malware Type | Minimum Permissions |
+|-------------|-------------------|
+| Banking trojan (overlay) | `INTERNET` + `SYSTEM_ALERT_WINDOW` + `BIND_ACCESSIBILITY_SERVICE` + `RECEIVE_SMS` |
+| Banking trojan (ATS) | `INTERNET` + `BIND_ACCESSIBILITY_SERVICE` |
+| Spyware | `INTERNET` + `CAMERA` + `RECORD_AUDIO` + `ACCESS_FINE_LOCATION` + `READ_CONTACTS` |
+| SMS fraud | `INTERNET` + `SEND_SMS` + `RECEIVE_SMS` |
+| Ransomware | `INTERNET` + `BIND_DEVICE_ADMIN` + storage permissions |
+| Clipper | `INTERNET` + `BIND_ACCESSIBILITY_SERVICE` (or foreground clipboard access) |
 
-## Common Abuse Patterns
-
-Dangerous permissions are frequently abused through:
-
-- **Over-permission**: Requesting more permissions than functionally necessary
-- **Permission creep**: Gradually requesting additional permissions through updates
-- **Social engineering**: Misleading users about permission purposes
-- **Exploitation**: Leveraging granted permissions for unintended purposes
-- **Privilege escalation**: Chaining multiple permissions to gain elevated access
-
-## Security Considerations
-
-When analyzing applications or permission usage:
-
-1. **Principle of least privilege**: Apps should only request necessary permissions
-2. **Purpose limitation**: Permissions should only be used for stated purposes
-3. **Temporal constraints**: Consider when and how frequently permissions are accessed
-4. **Data minimization**: Limit the scope and duration of sensitive data access
-5. **User transparency**: Users should understand why permissions are needed
-
-## Research Focus
-
-Each permission page in this wiki documents:
-
-- Technical implementation details
-- Known vulnerabilities and exploits
-- Abuse patterns observed in malware
-- Bypass techniques and escalation vectors
-- Defensive recommendations
-- Real-world case studies
-
-## References
-
-- [Android Permissions Overview](https://developer.android.com/guide/topics/permissions/overview)
-- [Android Manifest Permissions](https://developer.android.com/reference/android/Manifest.permission)
-- [Permission Best Practices](https://developer.android.com/training/permissions/requesting)
+[Medusa](../malware/families/medusa.md) v2 demonstrated the trend toward reduced permission footprints, dropping from 21 to 5 permissions while maintaining full functionality by relying more heavily on accessibility services for capabilities that previously required dedicated permissions.

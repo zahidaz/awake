@@ -1,5 +1,5 @@
 site_name: AWAKE
-site_description: Android Wiki of Attacks, Knowledge & Exploits - A comprehensive documentation of Android security vulnerabilities, permission exploits, and malware analysis
+site_description: Android Wiki of Attacks, Knowledge & Exploits
 site_url: https://zahidaz.github.io/awake/
 repo_url: https://github.com/zahidaz/awake
 repo_name: zahidaz/awake
@@ -7,18 +7,18 @@ repo_name: zahidaz/awake
 theme:
   name: material
   palette:
-    - scheme: default
-      primary: orange
-      accent: amber
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
     - scheme: slate
-      primary: deep-orange
-      accent: amber
+      primary: red
+      accent: deep orange
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+    - scheme: default
+      primary: red
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   features:
     - navigation.instant
     - navigation.tracking
@@ -26,89 +26,331 @@ theme:
     - navigation.sections
     - navigation.expand
     - navigation.top
+    - navigation.indexes
     - search.suggest
     - search.highlight
     - content.code.copy
     - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+    admonition:
+      technique: material/target
+      malware: material/bug
+      bypass: material/shield-off
+      frida: material/hook
+
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.details
+  - pymdownx.critic
+  - pymdownx.keys
   - admonition
   - attr_list
   - md_in_html
   - tables
+  - def_list
+  - footnotes
+  - toc:
+      permalink: true
 
 nav:
   - Home: index.md
-  - Permissions:
-      - permissions/index.md
-      - Calendar:
-          - permissions/calendar/index.md
-          - READ_CALENDAR: permissions/calendar/read-calendar.md
-          - WRITE_CALENDAR: permissions/calendar/write-calendar.md
-      - Call Log:
-          - permissions/call-log/index.md
-          - READ_CALL_LOG: permissions/call-log/read-call-log.md
-          - WRITE_CALL_LOG: permissions/call-log/write-call-log.md
-          - PROCESS_OUTGOING_CALLS: permissions/call-log/process-outgoing-calls.md
-      - Camera:
-          - permissions/camera/index.md
-          - CAMERA: permissions/camera/camera.md
-      - Contacts:
-          - permissions/contacts/index.md
-          - READ_CONTACTS: permissions/contacts/read-contacts.md
-          - WRITE_CONTACTS: permissions/contacts/write-contacts.md
-          - GET_ACCOUNTS: permissions/contacts/get-accounts.md
-      - Location:
-          - permissions/location/index.md
-          - ACCESS_FINE_LOCATION: permissions/location/access-fine-location.md
-          - ACCESS_COARSE_LOCATION: permissions/location/access-coarse-location.md
-          - ACCESS_BACKGROUND_LOCATION: permissions/location/access-background-location.md
-      - Microphone:
-          - permissions/microphone/index.md
-          - RECORD_AUDIO: permissions/microphone/record-audio.md
-      - Phone:
-          - permissions/phone/index.md
-          - READ_PHONE_STATE: permissions/phone/read-phone-state.md
-          - READ_PHONE_NUMBERS: permissions/phone/read-phone-numbers.md
-          - CALL_PHONE: permissions/phone/call-phone.md
-          - ANSWER_PHONE_CALLS: permissions/phone/answer-phone-calls.md
-          - ADD_VOICEMAIL: permissions/phone/add-voicemail.md
-          - USE_SIP: permissions/phone/use-sip.md
-          - ACCEPT_HANDOVER: permissions/phone/accept-handover.md
-      - Sensors:
-          - permissions/sensors/index.md
-          - BODY_SENSORS: permissions/sensors/body-sensors.md
-          - BODY_SENSORS_BACKGROUND: permissions/sensors/body-sensors-background.md
-      - Activity Recognition:
-          - permissions/activity-recognition/index.md
-          - ACTIVITY_RECOGNITION: permissions/activity-recognition/activity-recognition.md
-      - SMS:
-          - permissions/sms/index.md
-          - SEND_SMS: permissions/sms/send-sms.md
-          - RECEIVE_SMS: permissions/sms/receive-sms.md
-          - READ_SMS: permissions/sms/read-sms.md
-          - RECEIVE_WAP_PUSH: permissions/sms/receive-wap-push.md
-          - RECEIVE_MMS: permissions/sms/receive-mms.md
-      - Storage:
-          - permissions/storage/index.md
-          - READ_EXTERNAL_STORAGE: permissions/storage/read-external-storage.md
-          - WRITE_EXTERNAL_STORAGE: permissions/storage/write-external-storage.md
-          - READ_MEDIA_IMAGES: permissions/storage/read-media-images.md
-          - READ_MEDIA_VIDEO: permissions/storage/read-media-video.md
-          - READ_MEDIA_AUDIO: permissions/storage/read-media-audio.md
-      - Nearby Devices:
-          - permissions/nearby-devices/index.md
-          - BLUETOOTH_SCAN: permissions/nearby-devices/bluetooth-scan.md
-          - BLUETOOTH_ADVERTISE: permissions/nearby-devices/bluetooth-advertise.md
-          - BLUETOOTH_CONNECT: permissions/nearby-devices/bluetooth-connect.md
-          - NEARBY_WIFI_DEVICES: permissions/nearby-devices/nearby-wifi-devices.md
-          - UWB_RANGING: permissions/nearby-devices/uwb-ranging.md
+  - Attack Techniques:
+      - attacks/index.md
+      - Activities:
+          - Overlay Attacks: attacks/overlay-attacks.md
+          - Tapjacking: attacks/tapjacking.md
+          - Task Affinity Attacks: attacks/task-affinity-attacks.md
+      - Services:
+          - Accessibility Abuse: attacks/accessibility-abuse.md
+          - Notification Listener Abuse: attacks/notification-listener-abuse.md
+      - Broadcast Receivers:
+          - Broadcast Theft: attacks/broadcast-theft.md
+          - SMS Interception: attacks/sms-interception.md
+      - Content Providers:
+          - Content Provider Attacks: attacks/content-provider-attacks.md
+      - Intents:
+          - Deep Link Exploitation: attacks/deep-link-exploitation.md
+          - Intent Hijacking: attacks/intent-hijacking.md
+      - WebViews:
+          - WebView Exploitation: attacks/webview-exploitation.md
+      - Cross-Cutting:
+          - AI-Assisted Malware: attacks/ai-assisted-malware.md
+          - Anti-Analysis Techniques: attacks/anti-analysis-techniques.md
+          - App Collusion: attacks/app-collusion.md
+          - App Virtualization Attacks: attacks/app-virtualization.md
+          - Automated Transfer Systems: attacks/automated-transfer-systems.md
+          - C2 Communication: attacks/c2-techniques.md
+          - Call Interception: attacks/call-interception.md
+          - Camera & Microphone Surveillance: attacks/camera-mic-surveillance.md
+          - Clipboard Hijacking: attacks/clipboard-hijacking.md
+          - Data Exfiltration: attacks/data-exfiltration.md
+          - Device Admin Abuse: attacks/device-admin-abuse.md
+          - Device Wipe & Ransomware: attacks/device-wipe-ransomware.md
+          - Dynamic Code Loading: attacks/dynamic-code-loading.md
+          - Fake Biometric Prompts: attacks/fake-biometric-prompts.md
+          - Keylogging: attacks/keylogging.md
+          - Location Tracking & Geofencing: attacks/location-tracking.md
+          - Mass Malware Generation: attacks/mass-malware-generation.md
+          - Network Traffic Interception: attacks/network-traffic-interception.md
+          - NFC Relay: attacks/nfc-relay.md
+          - Notification Suppression: attacks/notification-suppression.md
+          - Persistence Techniques: attacks/persistence-techniques.md
+          - Phishing Techniques: attacks/phishing-techniques.md
+          - Play Store Evasion: attacks/play-store-evasion.md
+          - Privilege Escalation: attacks/privilege-escalation.md
+          - Runtime Permission Manipulation: attacks/runtime-permission-manipulation.md
+          - Screen Capture: attacks/screen-capture.md
+          - SIM & Carrier-Level Attacks: attacks/sim-carrier-attacks.md
+          - Supply Chain Attacks: attacks/supply-chain-attacks.md
+          - Work Profile Abuse: attacks/work-profile-abuse.md
+  - Malware:
+      - malware/index.md
+      - Timeline: malware/timeline.md
+      - Naming Conventions: malware/naming-conventions.md
+      - Threat Actors: malware/threat-actors.md
+      - Families:
+          - malware/families/index.md
+          - Albiriox: malware/families/albiriox.md
+          - Alien: malware/families/alien.md
+          - Anatsa: malware/families/anatsa.md
+          - Antidot: malware/families/antidot.md
+          - Anubis: malware/families/anubis.md
+          - AridSpy: malware/families/aridspy.md
+          - BankBot: malware/families/bankbot.md
+          - BingoMod: malware/families/bingomod.md
+          - BlankBot: malware/families/blankbot.md
+          - BoneSpy: malware/families/bonespy.md
+          - BRATA: malware/families/brata.md
+          - Brokewell: malware/families/brokewell.md
+          - BTMOB RAT: malware/families/btmob.md
+          - Cerberus: malware/families/cerberus.md
+          - Chameleon: malware/families/chameleon.md
+          - Copybara: malware/families/copybara.md
+          - Crocodilus: malware/families/crocodilus.md
+          - DCHSpy: malware/families/dchspy.md
+          - DeVixor: malware/families/devixor.md
+          - EagleMsgSpy: malware/families/eaglemsgspy.md
+          - Ermac: malware/families/ermac.md
+          - Fakecalls: malware/families/fakecalls.md
+          - FinSpy: malware/families/finspy.md
+          - FireScam: malware/families/firescam.md
+          - FluBot: malware/families/flubot.md
+          - FluHorse: malware/families/fluhorse.md
+          - Frogblight: malware/families/frogblight.md
+          - Gigabud: malware/families/gigabud.md
+          - GodFather: malware/families/godfather.md
+          - GoldPickaxe: malware/families/goldpickaxe.md
+          - Goldoson: malware/families/goldoson.md
+          - GriftHorse: malware/families/grifthorse.md
+          - GuardZoo: malware/families/guardzoo.md
+          - Gustuff: malware/families/gustuff.md
+          - Harly: malware/families/harly.md
+          - Hermit: malware/families/hermit.md
+          - Herodotus: malware/families/herodotus.md
+          - Hook: malware/families/hook.md
+          - Hydra: malware/families/hydra.md
+          - Joker: malware/families/joker.md
+          - Klopatra: malware/families/klopatra.md
+          - KoSpy: malware/families/kospy.md
+          - LightSpy: malware/families/lightspy.md
+          - Mamont: malware/families/mamont.md
+          - Mandrake: malware/families/mandrake.md
+          - Medusa: malware/families/medusa.md
+          - MoqHao: malware/families/moqhao.md
+          - Necro: malware/families/necro.md
+          - NGate: malware/families/ngate.md
+          - Octo: malware/families/octo.md
+          - Pegasus: malware/families/pegasus.md
+          - PixPirate: malware/families/pixpirate.md
+          - PJobRAT: malware/families/pjobrat.md
+          - PlainGnome: malware/families/plaingnome.md
+          - Predator: malware/families/predator.md
+          - Rafel RAT: malware/families/rafelrat.md
+          - RatOn: malware/families/raton.md
+          - SharkBot: malware/families/sharkbot.md
+          - SoumniBot: malware/families/soumnibot.md
+          - SparkCat: malware/families/sparkcat.md
+          - SpyAgent: malware/families/spyagent.md
+          - SpyLoan: malware/families/spyloan.md
+          - SpyNote: malware/families/spynote.md
+          - Sturnus: malware/families/sturnus.md
+          - ToxicPanda: malware/families/toxicpanda.md
+          - Triada: malware/families/triada.md
+          - TrickMo: malware/families/trickmo.md
+          - TsarBot: malware/families/tsarbot.md
+          - Vultur: malware/families/vultur.md
+          - Xenomorph: malware/families/xenomorph.md
+          - Zanubis: malware/families/zanubis.md
+  - Grayware:
+      - grayware/index.md
+      - Ad Fraud: grayware/ad-fraud.md
+      - Analysis Approach: grayware/analysis.md
+      - Children's App Data Harvesting: grayware/children-data-harvesting.md
+      - Commercial Surveillance Vendors: grayware/commercial-surveillance.md
+      - Data Broker SDKs: grayware/data-broker-sdks.md
+      - Device Fingerprinting: grayware/device-fingerprinting.md
+      - Firmware Grayware: grayware/firmware-grayware.md
+      - Predatory Lending Apps: grayware/predatory-lending.md
+      - Riskware / Dual-Use Apps: grayware/riskware.md
+      - Stalkerware: grayware/stalkerware.md
+      - Surveillance & Data Trade: grayware/surveillance-data-trade.md
+  - Platform Abuse:
+      - platform-abuse/index.md
+      - App Sandbox: platform-abuse/app-sandbox.md
+      - SELinux: platform-abuse/selinux.md
+      - Verified Boot: platform-abuse/verified-boot.md
+      - Keystore: platform-abuse/keystore.md
+      - Play Integrity: platform-abuse/play-integrity.md
+      - Biometric Authentication: platform-abuse/biometric-auth.md
+      - Permissions:
+          - permissions/index.md
+          - Calendar:
+              - permissions/calendar/index.md
+              - READ_CALENDAR: permissions/calendar/read-calendar.md
+              - WRITE_CALENDAR: permissions/calendar/write-calendar.md
+          - Call Log:
+              - permissions/call-log/index.md
+              - PROCESS_OUTGOING_CALLS: permissions/call-log/process-outgoing-calls.md
+              - READ_CALL_LOG: permissions/call-log/read-call-log.md
+              - WRITE_CALL_LOG: permissions/call-log/write-call-log.md
+          - Camera:
+              - permissions/camera/index.md
+              - CAMERA: permissions/camera/camera.md
+          - Contacts:
+              - permissions/contacts/index.md
+              - GET_ACCOUNTS: permissions/contacts/get-accounts.md
+              - READ_CONTACTS: permissions/contacts/read-contacts.md
+              - WRITE_CONTACTS: permissions/contacts/write-contacts.md
+          - Location:
+              - permissions/location/index.md
+              - ACCESS_BACKGROUND_LOCATION: permissions/location/access-background-location.md
+              - ACCESS_COARSE_LOCATION: permissions/location/access-coarse-location.md
+              - ACCESS_FINE_LOCATION: permissions/location/access-fine-location.md
+          - Microphone:
+              - permissions/microphone/index.md
+              - RECORD_AUDIO: permissions/microphone/record-audio.md
+          - Phone:
+              - permissions/phone/index.md
+              - ACCEPT_HANDOVER: permissions/phone/accept-handover.md
+              - ADD_VOICEMAIL: permissions/phone/add-voicemail.md
+              - ANSWER_PHONE_CALLS: permissions/phone/answer-phone-calls.md
+              - CALL_PHONE: permissions/phone/call-phone.md
+              - READ_PHONE_NUMBERS: permissions/phone/read-phone-numbers.md
+              - READ_PHONE_STATE: permissions/phone/read-phone-state.md
+              - USE_SIP: permissions/phone/use-sip.md
+          - Sensors:
+              - permissions/sensors/index.md
+              - BODY_SENSORS: permissions/sensors/body-sensors.md
+              - BODY_SENSORS_BACKGROUND: permissions/sensors/body-sensors-background.md
+          - Activity Recognition:
+              - permissions/activity-recognition/index.md
+              - ACTIVITY_RECOGNITION: permissions/activity-recognition/activity-recognition.md
+          - SMS:
+              - permissions/sms/index.md
+              - READ_SMS: permissions/sms/read-sms.md
+              - RECEIVE_MMS: permissions/sms/receive-mms.md
+              - RECEIVE_SMS: permissions/sms/receive-sms.md
+              - RECEIVE_WAP_PUSH: permissions/sms/receive-wap-push.md
+              - SEND_SMS: permissions/sms/send-sms.md
+          - Storage:
+              - permissions/storage/index.md
+              - READ_EXTERNAL_STORAGE: permissions/storage/read-external-storage.md
+              - READ_MEDIA_AUDIO: permissions/storage/read-media-audio.md
+              - READ_MEDIA_IMAGES: permissions/storage/read-media-images.md
+              - READ_MEDIA_VIDEO: permissions/storage/read-media-video.md
+              - WRITE_EXTERNAL_STORAGE: permissions/storage/write-external-storage.md
+          - Nearby Devices:
+              - permissions/nearby-devices/index.md
+              - BLUETOOTH_ADVERTISE: permissions/nearby-devices/bluetooth-advertise.md
+              - BLUETOOTH_CONNECT: permissions/nearby-devices/bluetooth-connect.md
+              - BLUETOOTH_SCAN: permissions/nearby-devices/bluetooth-scan.md
+              - NEARBY_WIFI_DEVICES: permissions/nearby-devices/nearby-wifi-devices.md
+              - UWB_RANGING: permissions/nearby-devices/uwb-ranging.md
+          - Special Permissions:
+              - permissions/special/index.md
+              - BIND_ACCESSIBILITY_SERVICE: permissions/special/bind-accessibility-service.md
+              - BIND_DEVICE_ADMIN: permissions/special/bind-device-admin.md
+              - BIND_NOTIFICATION_LISTENER_SERVICE: permissions/special/bind-notification-listener-service.md
+              - MANAGE_EXTERNAL_STORAGE: permissions/special/manage-external-storage.md
+              - PACKAGE_USAGE_STATS: permissions/special/package-usage-stats.md
+              - REQUEST_DELETE_PACKAGES: permissions/special/request-delete-packages.md
+              - REQUEST_INSTALL_PACKAGES: permissions/special/request-install-packages.md
+              - SYSTEM_ALERT_WINDOW: permissions/special/system-alert-window.md
+              - USE_FULL_SCREEN_INTENT: permissions/special/use-full-screen-intent.md
+              - WRITE_SETTINGS: permissions/special/write-settings.md
+          - Normal (Abusable):
+              - permissions/normal/index.md
+              - FOREGROUND_SERVICE: permissions/normal/foreground-service.md
+              - INTERNET: permissions/normal/internet.md
+              - QUERY_ALL_PACKAGES: permissions/normal/query-all-packages.md
+              - RECEIVE_BOOT_COMPLETED: permissions/normal/receive-boot-completed.md
+              - REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: permissions/normal/request-ignore-battery-optimizations.md
+              - WAKE_LOCK: permissions/normal/wake-lock.md
+  - Reversing:
+      - reversing/index.md
+      - Static Analysis: reversing/static-analysis.md
+      - Dynamic Analysis: reversing/dynamic-analysis.md
+      - Hooking: reversing/hooking.md
+      - Patching: reversing/patching.md
+      - Network Analysis: reversing/network-analysis.md
+      - Development Frameworks:
+          - reversing/frameworks/index.md
+          - AppInventor / Kodular: reversing/frameworks/appinventor.md
+          - B4A: reversing/frameworks/b4a.md
+          - Cocos2d-x: reversing/frameworks/cocos2d-x.md
+          - Compose Multiplatform: reversing/frameworks/compose-multiplatform.md
+          - Cordova / Ionic / Capacitor: reversing/frameworks/cordova.md
+          - Corona / Solar2D: reversing/frameworks/corona.md
+          - Defold: reversing/frameworks/defold.md
+          - Delphi / RAD Studio: reversing/frameworks/delphi.md
+          - Felgo: reversing/frameworks/felgo.md
+          - Flutter: reversing/frameworks/flutter.md
+          - GameMaker: reversing/frameworks/gamemaker.md
+          - GDevelop: reversing/frameworks/gdevelop.md
+          - Godot: reversing/frameworks/godot.md
+          - Kivy (Python): reversing/frameworks/kivy.md
+          - Kotlin Multiplatform: reversing/frameworks/kotlin-multiplatform.md
+          - libGDX: reversing/frameworks/libgdx.md
+          - NativeScript: reversing/frameworks/nativescript.md
+          - PWA / TWA: reversing/frameworks/pwa-twa.md
+          - Qt for Android: reversing/frameworks/qt.md
+          - React Native: reversing/frameworks/react-native.md
+          - "Ren'Py": reversing/frameworks/renpy.md
+          - RPG Maker: reversing/frameworks/rpgmaker.md
+          - Titanium: reversing/frameworks/titanium.md
+          - uni-app: reversing/frameworks/uni-app.md
+          - Unity: reversing/frameworks/unity.md
+          - Unreal Engine: reversing/frameworks/unreal-engine.md
+          - Xamarin / .NET MAUI: reversing/frameworks/xamarin.md
   - Packers:
       - packers/index.md
+      - Appdome: packers/appdome.md
+      - AppSealing: packers/appsealing.md
+      - Arxan (Digital.ai): packers/arxan.md
+      - Chinese Packers: packers/chinese-packers.md
+      - DexGuard: packers/dexguard.md
+      - DexProtector: packers/dexprotector.md
+      - LIAPP: packers/liapp.md
+      - Promon SHIELD: packers/promon.md
+      - R8 / ProGuard: packers/r8-proguard.md
+      - Verimatrix XTD: packers/verimatrix.md
       - Virbox: packers/virbox.md
+      - zShield (Zimperium): packers/zshield.md
+  - Industry:
+      - industry/index.md
+      - Security Companies: industry/security-companies.md
+  - Resources:
+      - resources/index.md
