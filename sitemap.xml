@@ -105,7 +105,15 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/malware/grayware/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/malware/naming-conventions/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/malware/threat-actors/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
@@ -405,6 +413,14 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/packers/appdome/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/packers/appsealing/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/packers/arxan/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
@@ -421,6 +437,10 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/packers/liapp/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/packers/promon/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
@@ -429,7 +449,15 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/packers/verimatrix/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/packers/virbox/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/packers/zshield/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
@@ -718,6 +746,10 @@
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/reversing/dynamic-analysis/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/reversing/frameworks/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
