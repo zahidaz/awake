@@ -13,7 +13,19 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/automated-transfer-systems/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/broadcast-theft/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/c2-techniques/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/clipboard-hijacking/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
@@ -25,11 +37,47 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/device-admin-abuse/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/dynamic-code-loading/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/intent-hijacking/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/keylogging/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/nfc-relay/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/notification-listener-abuse/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/overlay-attacks/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/persistence-techniques/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/phishing-techniques/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/screen-capture/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/sms-interception/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
@@ -137,6 +185,14 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/malware/families/dchspy/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/malware/families/devixor/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/malware/families/eaglemsgspy/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
@@ -150,6 +206,10 @@
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/malware/families/finspy/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/malware/families/firescam/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
@@ -345,11 +405,27 @@
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/packers/arxan/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/packers/chinese-packers/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/packers/dexguard/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/packers/dexprotector/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/packers/promon/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/packers/r8-proguard/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
@@ -646,6 +722,10 @@
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/reversing/hooking/</loc>
+         <lastmod>2026-02-14</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/reversing/network-analysis/</loc>
          <lastmod>2026-02-14</lastmod>
     </url>
     <url>
