@@ -17,6 +17,10 @@
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/anti-analysis-techniques/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/app-collusion/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
@@ -37,6 +41,14 @@
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/call-interception/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/camera-mic-surveillance/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/clipboard-hijacking/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
@@ -45,11 +57,19 @@
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/data-exfiltration/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/deep-link-exploitation/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/attacks/device-admin-abuse/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/device-wipe-ransomware/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
@@ -69,7 +89,15 @@
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/location-tracking/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/mass-malware-generation/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/network-traffic-interception/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
@@ -78,6 +106,10 @@
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/attacks/notification-listener-abuse/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/notification-suppression/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
@@ -97,11 +129,19 @@
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
+         <loc>https://zahidaz.github.io/awake/attacks/privilege-escalation/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
          <loc>https://zahidaz.github.io/awake/attacks/runtime-permission-manipulation/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
          <loc>https://zahidaz.github.io/awake/attacks/screen-capture/</loc>
+         <lastmod>2026-02-16</lastmod>
+    </url>
+    <url>
+         <loc>https://zahidaz.github.io/awake/attacks/sim-carrier-attacks/</loc>
          <lastmod>2026-02-16</lastmod>
     </url>
     <url>
