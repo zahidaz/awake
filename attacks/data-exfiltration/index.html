@@ -10765,8 +10765,8 @@
 <h1 id="data-exfiltration">Data Exfiltration<a class="headerlink" href="#data-exfiltration" title="Permanent link">&para;</a></h1>
 <p>Stealing data from compromised Android devices and transmitting it to attacker-controlled infrastructure. Data exfiltration is the operational objective behind most Android malware -- permissions, persistence, and evasion exist to support it. The scope ranges from targeted credential theft (banking trojans) to bulk surveillance (state-sponsored spyware) to opportunistic harvesting (adware SDKs collecting more than they should).</p>
 <p>See also: <a href="../c2-techniques/">C2 Communication</a>, <a href="../sms-interception/">SMS Interception</a>, <a href="../keylogging/">Keylogging</a>, <a href="../screen-capture/">Screen Capture</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10804,9 +10804,9 @@
 </tbody>
 </table>
 <p>T1646 covers HTTP/HTTPS exfiltration to C2 servers. T1639 covers cloud service abuse (Telegram, Firebase, Discord) and SMS-based exfiltration. T1532 covers ZIP compression before upload. T1636 and its sub-techniques cover collection of contacts (.003), SMS (.004), call logs (.002), and calendar (.001).</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10829,7 +10829,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="contact-list-theft">Contact List Theft<a class="headerlink" href="#contact-list-theft" title="Permanent link">&para;</a></h2>
 <p>The device contact list provides a social graph. Malware queries <code>ContactsContract</code> via <code>ContentResolver</code> to dump names, phone numbers, email addresses, and associated account metadata.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">Cursor</span><span class="w"> </span><span class="n">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getContentResolver</span><span class="p">().</span><span class="na">query</span><span class="p">(</span>

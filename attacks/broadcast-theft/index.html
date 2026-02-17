@@ -10174,8 +10174,8 @@
 
 <h1 id="broadcast-theft">Broadcast Theft<a class="headerlink" href="#broadcast-theft" title="Permanent link">&para;</a></h1>
 <p>Intercepting broadcast intents meant for other apps. Android's broadcast system sends messages to all registered receivers. If a broadcast carries sensitive data and isn't properly protected, any app can register a receiver and read it.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10193,9 +10193,9 @@
 </tbody>
 </table>
 <p>T1624.001 covers registering for intents broadcasted by other applications, enabling interception of broadcasts not intended for the malicious app.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10214,7 +10214,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="how-broadcasts-work">How Broadcasts Work<a class="headerlink" href="#how-broadcasts-work" title="Permanent link">&para;</a></h2>
 <p>An app sends a broadcast, and all registered <code>BroadcastReceiver</code> components matching the intent filter receive it. Two types:</p>
 <p><strong>Normal broadcasts</strong> (<code>sendBroadcast()</code>): delivered to all receivers simultaneously. No ordering, no priority, no ability to cancel.</p>

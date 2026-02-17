@@ -10263,8 +10263,8 @@
 <h1 id="sms-interception-theft">SMS Interception &amp; Theft<a class="headerlink" href="#sms-interception-theft" title="Permanent link">&para;</a></h1>
 <p>Intercepting, reading, sending, and forwarding SMS messages for OTP theft, premium fraud, worm propagation, and command-and-control. SMS interception was the original 2FA bypass technique in Android banking malware and remains relevant despite Android's progressive restrictions, because many financial institutions still rely on SMS-based authentication.</p>
 <p>See also: <a href="../notification-suppression/#sms-notification-suppression">Notification Suppression</a>, <a href="../call-interception/">Call Interception</a>, <a href="../notification-listener-abuse/">Notification Listener Abuse</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10287,9 +10287,9 @@
 </tbody>
 </table>
 <p>T1636.004 covers passive collection and active interception of SMS. T1582 covers sending, modifying, and deleting SMS (premium fraud, worm propagation, C2 channel).</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10312,7 +10312,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="attack-techniques">Attack Techniques<a class="headerlink" href="#attack-techniques" title="Permanent link">&para;</a></h2>
 <h3 id="broadcast-interception">Broadcast Interception<a class="headerlink" href="#broadcast-interception" title="Permanent link">&para;</a></h3>
 <p>The <code>SMS_RECEIVED</code> broadcast is ordered, meaning receivers execute by priority. Malware registers a high-priority receiver to process the SMS before any other app:</p>

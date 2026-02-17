@@ -10597,8 +10597,8 @@
 <h1 id="location-tracking-geofencing">Location Tracking &amp; Geofencing<a class="headerlink" href="#location-tracking-geofencing" title="Permanent link">&para;</a></h1>
 <p>Collecting device location data for victim surveillance, movement tracking, and geographically targeted malware activation. Location is a core data collection capability for every major spyware family and a common activation gate for banking trojans that only operate in target countries. Unlike most attack techniques that require complex permission escalation, coarse location data can be derived without any device permissions at all through IP geolocation and cell tower inference.</p>
 <p>See also: <a href="../../permissions/location/access-fine-location/"><code>ACCESS_FINE_LOCATION</code></a>, <a href="../../permissions/location/access-coarse-location/"><code>ACCESS_COARSE_LOCATION</code></a>, <a href="../../permissions/location/access-background-location/"><code>ACCESS_BACKGROUND_LOCATION</code></a>, <a href="../anti-analysis-techniques/#geographic-and-locale-checks">Anti-Analysis Techniques</a>, <a href="../play-store-evasion/#geographic-targeting">Play Store Evasion</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10631,9 +10631,9 @@
 </tbody>
 </table>
 <p>T1430 covers GPS, cell tower, and WiFi-based location collection. T1627.001 covers SIM/locale/IP geofencing used to restrict malware activation to target regions.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10665,7 +10665,7 @@
 </tbody>
 </table>
 <p>Malware that only needs to know the victim's country does not need location permissions at all. <code>TelephonyManager.getSimCountryIso()</code> and server-side IP geolocation provide country-level targeting with zero permissions.</p>
-</div>
+</details>
 <h2 id="location-data-collection-methods">Location Data Collection Methods<a class="headerlink" href="#location-data-collection-methods" title="Permanent link">&para;</a></h2>
 <h3 id="gps-fine-location">GPS (Fine Location)<a class="headerlink" href="#gps-fine-location" title="Permanent link">&para;</a></h3>
 <p>The most precise location source, accurate to approximately 3 meters outdoors. Requires <code>ACCESS_FINE_LOCATION</code> and a clear view of satellites. Indoor accuracy degrades significantly.</p>

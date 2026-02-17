@@ -10408,8 +10408,8 @@
 
 <h1 id="fake-biometric-prompts">Fake Biometric Prompts<a class="headerlink" href="#fake-biometric-prompts" title="Permanent link">&para;</a></h1>
 <p>Stealing device unlock credentials through fake lockscreens and abusing the BiometricPrompt API. Distinct from standard overlay phishing, which targets banking app credentials. This technique captures the device PIN, password, or unlock pattern, giving attackers the ability to unlock the device during remote access sessions and bypass device encryption at rest.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10432,9 +10432,9 @@
 </tbody>
 </table>
 <p>T1417.002 covers the overlay-based capture of device unlock credentials (PIN, pattern, password). T1516 covers the accessibility-driven biometric downgrade that forces PIN entry. MITRE does not have a dedicated technique for fake lockscreen overlays; this is an AWAKE-specific coverage area.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10453,7 +10453,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="android-biometric-architecture">Android Biometric Architecture<a class="headerlink" href="#android-biometric-architecture" title="Permanent link">&para;</a></h2>
 <p>Understanding the legitimate API is necessary to understand how it is abused.</p>
 <h3 id="biometric-classes">Biometric Classes<a class="headerlink" href="#biometric-classes" title="Permanent link">&para;</a></h3>

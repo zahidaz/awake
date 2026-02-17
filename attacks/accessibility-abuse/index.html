@@ -10319,8 +10319,8 @@
 <h1 id="accessibility-abuse">Accessibility Abuse<a class="headerlink" href="#accessibility-abuse" title="Permanent link">&para;</a></h1>
 <p>Using Android's accessibility framework to control the device programmatically. An accessibility service can read any screen, click any button, type into any field, and perform any gesture. This gives malware full device control without exploiting any vulnerability: the framework works exactly as designed, just not for its intended purpose.</p>
 <p>See also: <a href="../../permissions/special/bind-accessibility-service/"><code>BIND_ACCESSIBILITY_SERVICE</code></a> for the permission details, <a href="../notification-suppression/">Notification Suppression</a>, <a href="../anti-analysis-techniques/#play-protect-suppression">Anti-Analysis Techniques</a>, <a href="../camera-mic-surveillance/">Camera &amp; Mic Surveillance</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10342,9 +10342,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10364,7 +10364,7 @@
 </tbody>
 </table>
 <p>No exploit needed. The hardest part is getting the user to the Settings toggle and convincing them to enable it. Malware typically uses fake overlay dialogs ("Enable this service to continue", "Battery optimization required", "Accessibility update needed").</p>
-</div>
+</details>
 <h2 id="attack-capabilities">Attack Capabilities<a class="headerlink" href="#attack-capabilities" title="Permanent link">&para;</a></h2>
 <h3 id="keylogging">Keylogging<a class="headerlink" href="#keylogging" title="Permanent link">&para;</a></h3>
 <p>Accessibility services receive <code>TYPE_VIEW_TEXT_CHANGED</code> events containing the text entered in any field across any app.</p>

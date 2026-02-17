@@ -10252,8 +10252,8 @@
 
 <h1 id="content-provider-attacks">Content Provider Attacks<a class="headerlink" href="#content-provider-attacks" title="Permanent link">&para;</a></h1>
 <p>Exploiting exposed or misconfigured <code>ContentProvider</code> components to read, modify, or delete app data. Content providers are Android's standard mechanism for sharing structured data between apps. When exported without proper permission checks, they expose databases, files, and internal state.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10271,9 +10271,9 @@
 </tbody>
 </table>
 <p>No dedicated MITRE technique for content provider exploitation. T1409 covers accessing data stored by applications, which includes insecure content providers. MITRE treats content provider access as a data collection vector rather than a standalone technique.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10292,7 +10292,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="how-content-providers-work">How Content Providers Work<a class="headerlink" href="#how-content-providers-work" title="Permanent link">&para;</a></h2>
 <p>A content provider exposes data through a URI-based interface:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>content://com.target.app.provider/users

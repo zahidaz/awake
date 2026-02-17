@@ -10252,8 +10252,8 @@
 
 <h1 id="runtime-permission-manipulation">Runtime Permission Manipulation<a class="headerlink" href="#runtime-permission-manipulation" title="Permanent link">&para;</a></h1>
 <p>Granting permissions without user interaction. Once malware obtains <a href="../../permissions/special/bind-accessibility-service/"><code>BIND_ACCESSIBILITY_SERVICE</code></a>, it can navigate Settings screens, tap "Allow" buttons, and toggle switches to escalate from a single permission to full device control. Every modern Android banking trojan uses some variant of this technique.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10276,9 +10276,9 @@
 </tbody>
 </table>
 <p>T1516 covers the programmatic clicking of "Allow" buttons on permission dialogs and navigating Settings screens. T1453 covers the underlying accessibility service abuse that enables all permission manipulation.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10298,7 +10298,7 @@
 </tbody>
 </table>
 <p>The only user interaction needed is enabling the accessibility service. Everything after that is automated.</p>
-</div>
+</details>
 <h2 id="accessibility-based-auto-grant">Accessibility-Based Auto-Grant<a class="headerlink" href="#accessibility-based-auto-grant" title="Permanent link">&para;</a></h2>
 <p>The core technique: the malware's accessibility service programmatically navigates system Settings and interacts with UI elements to grant itself additional permissions.</p>
 <h3 id="view-tree-navigation">View Tree Navigation<a class="headerlink" href="#view-tree-navigation" title="Permanent link">&para;</a></h3>

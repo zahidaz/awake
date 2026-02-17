@@ -10430,12 +10430,12 @@
 
 <h1 id="work-profile-abuse">Work Profile Abuse<a class="headerlink" href="#work-profile-abuse" title="Permanent link">&para;</a></h1>
 <p>Exploiting Android Enterprise features to access corporate data, bypass MDM controls, or leverage enterprise APIs for malicious purposes. Work profiles create a separate managed environment on the device, but the isolation boundary has known weaknesses, and the powerful DPC APIs available to device administrators represent an attractive attack surface.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <p>MITRE ATT&amp;CK Mobile does not have a dedicated technique for work profile or Android Enterprise abuse. The closest mappings are <a href="https://attack.mitre.org/techniques/T1626/001/">T1626.001</a> (Device Administrator Permissions) for DPC API abuse and <a href="https://attack.mitre.org/techniques/T1404/">T1404</a> (Exploitation for Privilege Escalation) for CVE-2025-22442. This is an area where AWAKE provides coverage that ATT&amp;CK does not.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10454,7 +10454,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="android-enterprise-architecture">Android Enterprise Architecture<a class="headerlink" href="#android-enterprise-architecture" title="Permanent link">&para;</a></h2>
 <h3 id="managed-profiles">Managed Profiles<a class="headerlink" href="#managed-profiles" title="Permanent link">&para;</a></h3>
 <p>Android work profiles (introduced in Android 5.0) create a separate user space on the device with its own app instances, data storage, and encryption keys. The work profile runs under a distinct Linux user ID, providing process-level isolation from the personal profile.</p>

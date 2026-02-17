@@ -10287,8 +10287,8 @@
 <h1 id="call-interception-voice-phishing">Call Interception &amp; Voice Phishing<a class="headerlink" href="#call-interception-voice-phishing" title="Permanent link">&para;</a></h1>
 <p>Intercepting, redirecting, and faking phone calls on Android to conduct voice phishing (vishing) attacks. Unlike traditional phishing that targets text-based credentials, call interception exploits the inherent trust users place in voice communication with their bank. The victim dials their bank's real number, but the malware silently redirects the call to an attacker-controlled line where a human operator or pre-recorded IVR extracts sensitive information.</p>
 <p>See also: <a href="../phishing-techniques/">Phishing Techniques</a>, <a href="../sms-interception/">SMS Interception</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10311,9 +10311,9 @@
 </tbody>
 </table>
 <p>T1616 covers making, forwarding, and blocking phone calls. T1429 applies when the interception involves recording call audio.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10336,7 +10336,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="call-redirection-techniques">Call Redirection Techniques<a class="headerlink" href="#call-redirection-techniques" title="Permanent link">&para;</a></h2>
 <h3 id="default-call-handler-exploitation">Default Call Handler Exploitation<a class="headerlink" href="#default-call-handler-exploitation" title="Permanent link">&para;</a></h3>
 <p>The most powerful technique. When the malware becomes the default call handler, it manages the entire call lifecycle: dialing, connecting, displaying the in-call UI, and ending calls. This gives it complete control over what the user sees and hears.</p>

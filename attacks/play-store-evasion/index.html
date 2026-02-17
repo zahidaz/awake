@@ -10441,8 +10441,8 @@
 <h1 id="play-store-evasion">Play Store Evasion<a class="headerlink" href="#play-store-evasion" title="Permanent link">&para;</a></h1>
 <p>Techniques malware uses to bypass Google Play Protect and store review to distribute through the official Play Store. The dropper-based distribution model is the dominant strategy for Android banking malware since 2020 -- a clean app passes all checks at upload, then downloads or activates its malicious payload post-installation. Understanding these techniques is essential for analyzing how malware reaches millions of devices through a trusted distribution channel.</p>
 <p>See also: <a href="../dynamic-code-loading/">Dynamic Code Loading</a>, <a href="../persistence-techniques/">Persistence Techniques</a>, <a href="../anti-analysis-techniques/">Anti-Analysis Techniques</a>, <a href="../mass-malware-generation/">Mass Malware Generation</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10475,7 +10475,7 @@
 </tbody>
 </table>
 <p>T1407 covers the dropper-payload model where clean apps download malicious DEX/APK at runtime. T1655 covers trojanized apps masquerading as legitimate utilities. T1627.001 covers geographic targeting to avoid analysis environments. The versioning attack pattern and session-based installer bypass are not directly represented in ATT&amp;CK.</p>
-</div>
+</details>
 <div class="admonition warning">
 <p class="admonition-title">Scale of the Problem</p>
 <p>Google removed over 2.3 million apps from the Play Store in 2024 for policy violations. Despite automated scanning (Play Protect) and manual review, sophisticated droppers consistently bypass all layers. <a href="https://www.threatfabric.com/blogs/droppers-bypassing-android-13-restrictions">ThreatFabric</a> and <a href="https://www.cleafy.com/">Cleafy</a> regularly document families that survive on the store for months before detection.</p>

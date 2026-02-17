@@ -10365,8 +10365,8 @@
 <h1 id="notification-suppression">Notification Suppression<a class="headerlink" href="#notification-suppression" title="Permanent link">&para;</a></h1>
 <p>Hiding, dismissing, or manipulating Android notifications to prevent victims from detecting ongoing fraud. When a banking trojan initiates an unauthorized transfer, the bank sends a transaction alert via SMS or push notification. If the victim sees that alert, the operation fails. Notification suppression ensures the victim remains unaware while the attacker drains their account.</p>
 <p>See also: <a href="../notification-listener-abuse/">Notification Listener Abuse</a>, <a href="../sms-interception/">SMS Interception</a>, <a href="../automated-transfer-systems/">Automated Transfer Systems</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10389,9 +10389,9 @@
 </tbody>
 </table>
 <p>T1517 covers reading and dismissing notifications via <code>NotificationListenerService</code>. T1629.003 covers disabling Play Protect and suppressing security warnings.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10414,7 +10414,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="notification-listener-suppression">Notification Listener Suppression<a class="headerlink" href="#notification-listener-suppression" title="Permanent link">&para;</a></h2>
 <h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
 <p><code>NotificationListenerService</code> provides full read and dismiss access to all notifications on the device. Once enabled, the malware's listener receives every notification posted by any app and can:</p>

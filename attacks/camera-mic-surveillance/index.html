@@ -10331,8 +10331,8 @@
 <h1 id="camera-microphone-surveillance">Camera &amp; Microphone Surveillance<a class="headerlink" href="#camera-microphone-surveillance" title="Permanent link">&para;</a></h1>
 <p>Silent capture of audio and video from a compromised Android device. Spyware and banking trojans use the camera and microphone for ambient recording, live streaming, screenshot capture, and call recording. The objective ranges from targeted intelligence gathering (state-sponsored spyware like <a href="../../malware/families/pegasus/">Pegasus</a>) to mass credential harvesting (banking trojans recording screen during login).</p>
 <p>See also: <a href="../screen-capture/">Screen Capture</a>, <a href="../keylogging/">Keylogging</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../call-interception/">Call Interception</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10355,9 +10355,9 @@
 </tbody>
 </table>
 <p>T1429 covers microphone-based audio recording and call recording. T1512 covers camera capture (photo and video). Both techniques are core collection capabilities for spyware and RATs.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10384,7 +10384,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="camera-capture">Camera Capture<a class="headerlink" href="#camera-capture" title="Permanent link">&para;</a></h2>
 <h3 id="silent-photography">Silent Photography<a class="headerlink" href="#silent-photography" title="Permanent link">&para;</a></h3>
 <p>Malware opens the camera API in the background to capture photos without any visible UI. On Android 9+, background camera access requires a foreground service started while the app was visible.</p>

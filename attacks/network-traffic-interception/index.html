@@ -10387,8 +10387,8 @@
 <h1 id="network-traffic-interception">Network Traffic Interception<a class="headerlink" href="#network-traffic-interception" title="Permanent link">&para;</a></h1>
 <p>Intercepting, modifying, and redirecting network traffic on Android devices through VPN service abuse, DNS manipulation, proxy configuration, and certificate store attacks. Malware uses these techniques to capture credentials transmitted over HTTPS, redirect banking traffic to phishing servers, and exfiltrate data through controlled network tunnels.</p>
 <p>See also: <a href="../c2-techniques/">C2 Communication</a>, <a href="../webview-exploitation/">WebView Exploitation</a>, <a href="../phishing-techniques/">Phishing Techniques</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10406,9 +10406,9 @@
 </tbody>
 </table>
 <p>T1638 covers network-level interception including VPN abuse, DNS hijacking, and MITM attacks for credential capture and traffic manipulation.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10435,7 +10435,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="vpnservice-abuse">VpnService Abuse<a class="headerlink" href="#vpnservice-abuse" title="Permanent link">&para;</a></h2>
 <h3 id="how-vpnservice-works">How VpnService Works<a class="headerlink" href="#how-vpnservice-works" title="Permanent link">&para;</a></h3>
 <p>Android's <code>VpnService</code> API creates a TUN (network tunnel) interface that captures all device traffic. The app receives raw IP packets, can inspect, modify, or forward them to any destination. Only one VPN service can be active at a time.</p>

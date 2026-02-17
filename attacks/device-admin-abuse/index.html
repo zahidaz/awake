@@ -10419,8 +10419,8 @@
 <h1 id="device-admin-abuse">Device Admin Abuse<a class="headerlink" href="#device-admin-abuse" title="Permanent link">&para;</a></h1>
 <p>Exploiting the Device Administration API to prevent app removal, lock the screen, or wipe the device. A device admin app cannot be uninstalled until the user manually deactivates it through Settings, which malware actively obstructs through UI manipulation and social engineering.</p>
 <p>See also: <a href="../device-wipe-ransomware/">Device Wipe &amp; Ransomware</a>, <a href="../persistence-techniques/">Persistence Techniques</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10438,9 +10438,9 @@
 </tbody>
 </table>
 <p>T1626.001 covers abuse of the Android Device Administration API for preventing removal, factory reset, password reset, and camera disabling.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10463,7 +10463,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <h3 id="device-administration-api">Device Administration API<a class="headerlink" href="#device-administration-api" title="Permanent link">&para;</a></h3>
 <p>The <code>DevicePolicyManager</code> API was designed for enterprise MDM (Mobile Device Management) solutions to enforce security policies on company devices. It grants elevated privileges: locking the screen, setting password requirements, encrypting storage, wiping the device, disabling the camera.</p>

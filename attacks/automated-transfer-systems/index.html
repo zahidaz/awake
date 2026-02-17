@@ -10197,8 +10197,8 @@
 <h1 id="automated-transfer-systems-ats">Automated Transfer Systems (ATS)<a class="headerlink" href="#automated-transfer-systems-ats" title="Permanent link">&para;</a></h1>
 <p>On-device fraud that automates money transfers without user interaction. Rather than stealing credentials and replaying them from an attacker-controlled device, ATS operates the victim's real banking app directly using accessibility services. The transaction originates from the victim's trusted device, IP address, and session -- making it nearly invisible to bank-side fraud detection.</p>
 <p>See also: <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../overlay-attacks/">Overlay Attacks</a>, <a href="../notification-suppression/">Notification Suppression</a>, <a href="../device-wipe-ransomware/#post-fraud-factory-reset">Device Wipe &amp; Ransomware</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10221,9 +10221,9 @@
 </tbody>
 </table>
 <p>MITRE ATT&amp;CK has no standalone technique for Automated Transfer Systems. ATS is a compound banking fraud methodology combining accessibility abuse (T1453) for device control with input injection (T1516) for automated UI interaction. This is a gap in ATT&amp;CK's coverage that AWAKE addresses.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10246,7 +10246,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="ats-vs-overlay-vs-vnc">ATS vs Overlay vs VNC<a class="headerlink" href="#ats-vs-overlay-vs-vnc" title="Permanent link">&para;</a></h2>
 <p>Three distinct approaches to banking fraud, often combined within a single family.</p>
 <table>

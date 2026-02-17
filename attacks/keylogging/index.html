@@ -10231,8 +10231,8 @@
 <h1 id="keylogging-input-capture">Keylogging &amp; Input Capture<a class="headerlink" href="#keylogging-input-capture" title="Permanent link">&para;</a></h1>
 <p>Intercepting user keystrokes and text input to steal credentials, OTPs, and sensitive data. On Android, there is no kernel-level keylogger equivalent -- input capture operates through the accessibility framework or by replacing the system keyboard with a malicious Input Method Editor (IME). Both approaches are well-documented abuse paths that require user interaction to enable.</p>
 <p>See also: <a href="../camera-mic-surveillance/">Camera &amp; Mic Surveillance</a>, <a href="../screen-capture/">Screen Capture</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10249,9 +10249,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10274,7 +10274,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="techniques">Techniques<a class="headerlink" href="#techniques" title="Permanent link">&para;</a></h2>
 <h3 id="accessibility-based-keylogging">Accessibility-Based Keylogging<a class="headerlink" href="#accessibility-based-keylogging" title="Permanent link">&para;</a></h3>
 <p>The dominant method. An enabled accessibility service receives <code>TYPE_VIEW_TEXT_CHANGED</code> events every time the user types or modifies text in any app. Each event contains the current text content, the source package name, and the view's resource ID.</p>

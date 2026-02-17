@@ -10175,8 +10175,8 @@
 <h1 id="screen-recording-mediaprojection-abuse">Screen Recording &amp; MediaProjection Abuse<a class="headerlink" href="#screen-recording-mediaprojection-abuse" title="Permanent link">&para;</a></h1>
 <p>Capturing the victim's screen in real time to steal credentials, monitor activity, or enable remote device control. Unlike <a href="../overlay-attacks/">overlay attacks</a> that present fake UI, screen capture techniques passively observe the real UI -- the victim interacts with their actual banking app while the attacker watches or records every frame.</p>
 <p>See also: <a href="../camera-mic-surveillance/">Camera &amp; Mic Surveillance</a>, <a href="../notification-suppression/#screen-blackout-during-fraud">Notification Suppression</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10193,9 +10193,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10218,7 +10218,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="techniques">Techniques<a class="headerlink" href="#techniques" title="Permanent link">&para;</a></h2>
 <h3 id="mediaprojection-api">MediaProjection API<a class="headerlink" href="#mediaprojection-api" title="Permanent link">&para;</a></h3>
 <p>The primary screen recording mechanism since Android 5.0. The <code>android.media.projection.MediaProjection</code> class creates a virtual display that mirrors the device screen. The attacker obtains a <code>MediaProjection</code> token through <code>MediaProjectionManager.createScreenCaptureIntent()</code>, which triggers a system consent dialog.</p>

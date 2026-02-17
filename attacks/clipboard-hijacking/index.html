@@ -10208,8 +10208,8 @@
 
 <h1 id="clipboard-hijacking">Clipboard Hijacking<a class="headerlink" href="#clipboard-hijacking" title="Permanent link">&para;</a></h1>
 <p>Monitoring or modifying clipboard contents to steal sensitive data. Android's <code>ClipboardManager</code> API provides a system-wide clipboard that any foreground app can read and write. Malware abuses this to intercept cryptocurrency wallet addresses, passwords, OTPs, and banking data as users copy and paste between apps. The most destructive variant, the crypto clipper, silently replaces a copied wallet address with one controlled by the attacker, redirecting transactions without the victim noticing.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10226,9 +10226,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10247,7 +10247,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <h3 id="clipboardmanager-listener">ClipboardManager Listener<a class="headerlink" href="#clipboardmanager-listener" title="Permanent link">&para;</a></h3>
 <p>The primary mechanism. The app registers a listener that fires every time clipboard content changes:</p>

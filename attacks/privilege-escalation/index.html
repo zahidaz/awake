@@ -10785,8 +10785,8 @@
 <h1 id="privilege-escalation">Privilege Escalation<a class="headerlink" href="#privilege-escalation" title="Permanent link">&para;</a></h1>
 <p>Gaining elevated privileges on an Android device beyond what the app sandbox permits -- from kernel root exploits and SELinux bypasses to abusing leaked platform signing keys and chaining runtime permissions into full device control. Privilege escalation is the dividing line between commodity malware (which operates within the permission model) and commercial spyware (which breaks out of it entirely).</p>
 <p>See also: <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../device-admin-abuse/">Device Admin Abuse</a>, <a href="../../platform-abuse/selinux/">SELinux</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10819,9 +10819,9 @@
 </tbody>
 </table>
 <p>T1404 covers kernel exploits (DirtyCow, DirtyPipe, Framaroot, Towelroot) and driver vulnerabilities. T1626 covers permission escalation chains including accessibility-to-full-control. T1631 covers native code injection and library loading for process-level escalation.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10852,7 +10852,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="root-exploits-historical">Root Exploits (Historical)<a class="headerlink" href="#root-exploits-historical" title="Permanent link">&para;</a></h2>
 <p>Privilege escalation on Android historically meant getting root. Before modern SELinux enforcement and verified boot, a single kernel vulnerability could give an attacker uid 0 and full device control. These exploits remain relevant: millions of unpatched devices still run in the wild, and commercial spyware vendors maintain private exploit chains targeting current kernels.</p>
 <h3 id="framaroot-2013-2014">Framaroot (2013--2014)<a class="headerlink" href="#framaroot-2013-2014" title="Permanent link">&para;</a></h3>

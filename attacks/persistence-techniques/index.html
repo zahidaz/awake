@@ -10396,8 +10396,8 @@
 
 <h1 id="persistence-techniques">Persistence Techniques<a class="headerlink" href="#persistence-techniques" title="Permanent link">&para;</a></h1>
 <p>Surviving device reboots, app kills, and user attempts at removal. Android's process lifecycle aggressively terminates background apps to conserve resources, so malware must actively fight to stay alive. The most resilient families layer multiple persistence mechanisms, ensuring that if one is killed, another restarts it.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10429,9 +10429,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10462,7 +10462,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="boot-receiver">Boot Receiver<a class="headerlink" href="#boot-receiver" title="Permanent link">&para;</a></h2>
 <p>The simplest and most common persistence method. Registering a <code>BroadcastReceiver</code> for <code>BOOT_COMPLETED</code> causes Android to start the malware's component every time the device boots.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">&lt;receiver</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;.BootReceiver&quot;</span>

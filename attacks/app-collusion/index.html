@@ -10375,10 +10375,10 @@
 <h1 id="app-collusion">App Collusion<a class="headerlink" href="#app-collusion" title="Permanent link">&para;</a></h1>
 <p>Application collusion is a threat where two or more Android apps cooperate to perform a malicious action that neither could achieve independently. Each app requests only a minimal set of permissions, appearing benign in isolation. When combined on the same device, the apps aggregate permissions and share data through inter-app communication channels to achieve their goal. The real-world threat is dominated by SDK-mediated collusion, where a data broker distributes an SDK to many independent developers who unknowingly enable cross-app surveillance.</p>
 <p>See also: <a href="../intent-hijacking/">Intent Hijacking</a>, <a href="../content-provider-attacks/">Content Provider Attacks</a>, <a href="../broadcast-theft/">Broadcast Theft</a>, <a href="../dynamic-code-loading/">Dynamic Code Loading</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <p>MITRE ATT&amp;CK Mobile does not have a dedicated technique for app collusion. The closest related techniques are <a href="https://attack.mitre.org/techniques/T1624/001/">T1624.001</a> (Event Triggered Execution: Broadcast Receivers) for inter-app broadcast communication and <a href="https://attack.mitre.org/techniques/T1474/003/">T1474.003</a> (Compromise Software Supply Chain) for SDK-mediated collusion. The absence of a collusion-specific technique is a significant gap given the scale of real-world SDK collusion.</p>
-</div>
+</details>
 <h2 id="why-it-matters">Why It Matters<a class="headerlink" href="#why-it-matters" title="Permanent link">&para;</a></h2>
 <p>Android's security model is built around per-app sandboxing and permission grants. Every security check, store review, and malware scanner evaluates apps individually. Collusion exploits this blind spot: when malicious behavior is distributed across multiple apps, no single app triggers detection. Current app store review and malware scanning remain <a href="https://people.cs.vt.edu/danfeng/papers/AsiaCCS-17-Yao.pdf">overwhelmingly single-app focused</a>; combinatorial analysis of app pairs is computationally expensive and not performed at scale by any store.</p>
 <h2 id="communication-channels">Communication Channels<a class="headerlink" href="#communication-channels" title="Permanent link">&para;</a></h2>

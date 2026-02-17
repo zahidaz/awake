@@ -10297,8 +10297,8 @@
 <h1 id="dynamic-code-loading">Dynamic Code Loading<a class="headerlink" href="#dynamic-code-loading" title="Permanent link">&para;</a></h1>
 <p>Loading executable code at runtime rather than including it in the APK. The APK that passes Google Play Protect scanning contains no malicious code -- the real payload is downloaded, decrypted, or assembled after installation. This is the foundational technique behind dropper-based malware distribution and the primary reason Play Store scanners fail to catch banking trojans at upload time.</p>
 <p>See also: <a href="../../packers/">Packers</a>, <a href="../../reversing/hooking/">Hooking</a>, <a href="../anti-analysis-techniques/#code-level-obfuscation">Anti-Analysis Techniques</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10315,9 +10315,9 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10341,7 +10341,7 @@
 </tbody>
 </table>
 <p>No special permissions needed. Any app can load code from its own private storage or memory.</p>
-</div>
+</details>
 <h2 id="class-loaders">Class Loaders<a class="headerlink" href="#class-loaders" title="Permanent link">&para;</a></h2>
 <p>Android provides multiple class loaders for runtime code loading, each with different capabilities.</p>
 <h3 id="dexclassloader">DexClassLoader<a class="headerlink" href="#dexclassloader" title="Permanent link">&para;</a></h3>

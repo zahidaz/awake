@@ -10407,8 +10407,8 @@
 <h1 id="c2-communication-techniques">C2 Communication Techniques<a class="headerlink" href="#c2-communication-techniques" title="Permanent link">&para;</a></h1>
 <p>How Android malware talks to its command-and-control infrastructure. The C2 channel determines how commands reach the device, how stolen data leaves, and how resilient the operation is against takedowns. Most families use multiple channels for redundancy.</p>
 <p>See also: <a href="../network-traffic-interception/">Network Traffic Interception</a>, <a href="../anti-analysis-techniques/#domain-generation-algorithms">Anti-Analysis Techniques</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10446,9 +10446,9 @@
 </tbody>
 </table>
 <p>Sub-techniques: <a href="https://attack.mitre.org/techniques/T1481/001/">T1481.001</a> Dead Drop Resolver, <a href="https://attack.mitre.org/techniques/T1481/002/">T1481.002</a> Bidirectional Communication (Telegram, MQTT), <a href="https://attack.mitre.org/techniques/T1481/003/">T1481.003</a> One-Way Communication (FCM push).</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10471,7 +10471,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="c2-methods">C2 Methods<a class="headerlink" href="#c2-methods" title="Permanent link">&para;</a></h2>
 <h3 id="httphttps-rest-apis">HTTP/HTTPS REST APIs<a class="headerlink" href="#httphttps-rest-apis" title="Permanent link">&para;</a></h3>
 <p>The most common C2 channel. Malware sends HTTP POST requests to a hardcoded or dynamically resolved endpoint, typically JSON-encoded. The C2 responds with commands in the same format.</p>

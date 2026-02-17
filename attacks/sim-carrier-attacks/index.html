@@ -10675,8 +10675,8 @@
 <h1 id="sim-carrier-level-attacks">SIM &amp; Carrier-Level Attacks<a class="headerlink" href="#sim-carrier-level-attacks" title="Permanent link">&para;</a></h1>
 <p>Exploiting the cellular infrastructure layer -- SIM cards, carrier billing systems, USSD codes, and baseband processors -- to steal money, intercept communications, and bypass authentication. Many of these attacks operate below the Android OS, making them invisible to on-device security tools. When combined with on-device malware, they form a complete attack chain: the malware handles credential theft while carrier-level manipulation defeats 2FA and enables silent monetization.</p>
 <p>See also: <a href="../sms-interception/">SMS Interception</a>, <a href="../call-interception/">Call Interception</a>, <a href="../phishing-techniques/">Phishing Techniques</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10704,9 +10704,9 @@
 </tbody>
 </table>
 <p>T1451 covers SIM swapping and eSIM manipulation for 2FA bypass. T1449 covers carrier-infrastructure-level location tracking and interception. Carrier billing fraud and USSD exploitation do not have dedicated MITRE techniques; this is an area where AWAKE provides deeper coverage. Simjacker and WIBattack (SIM toolkit attacks) are not represented in ATT&amp;CK Mobile.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10737,7 +10737,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="sim-swapping">SIM Swapping<a class="headerlink" href="#sim-swapping" title="Permanent link">&para;</a></h2>
 <p>SIM swapping is not an on-device attack, but it is the single most relevant carrier-level threat to Android security because it defeats SMS-based 2FA entirely. The attacker convinces a carrier employee (via social engineering, bribery, or insider access) to port the victim's phone number to a SIM card the attacker controls. All incoming calls and SMS messages -- including OTP codes -- now route to the attacker.</p>
 <h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>

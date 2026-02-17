@@ -10309,8 +10309,8 @@
 <h1 id="device-wipe-ransomware">Device Wipe &amp; Ransomware<a class="headerlink" href="#device-wipe-ransomware" title="Permanent link">&para;</a></h1>
 <p>Destroying data, locking devices, and encrypting files on Android for extortion or evidence destruction. Android ransomware has evolved from simple screen lockers (2013) through PIN-changing lockers to file-encrypting variants, while banking trojans adopted factory reset as a post-fraud cleanup technique to destroy forensic evidence.</p>
 <p>See also: <a href="../device-admin-abuse/">Device Admin Abuse</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../persistence-techniques/">Persistence Techniques</a></p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10343,9 +10343,9 @@
 </tbody>
 </table>
 <p>T1471 covers file encryption ransomware (Simplocker, DoubleLocker, SOVA v5). T1662 covers factory reset as evidence destruction (BRATA, BingoMod). T1629.002 covers screen locking and PIN changing as device lockout.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10372,7 +10372,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="post-fraud-factory-reset">Post-Fraud Factory Reset<a class="headerlink" href="#post-fraud-factory-reset" title="Permanent link">&para;</a></h2>
 <p>Banking trojans use factory reset as an evidence destruction technique. After completing an unauthorized transfer, the malware wipes the device to eliminate forensic artifacts (SMS transaction confirmations, banking app logs, the malware itself).</p>
 <h3 id="brata">BRATA<a class="headerlink" href="#brata" title="Permanent link">&para;</a></h3>

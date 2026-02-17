@@ -10152,8 +10152,8 @@
 
 <h1 id="overlay-attacks">Overlay Attacks<a class="headerlink" href="#overlay-attacks" title="Permanent link">&para;</a></h1>
 <p>Drawing a fake UI on top of a legitimate app to steal credentials. The defining technique of Android banking malware since ~2016. The attacker creates a window that looks identical to a banking app's login screen, and the user types their credentials into the attacker's view.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <table>
 <thead>
 <tr>
@@ -10176,9 +10176,9 @@
 </tbody>
 </table>
 <p>T1417.002 explicitly covers overlay attacks using <code>SYSTEM_ALERT_WINDOW</code> and fake login screens. T1453 applies when accessibility services trigger the overlay based on foreground app detection.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10201,7 +10201,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <h3 id="foreground-detection">Foreground Detection<a class="headerlink" href="#foreground-detection" title="Permanent link">&para;</a></h3>
 <p>The malware needs to know when the user opens a target app. Methods used:</p>

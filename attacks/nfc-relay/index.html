@@ -10486,12 +10486,12 @@
 
 <h1 id="nfc-relay-attacks">NFC Relay Attacks<a class="headerlink" href="#nfc-relay-attacks" title="Permanent link">&para;</a></h1>
 <p>Relaying NFC (Near Field Communication) data from a victim's payment card to an attacker-controlled device for unauthorized transactions. An emerging attack category first seen in Android malware in 2024, enabling ATM cash withdrawal and POS fraud using cloned contactless card data.</p>
-<div class="admonition abstract">
-<p class="admonition-title">MITRE ATT&amp;CK</p>
+<details class="abstract">
+<summary>MITRE ATT&amp;CK</summary>
 <p>MITRE ATT&amp;CK Mobile has no dedicated technique for NFC relay attacks. The closest related technique is <a href="https://attack.mitre.org/techniques/T1638/">T1638</a> (Adversary-in-the-Middle), which covers relay/interception patterns conceptually. NFC relay using <a href="https://github.com/nfcgate/nfcgate">NFCGate</a> and Android's HCE API is an emerging attack class not yet represented in the ATT&amp;CK framework. This is a gap that AWAKE documents.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Requirements</p>
+</details>
+<details class="warning">
+<summary>Requirements</summary>
 <table>
 <thead>
 <tr>
@@ -10514,7 +10514,7 @@
 </tr>
 </tbody>
 </table>
-</div>
+</details>
 <h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
 <h3 id="attack-flow">Attack Flow<a class="headerlink" href="#attack-flow" title="Permanent link">&para;</a></h3>
 <ol>
