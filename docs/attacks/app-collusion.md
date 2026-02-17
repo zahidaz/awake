@@ -4,6 +4,10 @@ Application collusion is a threat where two or more Android apps cooperate to pe
 
 See also: [Intent Hijacking](intent-hijacking.md), [Content Provider Attacks](content-provider-attacks.md), [Broadcast Theft](broadcast-theft.md), [Dynamic Code Loading](dynamic-code-loading.md)
 
+??? abstract "MITRE ATT&CK"
+
+    MITRE ATT&CK Mobile does not have a dedicated technique for app collusion. The closest related techniques are [T1624.001](https://attack.mitre.org/techniques/T1624/001/) (Event Triggered Execution: Broadcast Receivers) for inter-app broadcast communication and [T1474.003](https://attack.mitre.org/techniques/T1474/003/) (Compromise Software Supply Chain) for SDK-mediated collusion. The absence of a collusion-specific technique is a significant gap given the scale of real-world SDK collusion.
+
 ## Why It Matters
 
 Android's security model is built around per-app sandboxing and permission grants. Every security check, store review, and malware scanner evaluates apps individually. Collusion exploits this blind spot: when malicious behavior is distributed across multiple apps, no single app triggers detection. Current app store review and malware scanning remain [overwhelmingly single-app focused](https://people.cs.vt.edu/danfeng/papers/AsiaCCS-17-Yao.pdf); combinatorial analysis of app pairs is computationally expensive and not performed at scale by any store.

@@ -2,7 +2,16 @@
 
 Tricking the user into tapping on something they didn't intend to by placing a transparent or partially obscuring overlay over a sensitive UI element. A specific application of [overlay attacks](overlay-attacks.md) focused on manipulating touch events rather than phishing credentials.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1417.002](https://attack.mitre.org/techniques/T1417/002/) | Input Capture: GUI Input Capture | Credential Access, Collection |
+    | [T1516](https://attack.mitre.org/techniques/T1516/) | Input Injection | Defense Evasion, Impact |
+
+    Tapjacking is a variant of overlay-based input capture (T1417.002) where clicks are simulated or redirected via T1516.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -42,14 +51,14 @@ Only part of the screen is covered. The unobscured area contains the target (e.g
 
 The overlay appears and disappears rapidly, showing for just long enough to catch a tap the user was already making. Harder to detect but less reliable.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 4.0.3 | `filterTouchesWhenObscured` attribute added | Opt-in; most apps don't implement it |
-| Android 6.0 | `SYSTEM_ALERT_WINDOW` moved to special permission (Settings toggle) | Accessibility service can auto-enable |
-| Android 8.0 | `TYPE_APPLICATION_OVERLAY` renders below system dialogs | Third-party app UIs remain vulnerable |
-| Android 12 | System dialogs set `FLAG_WINDOW_IS_PARTIALLY_OBSCURED`; overlays untouchable over sensitive system UI | Accessibility gestures bypass all overlay mitigations entirely |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 4.0.3 | 15 | [`filterTouchesWhenObscured`](https://developer.android.com/reference/android/view/View#attr_android:filterTouchesWhenObscured) attribute added | Opt-in; most apps don't implement it |
+| 6.0 | 23 | `SYSTEM_ALERT_WINDOW` moved to special permission (Settings toggle) | Accessibility service can auto-enable |
+| 8.0 | 26 | `TYPE_APPLICATION_OVERLAY` renders below system dialogs | Third-party app UIs remain vulnerable |
+| 12 | 31 | System dialogs set `FLAG_WINDOW_IS_PARTIALLY_OBSCURED`; [overlays untouchable](https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events) over sensitive system UI | [Accessibility](accessibility-abuse.md) gestures bypass all overlay mitigations entirely |
 
 ### Remaining Gaps
 

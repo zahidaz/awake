@@ -2,7 +2,16 @@
 
 Surviving device reboots, app kills, and user attempts at removal. Android's process lifecycle aggressively terminates background apps to conserve resources, so malware must actively fight to stay alive. The most resilient families layer multiple persistence mechanisms, ensuring that if one is killed, another restarts it.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1624.001](https://attack.mitre.org/techniques/T1624/001/) | Event Triggered Execution: Broadcast Receivers | Persistence |
+    | [T1541](https://attack.mitre.org/techniques/T1541/) | Foreground Persistence | Persistence, Defense Evasion |
+    | [T1398](https://attack.mitre.org/techniques/T1398/) | Boot or Logon Initialization Scripts | Persistence |
+    | [T1626.001](https://attack.mitre.org/techniques/T1626/001/) | Abuse Elevation Control Mechanism: Device Administrator Permissions | Privilege Escalation |
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -179,17 +188,21 @@ Malware targeting these regions often includes OEM-specific code that detects th
 
     When testing on Xiaomi, Huawei, Oppo, or Vivo devices, check for autostart whitelist entries under OEM-specific settings. Malware that works reliably in the wild on these devices has likely solved the OEM background-kill problem -- look for `Build.MANUFACTURER` checks and vendor-specific `Intent` actions in the decompiled code.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Restriction | Version | Impact | Malware Workaround |
-|-------------|---------|--------|-------------------|
-| Background service limits | Android 8+ | Services killed within minutes | Foreground service with notification |
-| Background location limits | Android 10+ | Location only while app is visible | Foreground service with `location` type |
-| Foreground service launch restrictions | Android 12+ | Cannot start foreground service from background | Boot receiver, alarm, or accessibility event as trigger |
-| Exact alarm restrictions | Android 12+ | `SCHEDULE_EXACT_ALARM` required | Use `setAndAllowWhileIdle()` (inexact) or request permission |
-| Notification permission | Android 13+ | `POST_NOTIFICATIONS` required (runtime permission) | Social engineer the grant, or use silent notification channels created pre-upgrade |
-| Background activity launch restrictions | Android 10+ | Cannot start activities from background | `USE_FULL_SCREEN_INTENT` or accessibility `performGlobalAction` |
-| Foreground service type requirements | Android 14+ | Must declare foreground service type in manifest | Declare appropriate type or use alternative persistence |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | `BOOT_COMPLETED` broadcast available | Basic boot persistence from day one |
+| 5.0 | 21 | `JobScheduler` introduced | Persistent scheduled execution surviving process death |
+| 8.0 | 26 | [Background service limits](https://developer.android.com/about/versions/oreo/background) | Services killed within minutes; foreground service with notification required |
+| 8.0 | 26 | [Implicit broadcast restrictions](https://developer.android.com/about/versions/oreo/background#broadcasts) | `BOOT_COMPLETED` exempt, still delivered to manifest receivers |
+| 10 | 29 | [Background activity launch restrictions](https://developer.android.com/guide/components/activities/background-starts) | Cannot start activities from background; use `USE_FULL_SCREEN_INTENT` or accessibility |
+| 10 | 29 | Background location limits | Foreground service with `location` type required |
+| 12 | 31 | [Foreground service launch restrictions](https://developer.android.com/about/versions/12/foreground-services) | Cannot start foreground service from background except via boot receiver, alarm, or accessibility |
+| 12 | 31 | [Exact alarm restrictions](https://developer.android.com/about/versions/12/behavior-changes-12#exact-alarm-permission) | `SCHEDULE_EXACT_ALARM` or `USE_EXACT_ALARM` required |
+| 13 | 33 | `POST_NOTIFICATIONS` runtime permission required | Social engineer the grant, or use silent channels created pre-upgrade |
+| 14 | 34 | [Foreground service type requirements](https://developer.android.com/about/versions/14/changes/fgs-types-required) | Must declare specific foreground service type in manifest |
+| 15 | 35 | Further restrictions on foreground service types | Some types (e.g., `dataSync`) limited to 6 hours |
 
 Each restriction pushed malware toward more creative solutions. The overall trend is layering multiple persistence methods so that at least one survives the increasingly aggressive background restrictions.
 

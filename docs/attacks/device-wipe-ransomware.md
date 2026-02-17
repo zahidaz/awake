@@ -4,7 +4,18 @@ Destroying data, locking devices, and encrypting files on Android for extortion 
 
 See also: [Device Admin Abuse](device-admin-abuse.md), [Accessibility Abuse](accessibility-abuse.md), [Persistence Techniques](persistence-techniques.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1471](https://attack.mitre.org/techniques/T1471/) | Data Encrypted for Impact | Impact |
+    | [T1662](https://attack.mitre.org/techniques/T1662/) | Data Destruction | Impact |
+    | [T1640](https://attack.mitre.org/techniques/T1640/) | Generate Fraudulent Advertising Revenue | Impact |
+    | [T1629.002](https://attack.mitre.org/techniques/T1629/002/) | Impair Defenses: Device Lockout | Defense Evasion |
+
+    T1471 covers file encryption ransomware (Simplocker, DoubleLocker, SOVA v5). T1662 covers factory reset as evidence destruction (BRATA, BingoMod). T1629.002 covers screen locking and PIN changing as device lockout.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -126,20 +137,20 @@ Sideloaded ransomware can still request `MANAGE_EXTERNAL_STORAGE` and trick user
 | [BingoMod](../malware/families/bingomod.md) | No | No | No | Remote wipe | 2024 |
 | [Rafel RAT](../malware/families/rafelrat.md) | Overlay | Yes | AES | `wipeData()` | 2024 |
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | Change | Impact on Ransomware |
-|---------|--------|---------------------|
-| 4.0 | Device admin API available | `wipeData()` and `resetPassword()` accessible |
-| 5.0 | SELinux enforcing | Root-based wipe harder without exploit |
-| 6.0 | `SYSTEM_ALERT_WINDOW` requires explicit grant (sideloaded) | Overlay-based lockers need user interaction |
-| 7.0 | `resetPassword()` requires current password if one is set | PIN change harder if device already has PIN |
-| 8.0 | `resetPassword()` deprecated for device admin | PIN-locking ransomware vector eliminated for 8.0+ |
-| 9.0 | Device admin deprecated for enterprise | Fewer legitimate uses, easier to flag abuse |
-| 10 | Scoped storage introduced (opt-in) | File encryption scope reduced |
-| 11 | Scoped storage enforced | Ransomware cannot access shared files without `MANAGE_EXTERNAL_STORAGE` |
-| 12 | `SYSTEM_ALERT_WINDOW` overlay restrictions | Harder to maintain persistent full-screen lock |
-| 14 | Foreground service type declarations required | Malicious services more visible in manifest |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 2.2 | 8 | [Device Administration API](https://developer.android.com/guide/topics/admin/device-admin) introduced | `wipeData()` and `resetPassword()` accessible |
+| 5.0 | 21 | SELinux enforcing for all domains | Root-based wipe harder without exploit |
+| 6.0 | 23 | `SYSTEM_ALERT_WINDOW` requires explicit grant (sideloaded) | Overlay-based lockers need user interaction |
+| 7.0 | 24 | `resetPassword()` requires current password if one is set | PIN change harder if device already has PIN |
+| 8.0 | 26 | [`resetPassword()` deprecated](https://developer.android.com/about/versions/oreo/android-8.0-changes#dp) for device admin | PIN-locking ransomware vector eliminated for 8.0+ |
+| 9.0 | 28 | [Device admin deprecation begins](https://developer.android.com/about/versions/pie/android-9.0-changes-all#device_security_changes) | Fewer legitimate uses, easier to flag abuse |
+| 10 | 29 | [Scoped storage](https://developer.android.com/about/versions/10/privacy/changes#scoped-storage) introduced (opt-in) | File encryption scope reduced |
+| 11 | 30 | Scoped storage enforced | Ransomware cannot access shared files without `MANAGE_EXTERNAL_STORAGE` |
+| 12 | 31 | [Overlay restrictions over system windows](https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events) | Harder to maintain persistent full-screen lock |
+| 14 | 34 | [Foreground service type declarations required](https://developer.android.com/about/versions/14/changes/fgs-types-required) | Malicious services more visible in manifest |
 
 ## Detection During Analysis
 

@@ -2,7 +2,18 @@
 
 Intercepting or redirecting intents meant for another app component. Possible when an app sends implicit intents or exports components without proper protection. The attacker's app registers to handle the same intent and receives data meant for the legitimate component.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    No standalone MITRE ATT&CK Mobile technique for intent hijacking. Related techniques:
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1635.001](https://attack.mitre.org/techniques/T1635/001/) | Steal Application Access Token: URI Hijacking | Credential Access |
+    | [T1624.001](https://attack.mitre.org/techniques/T1624/001/) | Event Triggered Execution: Broadcast Receivers | Persistence |
+
+    Intent hijacking as a general IPC attack surface is not explicitly modeled in ATT&CK. T1635.001 covers intent-based URI interception; T1624.001 covers intercepting broadcast intents.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -80,13 +91,15 @@ See [Broadcast Theft](broadcast-theft.md) for broadcast-specific interception.
 | File sharing interception | Registering for `ACTION_SEND` to capture files shared between apps |
 | Deep link hijacking | See [Deep Link Exploitation](deep-link-exploitation.md) |
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 5.0 (API 21) | Implicit intents to services throw `IllegalArgumentException` | Does not affect activities or broadcast receivers |
-| Android 12 (API 31) | Components with intent filters must explicitly declare `android:exported` | Developers often set `exported="true"` to resolve build errors |
-| Android 12+ | `PendingIntent` mutability must be declared (`FLAG_MUTABLE` / `FLAG_IMMUTABLE`) | Apps requiring `FLAG_MUTABLE` (notifications, MediaSession) remain vulnerable if base intent is not fully specified |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | Implicit intent resolution, exported components | Any app can intercept implicit intents or access exported components |
+| 5.0 | 21 | Implicit intents to services throw `IllegalArgumentException` | Service hijacking eliminated; activities and broadcast receivers unaffected |
+| 12 | 31 | Components with intent filters must explicitly declare [`android:exported`](https://developer.android.com/about/versions/12/behavior-changes-12#exported) | Developers often set `exported="true"` to resolve build errors |
+| 12 | 31 | `PendingIntent` mutability must be declared (`FLAG_MUTABLE` / `FLAG_IMMUTABLE`) | Apps requiring `FLAG_MUTABLE` remain vulnerable if base intent is not fully specified |
+| 14 | 34 | Restrictions on implicit intents targeting other apps' components | Tighter enforcement of explicit intent requirements |
 
 ## Detection During Analysis
 

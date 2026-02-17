@@ -4,7 +4,17 @@ Exploiting the cellular infrastructure layer -- SIM cards, carrier billing syste
 
 See also: [SMS Interception](sms-interception.md), [Call Interception](call-interception.md), [Phishing Techniques](phishing-techniques.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1451](https://attack.mitre.org/techniques/T1451/) | SIM Card Swap | Credential Access, Initial Access |
+    | [T1449](https://attack.mitre.org/techniques/T1449/) | Exploit SS7 to Track Device Location | Collection, Discovery |
+    | [T1640](https://attack.mitre.org/techniques/T1640/) | Generate Fraudulent Advertising Revenue | Impact |
+
+    T1451 covers SIM swapping and eSIM manipulation for 2FA bypass. T1449 covers carrier-infrastructure-level location tracking and interception. Carrier billing fraud and USSD exploitation do not have dedicated MITRE techniques; this is an area where AWAKE provides deeper coverage. Simjacker and WIBattack (SIM toolkit attacks) are not represented in ATT&CK Mobile.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -207,14 +217,14 @@ In 2012, [Ravi Borgaonkar demonstrated](https://www.youtube.com/watch?v=Q2-0B04H
 
 Samsung patched this, and modern Android versions display a confirmation dialog before dialing USSD codes via `tel:` URIs. The incident demonstrated why programmatic USSD execution without user consent is dangerous.
 
-### Android Mitigations
+### Platform Lifecycle (USSD)
 
-| Version | Mitigation |
-|---------|------------|
-| Pre-4.2 | No confirmation required for `tel:` URI USSD codes |
-| 4.2+ | `tel:` URI USSD codes show a confirmation dialog instead of executing directly |
-| 8.0+ | `sendUssdRequest()` API added with proper permission checks |
-| 10+ | Background activity launch restrictions limit silent USSD dialing |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| Pre-4.2 | <17 | No confirmation required for `tel:` URI USSD codes | Silent factory reset via web page ([CVE-2012-4001](#samsung-ussd-vulnerability-cve-2012-4001)) |
+| 4.2 | 17 | `tel:` URI USSD codes show confirmation dialog | Direct web-triggered USSD eliminated |
+| 8.0 | 26 | [`sendUssdRequest()`](https://developer.android.com/reference/android/telephony/TelephonyManager#sendUssdRequest(java.lang.String,%20android.telephony.TelephonyManager.UssdResponseCallback,%20android.os.Handler)) API with proper permission checks | Programmatic USSD execution still works with `CALL_PHONE` |
+| 10 | 29 | [Background activity launch restrictions](https://developer.android.com/about/versions/10/privacy/changes#background-activity-starts) | Silent USSD dialing from background limited |
 
 ## SIM Toolkit (STK) Attacks
 

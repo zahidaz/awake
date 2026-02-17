@@ -2,7 +2,13 @@
 
 Monitoring or modifying clipboard contents to steal sensitive data. Android's `ClipboardManager` API provides a system-wide clipboard that any foreground app can read and write. Malware abuses this to intercept cryptocurrency wallet addresses, passwords, OTPs, and banking data as users copy and paste between apps. The most destructive variant, the crypto clipper, silently replaces a copied wallet address with one controlled by the attacker, redirecting transactions without the victim noticing.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1414](https://attack.mitre.org/techniques/T1414/) | Clipboard Data | Collection, Credential Access |
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -72,15 +78,16 @@ Anything copied is logged and exfiltrated to C2. Users routinely copy credential
 
 When a user receives a one-time password via SMS or authenticator app and copies it, the clipboard briefly contains the OTP. Malware with a clipboard listener captures this immediately. Combined with other stolen credentials, this enables account takeover. Some banking apps auto-fill OTPs from SMS, but users who manually copy-paste from their SMS app or authenticator expose the code through clipboard.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Change | Impact on Attack |
-|---------|--------|-----------------|
-| Android 10 (API 29) | Background apps cannot read clipboard | Malware must maintain foreground state or use accessibility service. Accessibility bypass remains fully effective. |
-| Android 12 (API 31) | Toast notification when an app reads clipboard | User sees "[App] pasted from your clipboard" toast. Accessibility services bypass this notification. Apps that set clipboard data themselves don't trigger it. |
-| Android 12 (API 31) | `ClipDescription.getConfidential()` flag | Keyboard and IME apps can mark clipboard content as sensitive, preventing it from appearing in content suggestions. Does not prevent programmatic reads. |
-| Android 13 (API 33) | Clipboard auto-cleared after approximately 1 hour | Limits the time window for passive clipboard monitoring. Active listeners still capture content in real-time before the auto-clear. Crypto clippers are unaffected since they operate at the moment of copy. |
-| Android 14 (API 34) | Background activity launch restrictions tightened | Harder for background apps to bring themselves to foreground for clipboard access. Accessibility services unaffected. |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | `ClipboardManager` API available | Any app can read/write clipboard at any time |
+| 10 | 29 | [Background clipboard access restricted](https://developer.android.com/about/versions/10/privacy/changes#clipboard-data) | Malware must maintain foreground state or use accessibility service |
+| 12 | 31 | Toast notification when an app reads clipboard | User sees "[App] pasted from your clipboard"; accessibility services bypass this |
+| 12 | 31 | `ClipDescription.getConfidential()` flag | Keyboard/IME apps can mark content as sensitive; does not prevent programmatic reads |
+| 13 | 33 | [Clipboard auto-cleared after ~1 hour](https://developer.android.com/about/versions/13/behavior-changes-all#clipboard-preview) | Active listeners still capture in real-time; crypto clippers unaffected |
+| 14 | 34 | Background activity launch restrictions tightened | Harder for background apps to reach foreground for clipboard access; accessibility unaffected |
 
 The clipboard access toast in Android 12 is the most visible mitigation, but it only appears for reads, not for the initial copy event. A crypto clipper that replaces clipboard content on the `OnPrimaryClipChangedListener` callback operates before the user pastes, so the toast for the malware's clipboard write may flash briefly but is easily missed or attributed to the legitimate app.
 

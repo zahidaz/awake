@@ -2,7 +2,15 @@
 
 Exploiting exposed or misconfigured `ContentProvider` components to read, modify, or delete app data. Content providers are Android's standard mechanism for sharing structured data between apps. When exported without proper permission checks, they expose databases, files, and internal state.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1409](https://attack.mitre.org/techniques/T1409/) | Stored Application Data | Collection |
+
+    No dedicated MITRE technique for content provider exploitation. T1409 covers accessing data stored by applications, which includes insecure content providers. MITRE treats content provider access as a data collection vector rather than a standalone technique.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|

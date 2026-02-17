@@ -4,7 +4,14 @@ Using Android's accessibility framework to control the device programmatically. 
 
 See also: [`BIND_ACCESSIBILITY_SERVICE`](../permissions/special/bind-accessibility-service.md) for the permission details, [Notification Suppression](notification-suppression.md), [Anti-Analysis Techniques](anti-analysis-techniques.md#play-protect-suppression), [Camera & Mic Surveillance](camera-mic-surveillance.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1453](https://attack.mitre.org/techniques/T1453/) | Abuse Accessibility Features | Collection, Credential Access |
+    | [T1516](https://attack.mitre.org/techniques/T1516/) | Input Injection | Defense Evasion, Impact |
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -45,7 +52,7 @@ This effectively escalates from one permission (accessibility) to all permission
 
 ### On-Device Fraud (ATS)
 
-Automated Transfer System: the malware operates the real banking app to initiate transfers. Steps:
+Automated Transfer System ([T1516](https://attack.mitre.org/techniques/T1516/)): the malware operates the real banking app to initiate transfers. MITRE ATT&CK has no standalone technique for ATS; it is a compound behavior combining T1453 (accessibility abuse) and T1516 (input injection). Steps:
 
 1. Wait for user to log into banking app (or use stolen credentials via overlay)
 2. Navigate to transfer screen using accessibility gestures
@@ -70,7 +77,7 @@ With `flagRetrieveInteractiveWindows`, the accessibility service can read notifi
 
 ### Screen Streaming / VNC
 
-Some families (Hook, Octo) use accessibility events to build a real-time representation of the screen and stream it to the attacker, creating a VNC-like remote access capability.
+Some families ([Hook](../malware/families/hook.md), [Octo](../malware/families/octo.md)) use accessibility events to build a real-time representation of the screen and stream it to the attacker, creating a VNC-like remote access capability. See [Screen Capture](screen-capture.md) for the full breakdown of MediaProjection vs. accessibility-based approaches.
 
 ## Malware Families by Accessibility Capability
 
@@ -123,18 +130,27 @@ Common lures used to get users to the accessibility settings:
 | "Enable to continue" | App refuses to function until enabled |
 | "Google Chrome update" | Impersonates Chrome update process |
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Change | Impact |
-|---------|--------|--------|
-| Android 11 | `isAccessibilityTool` metadata required for visibility | Only affects apps targeting API 30+ |
-| Android 13 | Restricted settings for sideloaded apps | Bypassed by session-based installers |
-| Android 13 | Accessibility shortcut warning improved | Users still click through |
-| Android 15 | Expanded restricted settings | Closes some session-installer loopholes |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.6 | 4 | Accessibility framework introduced | Basic screen reading only |
+| 4.0 | 14 | `canRetrieveWindowContent` added | Full screen content extraction |
+| 4.1 | 16 | `TYPE_WINDOW_STATE_CHANGED` events | Real-time foreground app detection for [overlay](overlay-attacks.md) triggering |
+| 4.3 | 18 | `flagRetrieveInteractiveWindows` | Cross-window content access including notifications |
+| 7.0 | 24 | [`dispatchGesture()`](https://developer.android.com/reference/android/accessibilityservice/AccessibilityService#dispatchGesture(android.accessibilityservice.GestureDescription,%20android.accessibilityservice.AccessibilityService.GestureResultCallback,%20android.os.Handler)) API | Programmatic gestures enable [ATS](automated-transfer-systems.md) |
+| 7.0 | 24 | `GLOBAL_ACTION_LOCK_SCREEN` | Lock device during fraud operations |
+| 8.0 | 26 | Must declare handled event types in config XML | Malware declares all types |
+| 11 | 30 | `isAccessibilityTool` metadata required for Play Store visibility | Only affects apps targeting API 30+; sideloaded malware unaffected |
+| 12 | 31 | Password field text redaction in `AccessibilityNodeInfo` | Partial, depends on app implementation |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk) for sideloaded apps | Bypassed by [session-based installers](play-store-evasion.md) |
+| 13 | 33 | Accessibility shortcut warning improved | Users still click through warnings |
+| 14 | 34 | [`accessibilityDataSensitive`](https://developer.android.com/reference/android/view/View#setAccessibilityDataSensitive(int)) attribute | Apps can hide sensitive views from non-tool services; adoption is slow |
+| 15 | 35 | Expanded restricted settings enforcement | Closes some session-installer loopholes |
 
 !!! danger "Fundamental Limitation"
 
-    There is no technical way to distinguish a malicious accessibility service from a legitimate one at install time. The capability is inherent to the API.
+    There is no technical way to distinguish a malicious accessibility service from a legitimate one at install time. The capability is inherent to the API. API 24's `dispatchGesture()` was the inflection point: it turned accessibility from a passive observation tool into a full device automation framework that enables [automated on-device fraud](automated-transfer-systems.md).
 
 ## Families Using This Technique
 
@@ -181,10 +197,5 @@ Common lures used to get users to the accessibility settings:
 | [Rafel RAT](../malware/families/rafelrat.md) | Anti-removal, notification siphoning |
 | [Gigabud](../malware/families/gigabud.md) | Screen recording trigger, automated payments |
 | [PJobRAT](../malware/families/pjobrat.md) | Data exfiltration |
-| [BlankBot](../malware/families/blankbot.md) | Custom keyboard keylogging |
-| [Frogblight](../malware/families/frogblight.md) | Custom keyboard keylogging |
-| [ToxicPanda](../malware/families/toxicpanda.md) | ATS |
-| [Rafel RAT](../malware/families/rafelrat.md) | Keylogging, device control |
-| [Vultur](../malware/families/vultur.md) | Screen streaming |
 | [DeVixor](../malware/families/devixor.md) | Remote access via accessibility |
 | [FireScam](../malware/families/firescam.md) | Notification monitoring |

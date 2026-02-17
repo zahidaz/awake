@@ -2,9 +2,13 @@
 
 Android app-level virtualization frameworks (VirtualApp, DroidPlugin, VirtualXposed) allow one app to run other apps inside a virtual container without installation. Malware abuses this to run real banking apps inside a hostile sandbox, intercepting all user input and network traffic without modifying the target APK. This eliminates the need for overlays, bypasses repackaging detection, and defeats most runtime integrity checks because the target app is unmodified.
 
-MITRE tracks this as [T1670 - Virtualization Solution (Mobile)](https://attack.mitre.org/techniques/T1670/).
-
 See also: [Overlay Attacks](overlay-attacks.md), [Accessibility Abuse](accessibility-abuse.md), [Play Store Evasion](play-store-evasion.md)
+
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1670](https://attack.mitre.org/techniques/T1670/) | Virtualization Solution | Defense Evasion |
 
 ## Why It Matters
 

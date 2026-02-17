@@ -4,7 +4,19 @@ How Android malware talks to its command-and-control infrastructure. The C2 chan
 
 See also: [Network Traffic Interception](network-traffic-interception.md), [Anti-Analysis Techniques](anti-analysis-techniques.md#domain-generation-algorithms)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1437](https://attack.mitre.org/techniques/T1437/) | Application Layer Protocol | Command and Control |
+    | [T1481](https://attack.mitre.org/techniques/T1481/) | Web Service | Command and Control |
+    | [T1521](https://attack.mitre.org/techniques/T1521/) | Encrypted Channel | Command and Control |
+    | [T1637.001](https://attack.mitre.org/techniques/T1637/001/) | Dynamic Resolution: Domain Generation Algorithms | Command and Control |
+    | [T1644](https://attack.mitre.org/techniques/T1644/) | Out of Band Data | Command and Control |
+
+    Sub-techniques: [T1481.001](https://attack.mitre.org/techniques/T1481/001/) Dead Drop Resolver, [T1481.002](https://attack.mitre.org/techniques/T1481/002/) Bidirectional Communication (Telegram, MQTT), [T1481.003](https://attack.mitre.org/techniques/T1481/003/) One-Way Communication (FCM push).
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|

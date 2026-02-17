@@ -4,7 +4,16 @@ Intercepting, redirecting, and faking phone calls on Android to conduct voice ph
 
 See also: [Phishing Techniques](phishing-techniques.md), [SMS Interception](sms-interception.md), [Accessibility Abuse](accessibility-abuse.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1616](https://attack.mitre.org/techniques/T1616/) | Call Control | Collection, Command and Control, Impact |
+    | [T1429](https://attack.mitre.org/techniques/T1429/) | Audio Capture | Collection |
+
+    T1616 covers making, forwarding, and blocking phone calls. T1429 applies when the interception involves recording call audio.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -130,16 +139,16 @@ getContentResolver().delete(
 | [SpyNote](../malware/families/spynote.md) | Call recording via foreground service | Global | [CYFIRMA](https://www.cyfirma.com/research/spynote-unmasking-a-sophisticated-android-malware/) |
 | [Medusa](../malware/families/medusa.md) | Call/SMS interception, accessibility logging | Turkish/European banks | [ThreatFabric](https://www.threatfabric.com/blogs) |
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | Change | Impact on Malware |
-|---------|--------|-------------------|
-| Pre-6.0 | All permissions granted at install | Call interception trivial |
-| 6.0 | Runtime permissions for `CALL_PHONE`, `READ_PHONE_STATE` | User must grant explicitly; accessibility auto-grants |
-| 9.0 | `VOICE_CALL` audio source restricted | Call recording moves to `MIC` source with speakerphone |
-| 10 | `PROCESS_OUTGOING_CALLS` deprecated; `CallRedirectionService` introduced | Malware adopts new API or uses default handler approach |
-| 10+ | Background microphone restrictions | Foreground service required for recording |
-| 14+ | Foreground service type declaration required | Must declare `microphone` type in manifest |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| Pre-6.0 | <23 | All permissions granted at install | Call interception trivial |
+| 6.0 | 23 | Runtime permissions for `CALL_PHONE`, `READ_PHONE_STATE` | User must grant explicitly; [accessibility](accessibility-abuse.md) auto-grants |
+| 9.0 | 28 | `VOICE_CALL` audio source restricted | Call recording moves to `MIC` source with speakerphone |
+| 10 | 29 | `PROCESS_OUTGOING_CALLS` deprecated; [`CallRedirectionService`](https://developer.android.com/reference/android/telecom/CallRedirectionService) introduced | Malware adopts new API or uses default handler approach |
+| 10 | 29 | Background microphone restrictions | Foreground service required for recording |
+| 14 | 34 | [Foreground service type declaration required](https://developer.android.com/about/versions/14/changes/fgs-types-required) | Must declare `microphone` type in manifest |
 
 ## Detection During Analysis
 

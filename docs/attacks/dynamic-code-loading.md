@@ -4,7 +4,13 @@ Loading executable code at runtime rather than including it in the APK. The APK 
 
 See also: [Packers](../packers/index.md), [Hooking](../reversing/hooking.md), [Anti-Analysis Techniques](anti-analysis-techniques.md#code-level-obfuscation)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1407](https://attack.mitre.org/techniques/T1407/) | Download New Code at Runtime | Defense Evasion |
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -187,15 +193,18 @@ Commercial packers and malware dynamic loaders solve the same problem: executing
 
 See: [Packers](../packers/index.md) for detailed analysis of commercial packing solutions.
 
-## Android Restrictions
+## Platform Lifecycle
 
-| Version | Restriction | Impact |
-|---------|------------|--------|
-| Android 8 | `InMemoryDexClassLoader` introduced | Enabled fileless payload loading |
-| Android 10 | Restricted access to `/data/local/tmp` | Minor -- malware uses app-private dirs |
-| Android 14 | Dynamic code loading from writable paths triggers warning | DEX files in writable directories flagged by `DexFile` loading checks |
-| Android 14 | `ENFORCE_DYNAMIC_CODE_LOADING` flag | Apps can opt into read-only enforcement for loaded code |
-| Android 15 | Stricter enforcement for apps targeting API 35 | Loaded DEX must be in read-only paths, breaks writable DexClassLoader pattern |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | `DexClassLoader` available | Runtime DEX loading from disk |
+| 5.0 | 21 | ART replaces Dalvik, OAT compilation | DEX still loadable, compiled to native at load time |
+| 8.0 | 26 | [`InMemoryDexClassLoader`](https://developer.android.com/reference/dalvik/system/InMemoryDexClassLoader) introduced | Fileless payload loading from `ByteBuffer`, no filesystem trace |
+| 10 | 29 | Restricted access to `/data/local/tmp` | Minor, malware uses app-private directories |
+| 13 | 33 | [Dynamic code loading audit warnings](https://developer.android.com/about/versions/13/behavior-changes-13) | Logged but not enforced |
+| 14 | 34 | Dynamic code loading from writable paths triggers warning | DEX files in writable directories flagged by `DexFile` loading checks |
+| 14 | 34 | `ENFORCE_DYNAMIC_CODE_LOADING` flag | Apps can opt into read-only enforcement for loaded code |
+| 15 | 35 | Stricter enforcement for apps targeting API 35 | Loaded DEX must be in read-only paths; malware marks files read-only after writing or uses `InMemoryDexClassLoader` |
 
 Android 14's restriction is significant: `DexClassLoader` loading from `getFilesDir()` or `getCacheDir()` now logs warnings, and apps targeting API 34+ that set `ENFORCE_DYNAMIC_CODE_LOADING` will crash if the loaded file is writable. Malware adapts by marking payload files as read-only after writing, or by using `InMemoryDexClassLoader` to avoid the filesystem entirely.
 

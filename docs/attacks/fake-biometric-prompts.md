@@ -2,7 +2,16 @@
 
 Stealing device unlock credentials through fake lockscreens and abusing the BiometricPrompt API. Distinct from standard overlay phishing, which targets banking app credentials. This technique captures the device PIN, password, or unlock pattern, giving attackers the ability to unlock the device during remote access sessions and bypass device encryption at rest.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1417.002](https://attack.mitre.org/techniques/T1417/002/) | Input Capture: GUI Input Capture | Credential Access, Collection |
+    | [T1516](https://attack.mitre.org/techniques/T1516/) | Input Injection | Defense Evasion, Impact |
+
+    T1417.002 covers the overlay-based capture of device unlock credentials (PIN, pattern, password). T1516 covers the accessibility-driven biometric downgrade that forces PIN entry. MITRE does not have a dedicated technique for fake lockscreen overlays; this is an AWAKE-specific coverage area.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|

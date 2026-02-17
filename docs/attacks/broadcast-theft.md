@@ -2,7 +2,15 @@
 
 Intercepting broadcast intents meant for other apps. Android's broadcast system sends messages to all registered receivers. If a broadcast carries sensitive data and isn't properly protected, any app can register a receiver and read it.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1624.001](https://attack.mitre.org/techniques/T1624/001/) | Event Triggered Execution: Broadcast Receivers | Persistence |
+
+    T1624.001 covers registering for intents broadcasted by other applications, enabling interception of broadcasts not intended for the malicious app.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -77,15 +85,16 @@ Multiple apps receiving `BOOT_COMPLETED` race to start. Malware that starts firs
 | `PACKAGE_ADDED/REMOVED` | Package name of installed/removed app | None |
 | `BOOT_COMPLETED` | Device booted | `RECEIVE_BOOT_COMPLETED` |
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 3.1 (API 12) | Apps in stopped state don't receive broadcasts | Must be launched once; malware is typically already running |
-| Android 4.4 (API 19) | Only default SMS app can abort `SMS_RECEIVED` | Malware can still read SMS content without aborting |
-| Android 5.0 (API 21) | Sticky broadcasts deprecated | Legacy sticky broadcasts like `ACTION_BATTERY_CHANGED` still work |
-| Android 8.0 (API 26) | Implicit broadcast restrictions; most not delivered to manifest receivers | Exempt broadcasts (`BOOT_COMPLETED`, `SMS_RECEIVED`) still delivered; dynamic registration still works |
-| Android 14 (API 34) | Context-registered receivers must declare `RECEIVER_EXPORTED` or `RECEIVER_NOT_EXPORTED` | Malware explicitly sets `RECEIVER_EXPORTED` |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | Broadcast system with ordered broadcasts | Any app can intercept any unprotected broadcast |
+| 3.1 | 12 | Apps in stopped state don't receive broadcasts | Must be launched once; malware is typically already running |
+| 4.4 | 19 | Only default SMS app can abort `SMS_RECEIVED` | Malware can still read SMS content without aborting |
+| 5.0 | 21 | Sticky broadcasts deprecated | Legacy sticky broadcasts like `ACTION_BATTERY_CHANGED` still work |
+| 8.0 | 26 | [Implicit broadcast restrictions](https://developer.android.com/about/versions/oreo/background#broadcasts) | Exempt broadcasts (`BOOT_COMPLETED`, `SMS_RECEIVED`) still delivered; dynamic registration still works |
+| 14 | 34 | Context-registered receivers must declare [`RECEIVER_EXPORTED` or `RECEIVER_NOT_EXPORTED`](https://developer.android.com/about/versions/14/behavior-changes-14#runtime-receivers-exported) | Malware explicitly sets `RECEIVER_EXPORTED` |
 
 ## Families Using This Technique
 

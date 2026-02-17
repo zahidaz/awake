@@ -4,6 +4,17 @@ Compromising the software or hardware supply chain to distribute malware through
 
 See also: [Play Store Evasion](play-store-evasion.md), [Dynamic Code Loading](dynamic-code-loading.md), [Firmware Grayware](../grayware/firmware-grayware.md)
 
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1474](https://attack.mitre.org/techniques/T1474/) | Supply Chain Compromise | Initial Access |
+    | [T1474.001](https://attack.mitre.org/techniques/T1474/001/) | Compromise Software Dependencies and Development Tools | Initial Access |
+    | [T1474.002](https://attack.mitre.org/techniques/T1474/002/) | Compromise Hardware Supply Chain | Initial Access |
+    | [T1474.003](https://attack.mitre.org/techniques/T1474/003/) | Compromise Software Supply Chain | Initial Access |
+
+    T1474.001 covers Gradle/Maven dependency attacks (MavenGate, typosquatting, dependency confusion). T1474.002 covers firmware pre-installs during manufacturing (BADBOX, Triada firmware). T1474.003 covers SDK poisoning (SpinOk, Necro, Goldoson) and app acquisition attacks.
+
 !!! warning "Scale"
 
     | Vector | Largest Documented Case | Devices Affected |

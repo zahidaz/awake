@@ -4,7 +4,15 @@ Intercepting, modifying, and redirecting network traffic on Android devices thro
 
 See also: [C2 Communication](c2-techniques.md), [WebView Exploitation](webview-exploitation.md), [Phishing Techniques](phishing-techniques.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1638](https://attack.mitre.org/techniques/T1638/) | Adversary-in-the-Middle | Credential Access, Collection |
+
+    T1638 covers network-level interception including VPN abuse, DNS hijacking, and MITM attacks for credential capture and traffic manipulation.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -138,19 +146,19 @@ Apps can additionally implement certificate pinning to reject any CA not matchin
 
 Pinning is bypassed by hooking the TLS verification at runtime (Frida, Xposed), patching the `network_security_config.xml`, or hooking `TrustManager` implementations. Malware performing MITM does not typically need to bypass pinning because it controls the device and can hook the verification process.
 
-## Network Security Configuration Evolution
+## Platform Lifecycle
 
-| Android Version | Change | Security Impact |
-|----------------|--------|----------------|
-| Pre-7.0 | All CAs (system + user) trusted by default | User CA MITM trivial |
-| 7.0 | Network Security Config introduced; user CAs untrusted by default | MITM requires root for system CA or app-specific config |
-| 7.0 | Certificate pinning declarative support | Apps can pin without code changes |
-| 9.0 | Cleartext (HTTP) traffic blocked by default | Apps must explicitly allow HTTP via config |
-| 9.0 | Private DNS (DNS-over-TLS) support | DNS queries encrypted (when configured) |
-| 10 | TLS 1.3 enabled by default | Stronger encryption, but irrelevant if VPN intercepts |
-| 13 | DNS-over-HTTPS support | DNS encryption alternative |
-| 14 | System CA store moved to immutable APEX | Even root cannot permanently modify trust store |
-| 14 | Updatable root certificates via Google Play | Faster CA revocation response |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| Pre-7.0 | <24 | All CAs (system + user) trusted by default | User CA MITM trivial for all apps |
+| 7.0 | 24 | [Network Security Config](https://developer.android.com/privacy-and-security/security-config) introduced; user CAs untrusted by default | MITM requires root for system CA or app-specific config |
+| 7.0 | 24 | Declarative certificate pinning support | Apps can pin without code changes; attackers hook `TrustManager` to bypass |
+| 9.0 | 28 | [Cleartext (HTTP) traffic blocked by default](https://developer.android.com/privacy-and-security/security-config#CleartextTrafficPermitted) | Apps must explicitly allow HTTP; credential sniffing over HTTP eliminated for compliant apps |
+| 9.0 | 28 | Private DNS (DNS-over-TLS) support | DNS queries encrypted when configured; VPN-based interception still works |
+| 10 | 29 | TLS 1.3 enabled by default | Stronger encryption, but irrelevant if VPN intercepts pre-TLS |
+| 13 | 33 | DNS-over-HTTPS support | Additional DNS encryption option |
+| 14 | 34 | [System CA store moved to immutable APEX](https://httptoolkit.com/blog/android-14-breaks-system-certificate-installation/) | Even root cannot permanently modify trust store |
+| 14 | 34 | [Updatable root certificates via Google Play](https://www.xda-developers.com/android-14-root-certificates-updatable/) | Faster CA revocation response |
 
 ## Families Using Network Interception
 

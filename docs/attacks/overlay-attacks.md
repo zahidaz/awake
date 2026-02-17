@@ -2,7 +2,16 @@
 
 Drawing a fake UI on top of a legitimate app to steal credentials. The defining technique of Android banking malware since ~2016. The attacker creates a window that looks identical to a banking app's login screen, and the user types their credentials into the attacker's view.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1417.002](https://attack.mitre.org/techniques/T1417/002/) | Input Capture: GUI Input Capture | Credential Access, Collection |
+    | [T1453](https://attack.mitre.org/techniques/T1453/) | Abuse Accessibility Features | Collection, Credential Access |
+
+    T1417.002 explicitly covers overlay attacks using `SYSTEM_ALERT_WINDOW` and fake login screens. T1453 applies when accessibility services trigger the overlay based on foreground app detection.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -73,16 +82,22 @@ The malware downloads only injects for apps found on the device (see [`QUERY_ALL
 
 The trend is away from pure overlay attacks toward on-device fraud using accessibility to operate the real banking app directly. Overlays are still used for initial credential capture, but the real value is in accessibility-based ATS. The most recent evolution ([GodFather v3](../malware/families/godfather.md)) bypasses overlays entirely by running the real banking app inside a virtual environment and intercepting all interactions at runtime.
 
-## Android Mitigations
+## Platform Lifecycle
 
-!!! info "Every mitigation pushed malware toward heavier reliance on accessibility services"
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 4.0 | 14 | `TYPE_SYSTEM_ALERT` window type | Original overlay mechanism, draws over all apps |
+| 5.0 | 21 | `UsageStatsManager` for foreground detection | Polling-based overlay trigger without accessibility |
+| 6.0 | 23 | `SYSTEM_ALERT_WINDOW` becomes a runtime permission | Auto-granted from Play Store installs until API 26 |
+| 8.0 | 26 | `TYPE_APPLICATION_OVERLAY` replaces `TYPE_SYSTEM_ALERT` | Renders below permission dialogs, but attacker doesn't need to overlay those |
+| 8.0 | 26 | `SYSTEM_ALERT_WINDOW` no longer auto-granted from Play Store | Malware pivots to accessibility-triggered overlays |
+| 10 | 29 | Overlays cannot appear over focused app activities | [Accessibility](accessibility-abuse.md) gestures bypass this entirely |
+| 12 | 31 | [`FLAG_WINDOW_IS_PARTIALLY_OBSCURED`](https://developer.android.com/reference/android/view/MotionEvent#FLAG_WINDOW_IS_PARTIALLY_OBSCURED) warns apps of overlays | Most apps don't check this flag |
+| 12 | 31 | Overlays untouchable over system dialogs | Accessibility service performs the touches instead |
+| 12 | 31 | [Untrusted touch events blocked](https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events) when overlay obscures the target | Malware uses `FLAG_NOT_TOUCHABLE` with `alpha < 0.8` |
+| 15 | 35 | Further restrictions on overlay interaction patterns | Drives adoption of [app virtualization](app-virtualization.md) as alternative |
 
-    | Version | Mitigation | Bypass |
-    |---------|-----------|--------|
-    | Android 8 | `TYPE_APPLICATION_OVERLAY` renders below permission dialogs | Attacker doesn't need to overlay permission dialogs |
-    | Android 10 | Overlays can't appear over focused app activities | Accessibility gestures bypass this entirely |
-    | Android 12 | `FLAG_WINDOW_IS_PARTIALLY_OBSCURED` warns apps of overlays | Most apps don't check this flag |
-    | Android 12 | Overlays untouchable over system dialogs | Accessibility service performs the touches instead |
+!!! info "Every overlay restriction pushed malware toward heavier reliance on [accessibility services](accessibility-abuse.md)"
 
 ## Families Using This Technique
 

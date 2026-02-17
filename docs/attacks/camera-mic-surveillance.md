@@ -4,7 +4,16 @@ Silent capture of audio and video from a compromised Android device. Spyware and
 
 See also: [Screen Capture](screen-capture.md), [Keylogging](keylogging.md), [Accessibility Abuse](accessibility-abuse.md), [Call Interception](call-interception.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1429](https://attack.mitre.org/techniques/T1429/) | Audio Capture | Collection |
+    | [T1512](https://attack.mitre.org/techniques/T1512/) | Video Capture | Collection |
+
+    T1429 covers microphone-based audio recording and call recording. T1512 covers camera capture (photo and video). Both techniques are core collection capabilities for spyware and RATs.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -113,21 +122,20 @@ Banking trojans use camera/microphone primarily for credential capture during fr
 | [Vultur](../malware/families/vultur.md) | No | No | Screen recording | AlphaVNC + ngrok for real-time remote access |
 | [Crocodilus](../malware/families/crocodilus.md) | Yes | No | Black overlay | Camera for selfie capture, screen hidden during ATS |
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | Change | Impact on Surveillance |
-|---------|--------|----------------------|
-| Pre-6.0 | Camera/microphone permissions granted at install | Trivial access |
-| 6.0 | Runtime permissions for `CAMERA` and `RECORD_AUDIO` | User must grant explicitly; accessibility auto-grants |
-| 9.0 | Background camera access restricted | Foreground service required; must be started while app is visible |
-| 9.0 | `VOICE_CALL` audio source restricted | Call recording moves to `MIC` source workarounds |
-| 10 | Background microphone access restricted | Foreground service required |
-| 11 | Foreground service must declare `camera`/`microphone` type | Manifest declaration reveals intent |
-| 12 | Privacy indicators (green dot) for camera/microphone | Visual indicator to user; bypassed by LianSpy |
-| 14 | Foreground service type `camera`/`microphone` required | Cannot start camera/microphone FGS from background |
-| 14 | Microphone FGS cannot launch from `BOOT_COMPLETED` | Breaks boot-time ambient recording |
-| 14 | System CA certificates moved to immutable APEX | Related: HTTPS interception for data exfil harder |
-| 15 | Camera FGS also blocked from `BOOT_COMPLETED` | Further restricts boot-time surveillance |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| Pre-6.0 | <23 | Camera/microphone permissions granted at install | Trivial access to both sensors |
+| 6.0 | 23 | [Runtime permissions](https://developer.android.com/training/permissions/requesting) for `CAMERA` and `RECORD_AUDIO` | User must grant explicitly; [accessibility](accessibility-abuse.md) auto-grants |
+| 9.0 | 28 | Background camera access restricted | Foreground service required; must be started while app is visible |
+| 9.0 | 28 | `VOICE_CALL` audio source restricted | Call recording moves to `MIC` source workarounds |
+| 10 | 29 | Background microphone access restricted | Foreground service required |
+| 11 | 30 | [Foreground service must declare `camera`/`microphone` type](https://developer.android.com/about/versions/11/privacy/foreground-services) | Manifest declaration reveals intent |
+| 12 | 31 | [Privacy indicators](https://developer.android.com/about/versions/12/behavior-changes-all#mic-camera-indicators) (green dot) for camera/microphone | Visual indicator to user; bypassed by LianSpy via `icon_blacklist` |
+| 14 | 34 | [Foreground service type `camera`/`microphone` required](https://developer.android.com/about/versions/14/changes/fgs-types-required) | Cannot start camera/microphone FGS from background |
+| 14 | 34 | Microphone FGS cannot launch from `BOOT_COMPLETED` | Breaks boot-time ambient recording |
+| 15 | 35 | Camera FGS also blocked from `BOOT_COMPLETED` | Further restricts boot-time surveillance |
 
 ## Evasion Techniques
 

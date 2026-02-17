@@ -2,7 +2,15 @@
 
 Manipulating Android's activity back stack to place a malicious activity inside a target app's task. The user believes they're interacting with the legitimate app because the malicious activity appears in its task and recent apps entry. Also known as "StrandHogg" after the vulnerability disclosure that popularized it.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1635.001](https://attack.mitre.org/techniques/T1635/001/) | Masquerading: Match Legitimate Name or Location | Defense Evasion |
+
+    Task affinity manipulation is a form of masquerading where the malicious activity appears within the target app's task context. MITRE ATT&CK Mobile does not have a dedicated technique for Android task manipulation; this is an area where AWAKE provides deeper coverage.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -65,13 +73,14 @@ The Recent Apps screen shows the Chase icon and label, further selling the illus
 | `excludeFromRecents` | Hides malicious activity from recent apps |
 | `documentLaunchMode` | Controls document-based task creation |
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 10 (API 29) | Restricted task affinity behavior for background-launched activities (StrandHogg v1 patch) | Variations remain possible with certain launch mode configurations |
-| May 2020 Security Patch | Patched StrandHogg 2.0 (CVE-2020-0096) | Only applies to devices receiving the patch |
-| Android 12+ | Additional restrictions on background activity starts | The underlying task model hasn't fundamentally changed; residual risk remains on unpatched devices |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | Task affinity and `allowTaskReparenting` available | Any app can join another app's task via manifest declaration |
+| 10 | 29 | [Restricted task affinity for background-launched activities](https://developer.android.com/about/versions/10/privacy/changes#background-activity-starts) (StrandHogg v1 patch) | Variations remain with certain launch mode configurations |
+| May 2020 patch | 29 | Patched StrandHogg 2.0 (CVE-2020-0096) | Only applies to devices receiving the security update |
+| 12 | 31 | [Additional restrictions on background activity starts](https://developer.android.com/about/versions/12/behavior-changes-12#back-press) | Underlying task model unchanged; residual risk on unpatched devices |
 
 ## Detection During Analysis
 

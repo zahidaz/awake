@@ -4,6 +4,21 @@ Detecting and evading analysis environments, security tools, and human researche
 
 See also: [Play Store Evasion](play-store-evasion.md), [Dynamic Code Loading](dynamic-code-loading.md), [Persistence Techniques](persistence-techniques.md)
 
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1633](https://attack.mitre.org/techniques/T1633/) | Virtualization/Sandbox Evasion | Defense Evasion |
+    | [T1633.001](https://attack.mitre.org/techniques/T1633/001/) | System Checks | Defense Evasion |
+    | [T1627](https://attack.mitre.org/techniques/T1627/) | Execution Guardrails | Defense Evasion |
+    | [T1627.001](https://attack.mitre.org/techniques/T1627/001/) | Geofencing | Defense Evasion |
+    | [T1406](https://attack.mitre.org/techniques/T1406/) | Obfuscated Files or Information | Defense Evasion |
+    | [T1628](https://attack.mitre.org/techniques/T1628/) | Hide Artifacts | Defense Evasion |
+    | [T1630](https://attack.mitre.org/techniques/T1630/) | Indicator Removal on Host | Defense Evasion |
+    | [T1629](https://attack.mitre.org/techniques/T1629/) | Impair Defenses | Defense Evasion |
+
+    T1633 covers emulator/sandbox detection via build properties, telephony, sensors, and filesystem artifacts. T1627 covers execution guardrails including geofencing, delayed activation, and SIM checks. T1406 covers string encryption, packing, and code obfuscation. T1628/T1630 cover hiding the app icon, clearing logs, and removing forensic artifacts. T1629 covers disabling Play Protect and security tools.
+
 ## Emulator Detection
 
 The most common first check. Emulators expose artifacts through build properties, hardware fingerprinting, telephony state, and sensor data that differ from physical devices.

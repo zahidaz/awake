@@ -4,7 +4,15 @@ Tricking Android users into installing malware, surrendering credentials, or gra
 
 See also: [Call Interception](call-interception.md), [Notification Suppression](notification-suppression.md#fake-notification-injection), [Overlay Attacks](overlay-attacks.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1660](https://attack.mitre.org/techniques/T1660/) | Phishing | Initial Access |
+
+    T1660 covers SMS phishing (smishing), email phishing, QR code phishing (quishing), vishing, and social media-based phishing on mobile.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|

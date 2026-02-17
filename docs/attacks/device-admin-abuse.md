@@ -4,7 +4,15 @@ Exploiting the Device Administration API to prevent app removal, lock the screen
 
 See also: [Device Wipe & Ransomware](device-wipe-ransomware.md), [Persistence Techniques](persistence-techniques.md), [Accessibility Abuse](accessibility-abuse.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1626.001](https://attack.mitre.org/techniques/T1626/001/) | Abuse Elevation Control Mechanism: Device Administrator Permissions | Privilege Escalation |
+
+    T1626.001 covers abuse of the Android Device Administration API for preventing removal, factory reset, password reset, and camera disabling.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -158,17 +166,17 @@ Samsung Knox provides additional enterprise APIs beyond stock Android. On Samsun
 
 Knox abuse has been observed in targeted attacks against enterprises using Samsung fleets. The attacker gains Knox admin rights and locks down the device more aggressively than standard Android APIs allow.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 2.2 (API 8) | Device Administration API introduced | No restrictions on third-party use |
-| Android 5.0 (API 21) | Device Owner and Profile Owner introduced (more powerful than basic device admin) | Malware continues using basic device admin for anti-uninstall |
-| Android 7.0 (API 24) | `resetPassword()` can no longer change an existing password | Only works when no password is set |
-| Android 8.0 (API 26) | `resetPassword()` deprecated for device admin; camera disable restricted | Shift to accessibility for equivalent capabilities |
-| Android 9.0 (API 28) | Device admin deprecation begins: `resetPassword()`, `setCameraDisabled()` deprecated for third-party apps | Malware shifts to accessibility service abuse |
-| Android 10 (API 29) | Device admin cannot set password quality requirements on devices with existing screen lock | Anti-uninstall still works |
-| Android 14 (API 34) | Deprecated policies actively blocked for apps targeting API 34+; most policy methods throw `SecurityException` | Apps targeting lower API levels unaffected; anti-uninstall via admin activation still functional |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 2.2 | 8 | [Device Administration API](https://developer.android.com/guide/topics/admin/device-admin) introduced | Anti-uninstall, screen lock, wipe capabilities available |
+| 5.0 | 21 | Device Owner and Profile Owner introduced | More powerful than device admin, but requires factory-fresh provisioning |
+| 7.0 | 24 | `resetPassword()` can no longer change an existing password | Only works when no password is set |
+| 8.0 | 26 | `resetPassword()` deprecated for device admin; camera disable restricted | Shift to [accessibility](accessibility-abuse.md) for equivalent capabilities |
+| 9.0 | 28 | [Device admin deprecation begins](https://developer.android.com/about/versions/pie/android-9.0-changes-all#device_security_changes): `resetPassword()`, `setCameraDisabled()` deprecated for third-party apps | Malware shifts to accessibility service abuse |
+| 10 | 29 | Device admin cannot set password quality requirements on devices with existing screen lock | Anti-uninstall still works |
+| 14 | 34 | Deprecated policies actively blocked for apps targeting API 34+; most policy methods throw `SecurityException` | Apps targeting lower API levels unaffected; anti-uninstall via admin activation still functional |
 
 ## Modern Replacement: Accessibility Service
 

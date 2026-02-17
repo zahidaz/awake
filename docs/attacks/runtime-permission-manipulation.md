@@ -2,7 +2,16 @@
 
 Granting permissions without user interaction. Once malware obtains [`BIND_ACCESSIBILITY_SERVICE`](../permissions/special/bind-accessibility-service.md), it can navigate Settings screens, tap "Allow" buttons, and toggle switches to escalate from a single permission to full device control. Every modern Android banking trojan uses some variant of this technique.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1516](https://attack.mitre.org/techniques/T1516/) | Input Injection | Defense Evasion, Impact |
+    | [T1453](https://attack.mitre.org/techniques/T1453/) | Abuse Accessibility Features | Collection, Credential Access |
+
+    T1516 covers the programmatic clicking of "Allow" buttons on permission dialogs and navigating Settings screens. T1453 covers the underlying accessibility service abuse that enables all permission manipulation.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -147,20 +156,20 @@ This works because disabling biometrics is a Settings toggle, accessible via the
 | [Chameleon](../malware/families/chameleon.md) | Yes | No | Yes (Zombinder) | Yes | Yes |
 | [SpyNote](../malware/families/spynote.md) | Yes | Via accessibility | Yes | No | Yes |
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | Change | Malware Adaptation |
-|---------|--------|-------------------|
-| Android 6 | Runtime permissions introduced | Malware auto-clicks "Allow" via accessibility |
-| Android 8 | `TYPE_APPLICATION_OVERLAY` replaces `TYPE_SYSTEM_ALERT` | Accessibility grants the new overlay permission |
-| Android 10 | Background activity launch restrictions | Foreground service workaround |
-| Android 11 | Auto-revoke unused permissions | Malware periodically re-grants via accessibility |
-| Android 11 | One-time permissions for camera/mic/location | Auto-grant repeats each session |
-| Android 12 | Approximate vs precise location choice | Accessibility selects "Precise" option |
-| Android 13 | Restricted settings for sideloaded apps | Session-based installer bypass |
-| Android 13 | Notification permission now requires explicit grant | Auto-clicked via accessibility |
-| Android 14 | Restricted settings expanded but session bypass persists | No change in dropper behavior |
-| Android 15 | Expanded restricted settings enforcement | Session-based bypass partially patched |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 6.0 | 23 | [Runtime permissions](https://developer.android.com/training/permissions/requesting) introduced | Malware auto-clicks "Allow" via [accessibility](accessibility-abuse.md) |
+| 8.0 | 26 | `TYPE_APPLICATION_OVERLAY` replaces `TYPE_SYSTEM_ALERT` | Accessibility grants the new overlay permission type |
+| 10 | 29 | [Background activity launch restrictions](https://developer.android.com/about/versions/10/privacy/changes#background-activity-starts) | Foreground service workaround |
+| 11 | 30 | [Auto-revoke unused permissions](https://developer.android.com/about/versions/11/privacy/permissions#auto-reset) | Malware periodically re-grants via accessibility |
+| 11 | 30 | One-time permissions for camera/mic/location | Auto-grant repeats each session |
+| 12 | 31 | [Approximate vs precise location choice](https://developer.android.com/about/versions/12/behavior-changes-12#approximate-location) | Accessibility selects "Precise" option |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/changes/restricted-settings) for sideloaded apps | [Session-based installer bypass](#session-based-installer-bypass-android-13) |
+| 13 | 33 | [Notification permission](https://developer.android.com/develop/ui/views/notifications/notification-permission) requires explicit grant | Auto-clicked via accessibility |
+| 14 | 34 | Restricted settings expanded but session bypass persists | No change in dropper behavior |
+| 15 | 35 | Expanded restricted settings enforcement | Session-based bypass partially patched |
 
 ## Detection During Analysis
 

@@ -4,7 +4,16 @@ On-device fraud that automates money transfers without user interaction. Rather 
 
 See also: [Accessibility Abuse](accessibility-abuse.md), [Overlay Attacks](overlay-attacks.md), [Notification Suppression](notification-suppression.md), [Device Wipe & Ransomware](device-wipe-ransomware.md#post-fraud-factory-reset)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1516](https://attack.mitre.org/techniques/T1516/) | Input Injection | Defense Evasion, Impact |
+    | [T1453](https://attack.mitre.org/techniques/T1453/) | Abuse Accessibility Features | Collection, Credential Access |
+
+    MITRE ATT&CK has no standalone technique for Automated Transfer Systems. ATS is a compound banking fraud methodology combining accessibility abuse (T1453) for device control with input injection (T1516) for automated UI interaction. This is a gap in ATT&CK's coverage that AWAKE addresses.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -159,16 +168,18 @@ A full ATS-driven account takeover chains multiple techniques:
     }
     ```
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Restriction | ATS Impact |
-|---------|------------|------------|
-| Android 7 | Background execution limits | Minimal -- accessibility runs as foreground service |
-| Android 10 | Background activity launch restrictions | ATS must wait for user interaction or use `USE_FULL_SCREEN_INTENT` |
-| Android 13 | Restricted settings for sideloaded apps | Accessibility harder to enable -- bypassed via session-based install |
-| Android 13 | Non-dismissible notification for active accessibility | User may notice -- malware hides behind legitimate-looking service name |
-| Android 14 | Accessibility declaration restrictions | Apps must declare specific accessibility capabilities |
-| Android 15 | Expanded restricted settings enforcement | Closes session-installer bypass for some OEMs |
+| Android Version | API | Change | ATS Impact |
+|----------------|-----|--------|------------|
+| 7.0 | 24 | [`dispatchGesture()`](https://developer.android.com/reference/android/accessibilityservice/AccessibilityService#dispatchGesture(android.accessibilityservice.GestureDescription,%20android.accessibilityservice.AccessibilityService.GestureResultCallback,%20android.os.Handler)) API added | Makes ATS viable: programmatic gestures can navigate banking app UI |
+| 7.0 | 24 | Background execution limits | Minimal, accessibility runs as foreground service |
+| 10 | 29 | Background activity launch restrictions | ATS must wait for user interaction or use `USE_FULL_SCREEN_INTENT` |
+| 12 | 31 | [Untrusted touch blocking](https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events) | Does not affect accessibility-based input injection |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk) for sideloaded apps | Accessibility harder to enable; bypassed via session-based install |
+| 13 | 33 | Non-dismissible notification for active accessibility | User may notice; malware hides behind legitimate-looking service name |
+| 14 | 34 | Accessibility declaration restrictions | Apps must declare specific accessibility capabilities |
+| 15 | 35 | Expanded restricted settings enforcement | Closes session-installer bypass for some OEMs |
 
 !!! danger "Fundamental Limitation"
 

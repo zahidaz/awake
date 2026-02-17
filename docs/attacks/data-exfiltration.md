@@ -4,7 +4,19 @@ Stealing data from compromised Android devices and transmitting it to attacker-c
 
 See also: [C2 Communication](c2-techniques.md), [SMS Interception](sms-interception.md), [Keylogging](keylogging.md), [Screen Capture](screen-capture.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1646](https://attack.mitre.org/techniques/T1646/) | Exfiltration Over C2 Channel | Exfiltration |
+    | [T1639](https://attack.mitre.org/techniques/T1639/) | Exfiltration Over Alternative Protocol | Exfiltration |
+    | [T1639.001](https://attack.mitre.org/techniques/T1639/001/) | Exfiltration Over Unencrypted Non-C2 Protocol | Exfiltration |
+    | [T1532](https://attack.mitre.org/techniques/T1532/) | Archive Collected Data | Collection |
+    | [T1636](https://attack.mitre.org/techniques/T1636/) | Protected User Data | Collection |
+
+    T1646 covers HTTP/HTTPS exfiltration to C2 servers. T1639 covers cloud service abuse (Telegram, Firebase, Discord) and SMS-based exfiltration. T1532 covers ZIP compression before upload. T1636 and its sub-techniques cover collection of contacts (.003), SMS (.004), call logs (.002), and calendar (.001).
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -411,20 +423,20 @@ Spyware families like [Pegasus](../malware/families/pegasus.md) and [FinSpy](../
 
 State-sponsored spyware ([Pegasus](../malware/families/pegasus.md), [Predator](../malware/families/predator.md), [Hermit](../malware/families/hermit.md), [FinSpy](../malware/families/finspy.md)) exfiltrates everything. Banking trojans focus on SMS/OTPs and device info. Loan apps ([SpyLoan](../malware/families/spyloan.md)) target contacts and photos for extortion.
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | API | Change | Impact on Data Exfiltration |
-|---------|-----|--------|---------------------------|
-| Android 6.0 | 23 | Runtime permissions | Contacts, SMS, call log, storage require user grant at runtime |
-| Android 7.0 | 24 | `GET_ACCOUNTS` restricted | Third-party account enumeration limited |
-| Android 8.0 | 26 | Background execution limits | Background services killed, affects continuous monitoring |
-| Android 10 | 29 | Scoped storage, background location restrictions, clipboard restrictions | File access limited to own sandbox, clipboard reading restricted to foreground |
-| Android 10 | 29 | Non-resettable identifiers restricted | IMEI, serial number inaccessible without `READ_PRIVILEGED_PHONE_STATE` |
-| Android 11 | 30 | `MANAGE_EXTERNAL_STORAGE` for all-files access, package visibility filtering | Full storage access requires special permission, installed app list requires `QUERY_ALL_PACKAGES` |
-| Android 12 | 31 | Approximate location option, clipboard access toast, Bluetooth permissions split | Users can grant coarse location only, clipboard reads visible to user |
-| Android 13 | 33 | Granular media permissions, notification permission required, photo picker | `READ_MEDIA_IMAGES`/`VIDEO`/`AUDIO` replace storage permission, photo picker limits access to selected files |
-| Android 14 | 34 | Selected photos access, credential manager | Users can grant access to specific photos only |
-| Android 15 | 35 | Screen recording detection, enhanced privacy sandbox | Apps can detect when they are being recorded |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 6.0 | 23 | [Runtime permissions](https://developer.android.com/training/permissions/requesting) | Contacts, SMS, call log, storage require user grant; [accessibility](accessibility-abuse.md) auto-grants |
+| 7.0 | 24 | `GET_ACCOUNTS` restricted | Third-party account enumeration limited |
+| 8.0 | 26 | [Background execution limits](https://developer.android.com/about/versions/oreo/background) | Background services killed, affects continuous monitoring |
+| 10 | 29 | [Scoped storage](https://developer.android.com/about/versions/10/privacy/changes#scoped-storage), clipboard restrictions | File access limited to own sandbox; clipboard reading restricted to foreground app |
+| 10 | 29 | [Non-resettable identifiers restricted](https://developer.android.com/about/versions/10/privacy/changes#non-resettable-device-ids) | IMEI, serial number inaccessible without `READ_PRIVILEGED_PHONE_STATE` |
+| 11 | 30 | [`MANAGE_EXTERNAL_STORAGE`](https://developer.android.com/training/data-storage/manage-all-files) for all-files access, [package visibility filtering](https://developer.android.com/training/package-visibility) | Full storage access requires special permission; installed app list requires `QUERY_ALL_PACKAGES` |
+| 12 | 31 | [Approximate location option](https://developer.android.com/about/versions/12/behavior-changes-12#approximate-location), clipboard toast | Users can grant coarse location only; clipboard reads visible to user |
+| 13 | 33 | [Granular media permissions](https://developer.android.com/about/versions/13/behavior-changes-13#granular-media-permissions), [photo picker](https://developer.android.com/training/data-storage/shared/photopicker) | `READ_MEDIA_IMAGES`/`VIDEO`/`AUDIO` replace storage permission; photo picker limits bulk theft |
+| 14 | 34 | [Selected photos access](https://developer.android.com/about/versions/14/changes/partial-photo-video-access) | Users can grant access to specific photos only |
+| 15 | 35 | Screen recording detection, enhanced privacy sandbox | Apps can detect when they are being recorded |
 
 ## Detection During Analysis
 

@@ -4,7 +4,13 @@ Capturing the victim's screen in real time to steal credentials, monitor activit
 
 See also: [Camera & Mic Surveillance](camera-mic-surveillance.md), [Notification Suppression](notification-suppression.md#screen-blackout-during-fraud)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1513](https://attack.mitre.org/techniques/T1513/) | Screen Capture | Collection |
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -115,23 +121,23 @@ Apps can set `FLAG_SECURE` on their windows to prevent screenshots and screen re
 
 Most malware relies on accessibility tree reading as the FLAG_SECURE bypass since it requires no root and works across all Android versions. The pixel-level bypasses are limited to rooted devices or exploit chains.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Change | Impact on Malware |
-|---------|--------|-------------------|
-| Android 5.0 | MediaProjection API introduced | Screen recording possible without root |
-| Android 5.0-9 | Consent dialog, no ongoing indicator | Malware shows dialog once, records indefinitely |
-| Android 10 | `FOREGROUND_SERVICE_MEDIA_PROJECTION` type required | Must declare foreground service type in manifest |
-| Android 10 | Persistent notification required for media projection | User sees ongoing notification (malware disguises it) |
-| Android 11 | MediaProjection token no longer reusable across app restarts | Must re-trigger consent after process death |
-| Android 12 | StatusBar indicator for active screen sharing | User may notice colored dot indicator |
-| Android 14 | Consent dialog shown before each capture session | Breaks single-consent-then-record-forever pattern |
-| Android 14 | `onCapturedContentVisibilityChanged()` callback | Apps can detect when they are being captured |
-| Android 15 | Screenshot detection API (`Activity.ScreenCaptureCallback`) | Target apps can respond to capture events |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 5.0 | 21 | [`MediaProjection`](https://developer.android.com/reference/android/media/projection/MediaProjection) API introduced | Screen recording possible without root for the first time |
+| 5.0-9 | 21-28 | Consent dialog, no ongoing indicator | Malware shows dialog once, records indefinitely |
+| 10 | 29 | `FOREGROUND_SERVICE_MEDIA_PROJECTION` type required | Must declare foreground service type in manifest |
+| 10 | 29 | Persistent notification required for media projection | User sees ongoing notification (malware disguises it) |
+| 11 | 30 | MediaProjection token no longer reusable across app restarts | Must re-trigger consent after process death |
+| 12 | 31 | StatusBar indicator for active screen sharing | User may notice colored dot indicator |
+| 14 | 34 | [Consent dialog shown before each capture session](https://developer.android.com/about/versions/14/behavior-changes-14#screen-sharing) | Breaks single-consent-then-record-forever pattern |
+| 14 | 34 | `onCapturedContentVisibilityChanged()` callback | Apps can detect when they are being captured |
+| 15 | 35 | [Screenshot detection API](https://developer.android.com/reference/android/app/Activity.ScreenCaptureCallback) (`Activity.ScreenCaptureCallback`) | Target apps can respond to capture events |
 
-!!! info "Android Version Trend"
+!!! info "Trend"
 
-    Each version makes MediaProjection harder to abuse silently. This pushes malware toward accessibility-based screen reading, which remains unaffected by these mitigations.
+    Each version makes MediaProjection harder to abuse silently. This pushes malware toward [accessibility-based screen reading](accessibility-abuse.md#screen-streaming-vnc), which remains unaffected by these mitigations.
 
 ## Families Using This Technique
 

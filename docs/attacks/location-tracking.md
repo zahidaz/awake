@@ -4,7 +4,18 @@ Collecting device location data for victim surveillance, movement tracking, and 
 
 See also: [`ACCESS_FINE_LOCATION`](../permissions/location/access-fine-location.md), [`ACCESS_COARSE_LOCATION`](../permissions/location/access-coarse-location.md), [`ACCESS_BACKGROUND_LOCATION`](../permissions/location/access-background-location.md), [Anti-Analysis Techniques](anti-analysis-techniques.md#geographic-and-locale-checks), [Play Store Evasion](play-store-evasion.md#geographic-targeting)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1430](https://attack.mitre.org/techniques/T1430/) | Location Tracking | Collection, Discovery |
+    | [T1430.001](https://attack.mitre.org/techniques/T1430/001/) | Remote Device Management Services | Collection, Discovery |
+    | [T1430.002](https://attack.mitre.org/techniques/T1430/002/) | Impersonate SS7 Nodes | Collection, Discovery |
+    | [T1627.001](https://attack.mitre.org/techniques/T1627/001/) | Geofencing | Defense Evasion |
+
+    T1430 covers GPS, cell tower, and WiFi-based location collection. T1627.001 covers SIM/locale/IP geofencing used to restrict malware activation to target regions.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -317,25 +328,24 @@ Analysts frequently use mock location apps (Fake GPS, GPS Joystick) or emulator 
 | [DCHSpy](../malware/families/dchspy.md) | Spyware | GPS | Location tracking as part of surveillance suite |
 | [FireScam](../malware/families/firescam.md) | Spyware | GPS | Telegram impersonation with location exfiltration |
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | API | Year | Location Change |
-|---------|-----|------|----------------|
-| 1.0 | 1 | 2008 | `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION` introduced |
-| 6.0 | 23 | 2015 | Location becomes runtime permission (user must grant explicitly) |
-| 8.0 | 26 | 2017 | Background location throttled to a few updates per hour |
-| 8.0 | 26 | 2017 | Background service execution limits kill persistent location services |
-| 9.0 | 28 | 2018 | WiFi scan throttling (foreground: 4/2min, background: 1/30min) |
-| 10 | 29 | 2019 | `ACCESS_BACKGROUND_LOCATION` introduced as separate permission |
-| 10 | 29 | 2019 | `ACCESS_FINE_LOCATION` required for WiFi scan results |
-| 11 | 30 | 2020 | Background location can only be granted from Settings (not runtime dialog) |
-| 11 | 30 | 2020 | One-time location permission option added |
-| 12 | 31 | 2021 | Approximate vs precise location choice in permission dialog |
-| 12 | 31 | 2021 | `Location.isMock()` replaces deprecated `isFromMockProvider()` |
-| 12 | 31 | 2021 | Bluetooth scan no longer requires location permission |
-| 13 | 33 | 2022 | Foreground service type `location` must be declared in manifest |
-| 14 | 34 | 2023 | Stricter foreground service type enforcement |
-| 15 | 35 | 2024 | Enhanced background location audit, Play Store review hardened |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.0 | 1 | `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION` introduced | Location available to any installed app |
+| 6.0 | 23 | [Runtime permissions](https://developer.android.com/training/permissions/requesting) for location | User must grant explicitly; [accessibility](accessibility-abuse.md) auto-grants |
+| 8.0 | 26 | [Background location throttled](https://developer.android.com/about/versions/oreo/background-location-limits) to a few updates per hour | Active GPS polling from background services degraded |
+| 8.0 | 26 | [Background service execution limits](https://developer.android.com/about/versions/oreo/background) | Persistent location services killed; foreground service required |
+| 9.0 | 28 | WiFi scan throttling (foreground: 4/2min, background: 1/30min) | WiFi BSSID-based positioning rate-limited |
+| 10 | 29 | [`ACCESS_BACKGROUND_LOCATION`](https://developer.android.com/about/versions/10/privacy/changes#app-access-device-location) as separate permission | User must explicitly grant background location in addition to foreground |
+| 10 | 29 | `ACCESS_FINE_LOCATION` required for WiFi scan results | WiFi positioning requires location permission |
+| 11 | 30 | [Background location can only be granted from Settings](https://developer.android.com/about/versions/11/privacy/location) | No runtime dialog; [accessibility](accessibility-abuse.md) navigates Settings to grant |
+| 11 | 30 | One-time location permission option | Location access revoked after app backgrounded |
+| 12 | 31 | [Approximate vs precise location](https://developer.android.com/about/versions/12/behavior-changes-12#approximate-location) choice in permission dialog | User can grant only coarse location, degrading tracking precision |
+| 12 | 31 | Bluetooth scan no longer requires location permission | Reduces legitimate reasons to request location |
+| 13 | 33 | [Foreground service type `location` required](https://developer.android.com/about/versions/14/changes/fgs-types-required) in manifest | Service must declare intent in manifest |
+| 14 | 34 | Stricter foreground service type enforcement | `USE_EXACT_ALARM` restricted for periodic polling |
+| 15 | 35 | Enhanced background location audit, Play Store review hardened | Play Store scrutiny on `ACCESS_BACKGROUND_LOCATION` increased |
 
 ## Detection During Analysis
 

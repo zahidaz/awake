@@ -4,6 +4,17 @@ Techniques malware uses to bypass Google Play Protect and store review to distri
 
 See also: [Dynamic Code Loading](dynamic-code-loading.md), [Persistence Techniques](persistence-techniques.md), [Anti-Analysis Techniques](anti-analysis-techniques.md), [Mass Malware Generation](mass-malware-generation.md)
 
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1661](https://attack.mitre.org/techniques/T1661/) | Application Discovery | Discovery |
+    | [T1407](https://attack.mitre.org/techniques/T1407/) | Download New Code at Runtime | Defense Evasion |
+    | [T1655](https://attack.mitre.org/techniques/T1655/) | Masquerading | Defense Evasion |
+    | [T1627.001](https://attack.mitre.org/techniques/T1627/001/) | Geofencing | Defense Evasion |
+
+    T1407 covers the dropper-payload model where clean apps download malicious DEX/APK at runtime. T1655 covers trojanized apps masquerading as legitimate utilities. T1627.001 covers geographic targeting to avoid analysis environments. The versioning attack pattern and session-based installer bypass are not directly represented in ATT&CK.
+
 !!! warning "Scale of the Problem"
 
     Google removed over 2.3 million apps from the Play Store in 2024 for policy violations. Despite automated scanning (Play Protect) and manual review, sophisticated droppers consistently bypass all layers. [ThreatFabric](https://www.threatfabric.com/blogs/droppers-bypassing-android-13-restrictions) and [Cleafy](https://www.cleafy.com/) regularly document families that survive on the store for months before detection.
@@ -175,16 +186,16 @@ session.commit(PendingIntent.getBroadcast(
 
 [SpyNote](../malware/families/spynote.md) and [Anatsa](../malware/families/anatsa.md) droppers adopted this technique within weeks of Restricted Settings launching, as [documented by cryptax](https://cryptax.medium.com/android-spynote-bypasses-restricted-settings-breaks-many-re-tools-8791b3e6bf38).
 
-## Android Version Changes
+## Platform Lifecycle
 
-| Version | Change | Impact on Evasion |
-|---------|--------|-------------------|
-| Android 11 | Package visibility restrictions | Malware must declare `QUERY_ALL_PACKAGES` or use targeted `<queries>` |
-| Android 13 | Restricted Settings for sideloaded apps | Bypassed via session-based installer within weeks |
-| Android 14 | Restricted Settings still bypassable | SecuriDropper technique persists |
-| Android 14 | Dynamic code loading warnings for writable paths | Malware switches to `InMemoryDexClassLoader` or read-only files |
-| Android 15 | Enhanced Play Protect live threat detection | Real-time behavioral analysis catches some delayed activation |
-| Android 15 | Stricter DCL enforcement for API 35+ | Loaded DEX must be in read-only paths |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 11 | 30 | [Package visibility restrictions](https://developer.android.com/training/package-visibility) | Malware must declare `QUERY_ALL_PACKAGES` or use targeted `<queries>` |
+| 13 | 33 | [Restricted Settings](https://developer.android.com/about/versions/13/changes/restricted-settings) for sideloaded apps | Bypassed via [session-based installer](#session-based-installer-bypass) within weeks |
+| 14 | 34 | Restricted Settings still bypassable | SecuriDropper technique persists |
+| 14 | 34 | Dynamic code loading warnings for writable paths | Malware switches to `InMemoryDexClassLoader` or read-only files |
+| 15 | 35 | Enhanced Play Protect live threat detection | Real-time behavioral analysis catches some delayed activation |
+| 15 | 35 | Stricter DCL enforcement for API 35+ | Loaded DEX must be in read-only paths |
 
 ## Detection During Analysis
 

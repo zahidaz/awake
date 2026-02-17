@@ -4,7 +4,16 @@ Intercepting, reading, sending, and forwarding SMS messages for OTP theft, premi
 
 See also: [Notification Suppression](notification-suppression.md#sms-notification-suppression), [Call Interception](call-interception.md), [Notification Listener Abuse](notification-listener-abuse.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1636.004](https://attack.mitre.org/techniques/T1636/004/) | Protected User Data: SMS Messages | Collection |
+    | [T1582](https://attack.mitre.org/techniques/T1582/) | SMS Control | Impact |
+
+    T1636.004 covers passive collection and active interception of SMS. T1582 covers sending, modifying, and deleting SMS (premium fraud, worm propagation, C2 channel).
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -162,16 +171,19 @@ The trend is clear: each Android restriction pushed malware toward alternative c
 
     Since 2020, most banking trojans use [notification listener abuse](notification-listener-abuse.md) to read OTP codes from notification content instead of requesting SMS permissions. If a sample requests `RECEIVE_SMS` alongside `BIND_NOTIFICATION_LISTENER_SERVICE`, the SMS path is likely a fallback for devices where notification access was not granted.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 4.4 (API 19) | Only the default SMS app can call `abortBroadcast()` on `SMS_RECEIVED` | Other apps still receive the broadcast, just cannot suppress it |
-| Android 5.0 (API 21) | `SMS_DELIVER` broadcast sent only to default SMS app | `SMS_RECEIVED` still goes to all receivers |
-| Android 6.0 (API 23) | SMS permissions become runtime permissions | Social engineering user to grant at runtime |
-| Android 8.0 (API 26) | Implicit broadcast restrictions | `SMS_RECEIVED` is exempt, still delivered to manifest-registered receivers |
-| Android 10 (API 29) | `READ_SMS` restricted to default SMS app or active accessibility service; `ROLE_SMS` replaces `ACTION_CHANGE_DEFAULT` | Accessibility service grants access to SMS content provider |
-| Android 13 (API 33) | Restricted settings prevent sideloaded apps from being set as default SMS app | Session-based package installer bypass |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 1.6 | 4 | `SMS_RECEIVED` broadcast available | Any app can intercept all incoming SMS |
+| 4.4 | 19 | Only the default SMS app can call `abortBroadcast()` | Other apps still receive the broadcast, just cannot suppress it |
+| 5.0 | 21 | `SMS_DELIVER` broadcast sent only to default SMS app | `SMS_RECEIVED` still goes to all registered receivers |
+| 6.0 | 23 | SMS permissions become [runtime permissions](https://developer.android.com/training/permissions/requesting) | Social engineering user to grant at runtime |
+| 8.0 | 26 | [Implicit broadcast restrictions](https://developer.android.com/about/versions/oreo/background#broadcasts) | `SMS_RECEIVED` is exempt, still delivered to manifest-registered receivers |
+| 10 | 29 | `READ_SMS` restricted to default SMS app or active accessibility service | [Accessibility](accessibility-abuse.md) service grants access to SMS content provider |
+| 10 | 29 | `ROLE_SMS` replaces `ACTION_CHANGE_DEFAULT` | Malware uses `RoleManager` API for default SMS request |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk) prevent sideloaded apps from becoming default SMS app | Session-based package installer bypass |
+| 14 | 34 | Apps must declare `FOREGROUND_SERVICE_SPECIAL_USE` for SMS-related foreground services | Minimal impact, malware declares the type |
 
 ## Families Using This Technique
 

@@ -4,7 +4,18 @@ Gaining elevated privileges on an Android device beyond what the app sandbox per
 
 See also: [Accessibility Abuse](accessibility-abuse.md), [Device Admin Abuse](device-admin-abuse.md), [SELinux](../platform-abuse/selinux.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1404](https://attack.mitre.org/techniques/T1404/) | Exploitation for Privilege Escalation | Privilege Escalation |
+    | [T1626](https://attack.mitre.org/techniques/T1626/) | Abuse Elevation Control Mechanism | Privilege Escalation, Defense Evasion |
+    | [T1626.001](https://attack.mitre.org/techniques/T1626/001/) | Device Administrator Permissions | Privilege Escalation, Defense Evasion |
+    | [T1631](https://attack.mitre.org/techniques/T1631/) | Process Injection | Privilege Escalation, Defense Evasion |
+
+    T1404 covers kernel exploits (DirtyCow, DirtyPipe, Framaroot, Towelroot) and driver vulnerabilities. T1626 covers permission escalation chains including accessibility-to-full-control. T1631 covers native code injection and library loading for process-level escalation.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -201,23 +212,22 @@ From [notification listener](notification-listener-abuse.md) access:
 4. Attacker uses stolen credentials + OTP to take over banking/email accounts
 5. Account takeover enables further attacks (SIM swap, credential resets)
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | Year | Escalation-Relevant Changes |
-|---------|------|-----------------------------|
-| Android 4.3 | 2013 | SELinux introduced in permissive mode |
-| Android 4.4 | 2013 | SELinux enforcing for core domains; `su` binary restricted |
-| Android 5.0 | 2014 | Full SELinux enforcement; 64-bit ABI; verified boot (warning only) |
-| Android 6.0 | 2015 | Runtime permissions model; `SYSTEM_ALERT_WINDOW` auto-granted from Play Store |
-| Android 7.0 | 2016 | Verified boot strictly enforced; file-based encryption; `resetPassword()` restricted |
-| Android 8.0 | 2017 | Project Treble (HAL isolation); `SYSTEM_ALERT_WINDOW` type restrictions; seccomp filter for zygote |
-| Android 9.0 | 2018 | Biometric API; device admin deprecated for third-party apps; kernel CFI on Pixel |
-| Android 10 | 2019 | Scoped storage; background activity launch restrictions; BoundsSanitizer in media codecs |
-| Android 11 | 2020 | One-time permissions; scoped storage enforced; `MANAGE_EXTERNAL_STORAGE` gated; async `binder` calls restricted |
-| Android 12 | 2021 | Approximate location option; `SameSite` cookies in WebView; ART module updatable via Play |
-| Android 13 | 2022 | Restricted settings for sideloaded apps (blocks accessibility/notification listener); notification permission required; intent filter matching stricter |
-| Android 14 | 2023 | Minimum target SDK enforced (blocks installing very old APKs); credential manager API; background activity launch further restricted |
-| Android 15 | 2024 | Expanded restricted settings; improved integrity checking; 16KB page size support reducing exploit reliability |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 4.3 | 18 | SELinux introduced in permissive mode | Logging only; no enforcement |
+| 4.4 | 19 | SELinux enforcing for core domains; `su` binary restricted | Root exploits must also bypass SELinux for protected domains |
+| 5.0 | 21 | Full SELinux enforcement; 64-bit ABI; [verified boot](https://source.android.com/docs/security/features/verifiedboot) (warning only) | All processes confined; exploit chains must include SELinux bypass |
+| 6.0 | 23 | [Runtime permissions](https://developer.android.com/training/permissions/requesting); `SYSTEM_ALERT_WINDOW` auto-granted from Play Store | Permission chain attacks become viable ([overlay](overlay-attacks.md) to [accessibility](accessibility-abuse.md)) |
+| 7.0 | 24 | Verified boot strictly enforced; file-based encryption | Persistent rootkits harder; cannot modify `/system` without detection |
+| 8.0 | 26 | [Project Treble](https://android-developers.googleblog.com/2017/05/here-comes-treble-modular-base-for.html) (HAL isolation); seccomp filter for zygote | Kernel attack surface reduced; HAL processes sandboxed |
+| 9.0 | 28 | [Device admin deprecated](https://developer.android.com/about/versions/pie/android-9.0-changes-all#device_security_changes); kernel CFI on Pixel | Kernel control-flow integrity blocks ROP/JOP exploit chains |
+| 10 | 29 | [Scoped storage](https://developer.android.com/about/versions/10/privacy/changes#scoped-storage); [BoundsSanitizer](https://source.android.com/docs/security/test/bounds-sanitizer) in media codecs | Media codec exploits harder; cross-app file access restricted |
+| 11 | 30 | One-time permissions; scoped storage enforced | Temporary permission grants limit persistent access |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/changes/restricted-settings) for sideloaded apps | Sideloaded apps blocked from enabling accessibility/notification listener directly |
+| 14 | 34 | [Minimum target SDK enforced](https://developer.android.com/about/versions/14/behavior-changes-14#minimum-target-sdk-version); background activity launch restricted | Cannot install APKs targeting very old APIs; reduces legacy API abuse |
+| 15 | 35 | Expanded restricted settings; 16KB page size support | Larger page sizes reduce heap exploit reliability |
 
 ## Families Using This Technique
 

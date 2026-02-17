@@ -4,7 +4,13 @@ Intercepting user keystrokes and text input to steal credentials, OTPs, and sens
 
 See also: [Camera & Mic Surveillance](camera-mic-surveillance.md), [Screen Capture](screen-capture.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1417.001](https://attack.mitre.org/techniques/T1417/001/) | Input Capture: Keylogging | Credential Access, Collection |
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -130,18 +136,21 @@ Banking trojans do not log everything. They maintain a target list (downloaded f
 
 Some families also monitor `TYPE_VIEW_FOCUSED` events to detect when the user enters a login form, then activate intensive logging only for that session.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Change | Impact |
-|---------|--------|--------|
-| Android 8 | Accessibility services must declare handled event types | Malware declares all types in config XML |
-| Android 11 | `isAccessibilityTool` metadata for Play Store visibility | Sideloaded malware unaffected |
-| Android 12 | Accessibility services cannot observe password fields in some contexts | Partial -- depends on app implementation |
-| Android 13 | Restricted settings blocks accessibility for sideloaded apps | Bypassed via session-based package installer |
-| Android 14 | `accessibilityDataSensitive` attribute lets apps mark views as sensitive | Only effective if target apps adopt the attribute |
-| Android 15 | Expanded restricted settings enforcement | Closes some session-installer bypass routes |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 4.0 | 14 | `AccessibilityService` with `canRetrieveWindowContent` | Accessibility keylogging becomes viable |
+| 4.0 | 14 | `TYPE_VIEW_TEXT_CHANGED` events | Real-time text capture from any app |
+| 4.0 | 14 | `flagRequestFilterKeyEvents` | Raw `KeyEvent` interception via `onKeyEvent()` |
+| 8.0 | 26 | Accessibility services must declare handled event types | Malware declares all types in config XML |
+| 11 | 30 | `isAccessibilityTool` metadata for Play Store visibility | Sideloaded malware unaffected |
+| 12 | 31 | Accessibility services cannot observe password fields in some contexts | Partial, depends on app implementation |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk) blocks accessibility for sideloaded apps | Bypassed via [session-based package installer](play-store-evasion.md) |
+| 14 | 34 | [`accessibilityDataSensitive`](https://developer.android.com/reference/android/view/View#setAccessibilityDataSensitive(int)) attribute lets apps mark views as sensitive | Only effective if target apps adopt the attribute |
+| 15 | 35 | Expanded restricted settings enforcement | Closes some session-installer bypass routes |
 
-The `accessibilityDataSensitive` attribute (Android 14+) is the most significant development. When an app marks an `EditText` as sensitive, accessibility services not flagged as `isAccessibilityTool` cannot read its content. Adoption is slow -- most banking apps have not yet implemented it.
+The `accessibilityDataSensitive` attribute (Android 14+) is the most significant development. When an app marks an `EditText` as sensitive, accessibility services not flagged as `isAccessibilityTool` cannot read its content. Adoption is slow: most banking apps have not yet implemented it.
 
 ## Families Using This Technique
 

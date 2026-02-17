@@ -4,7 +4,16 @@ Hiding, dismissing, or manipulating Android notifications to prevent victims fro
 
 See also: [Notification Listener Abuse](notification-listener-abuse.md), [SMS Interception](sms-interception.md), [Automated Transfer Systems](automated-transfer-systems.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1517](https://attack.mitre.org/techniques/T1517/) | Access Notifications | Collection, Credential Access |
+    | [T1629.003](https://attack.mitre.org/techniques/T1629/003/) | Impair Defenses: Disable or Modify Tools | Defense Evasion |
+
+    T1517 covers reading and dismissing notifications via `NotificationListenerService`. T1629.003 covers disabling Play Protect and suppressing security warnings.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -151,17 +160,17 @@ The victim sees a black screen (appearing as if the device is off or locked) whi
 | [Anubis](../malware/families/anubis.md) | Yes | Default SMS | No | No | No |
 | [FluBot](../malware/families/flubot.md) | No | Default SMS | No | No | No |
 
-## Android Version Timeline
+## Platform Lifecycle
 
-| Version | Change | Impact |
-|---------|--------|--------|
-| 4.3 | `NotificationListenerService` introduced | First programmatic notification access |
-| 4.4 | Default SMS handler required for SMS access | `abortBroadcast()` trick eliminated |
-| 5.0 | Notification access requires explicit user toggle in Settings | Social engineering required to enable |
-| 8.0 | Notification channels introduced | Apps can create low-importance channels to hide their own notifications |
-| 13 | `POST_NOTIFICATIONS` requires runtime permission | Malware must request or auto-grant via accessibility |
-| 13 | Restricted Settings blocks sideloaded apps from notification listener | [Session-based installer bypass](runtime-permission-manipulation.md#session-based-installer-bypass-android-13) circumvents this |
-| 14 | Restricted Settings expanded | Session-based bypass persists |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 4.3 | 18 | [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService) introduced | First programmatic notification access |
+| 4.4 | 19 | Default SMS handler required for SMS access | `abortBroadcast()` trick eliminated |
+| 5.0 | 21 | Notification access requires explicit user toggle in Settings | Social engineering or [accessibility](accessibility-abuse.md) required to enable |
+| 8.0 | 26 | [Notification channels](https://developer.android.com/develop/ui/views/notifications#ManageChannels) introduced | Apps can create low-importance channels to hide own notifications |
+| 13 | 33 | [`POST_NOTIFICATIONS`](https://developer.android.com/develop/ui/views/notifications/notification-permission) requires runtime permission | Malware must request or auto-grant via accessibility |
+| 13 | 33 | [Restricted Settings](https://developer.android.com/about/versions/13/changes/restricted-settings) blocks sideloaded apps from notification listener | [Session-based installer bypass](runtime-permission-manipulation.md#session-based-installer-bypass-android-13) circumvents this |
+| 14 | 34 | Restricted Settings expanded | Session-based bypass persists |
 
 ## Detection During Analysis
 

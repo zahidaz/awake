@@ -4,7 +4,15 @@ Exploiting `NotificationListenerService` to silently read, exfiltrate, and dismi
 
 See also: [Notification Suppression](notification-suppression.md), [SMS Interception](sms-interception.md)
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    | ID | Technique | Tactic |
+    |---|---|---|
+    | [T1517](https://attack.mitre.org/techniques/T1517/) | Access Notifications | Collection, Credential Access |
+
+    T1517 covers both reading notification content and dismissing notifications to suppress evidence. Malware listed under this technique on MITRE includes FlixOnline and [Mandrake](../malware/families/mandrake.md).
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
@@ -134,16 +142,17 @@ This requires no user interaction beyond the initial accessibility service grant
 
 Notification listeners hit the sweet spot: broad coverage, ability to suppress evidence, no runtime permission dialog, and less Play Store scrutiny than accessibility services.
 
-## Android Mitigations
+## Platform Lifecycle
 
-| Version | Mitigation | Bypass |
-|---------|-----------|--------|
-| Android 4.3 (API 18) | `NotificationListenerService` introduced with manual user enablement | Social engineering or accessibility auto-enable |
-| Android 5.0 (API 21) | `cancelNotification(key)` added for precise dismissal | Malware uses this offensively to suppress evidence |
-| Android 8.0 (API 26) | Notification channels provide more context | Gives listeners more filtering capability, not less |
-| Android 11 (API 30) | Notification history API (`getNotificationHistory()`) | Listeners retroactively access recent notifications even if not running when posted |
-| Android 13 (API 33) | Restricted settings for sideloaded apps; cannot direct to notification access settings | Bypassed via session-based installers or store distribution |
-| Android 14 (API 34) | Further tightening of restricted settings | Malware adapts installer package name to appear store-distributed |
+| Android Version | API | Change | Offensive Impact |
+|----------------|-----|--------|-----------------|
+| 4.3 | 18 | [`NotificationListenerService`](https://developer.android.com/reference/android/service/notification/NotificationListenerService) introduced | New attack surface for notification interception |
+| 5.0 | 21 | `cancelNotification(key)` added for precise dismissal | Malware dismisses individual OTP/alert notifications |
+| 7.0 | 24 | `getActiveNotifications()` for reading all current notifications | Retroactive notification access on service bind |
+| 8.0 | 26 | Notification channels provide more structured metadata | Gives listeners more filtering capability, not less |
+| 11 | 30 | `getNotificationHistory()` added | Listeners retroactively access recent notifications even if not running when posted |
+| 13 | 33 | [Restricted settings](https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk) for sideloaded apps | Bypassed via session-based installers or store distribution |
+| 14 | 34 | Further tightening of restricted settings | Malware adapts installer package name to appear store-distributed |
 
 ## Families Using This Technique
 

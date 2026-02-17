@@ -2,7 +2,11 @@
 
 Relaying NFC (Near Field Communication) data from a victim's payment card to an attacker-controlled device for unauthorized transactions. An emerging attack category first seen in Android malware in 2024, enabling ATM cash withdrawal and POS fraud using cloned contactless card data.
 
-!!! warning "Requirements"
+??? abstract "MITRE ATT&CK"
+
+    MITRE ATT&CK Mobile has no dedicated technique for NFC relay attacks. The closest related technique is [T1638](https://attack.mitre.org/techniques/T1638/) (Adversary-in-the-Middle), which covers relay/interception patterns conceptually. NFC relay using [NFCGate](https://github.com/nfcgate/nfcgate) and Android's HCE API is an emerging attack class not yet represented in the ATT&CK framework. This is a gap that AWAKE documents.
+
+??? warning "Requirements"
 
     | Requirement | Details |
     |-------------|---------|
