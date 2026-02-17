@@ -53,7 +53,7 @@ Notable families:
 | Pegasus (NSO) | Full call log exfiltration as part of comprehensive device surveillance |
 | Predator (Cytrox) | Call history collection alongside other communication data |
 | Hermit (RCS Lab) | Call log theft combined with call recording |
-| PhoneSpy | Periodic call log dump to C2 |
+| [PhoneSpy](../../malware/families/phonespy.md) | Periodic call log dump to C2 |
 | Dracarys (Meta attribution) | Call log exfiltration with contact and SMS data |
 | GravityRAT | Call log theft targeting Indian and Pakistani users |
 

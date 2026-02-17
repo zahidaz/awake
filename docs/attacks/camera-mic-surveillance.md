@@ -121,6 +121,7 @@ Banking trojans use camera/microphone primarily for credential capture during fr
 | [Octo](../malware/families/octo.md) | No | No | Screenshot stream | `SHIT_QUALITY` mode for bandwidth-efficient screen streaming |
 | [Vultur](../malware/families/vultur.md) | No | No | Screen recording | AlphaVNC + ngrok for real-time remote access |
 | [Crocodilus](../malware/families/crocodilus.md) | Yes | No | Black overlay | Camera for selfie capture, screen hidden during ATS |
+| [DCHSpy](../malware/families/dchspy.md) | Photo capture | Ambient audio | No | Iranian surveillanceware with SFTP exfiltration |
 
 ## Platform Lifecycle
 

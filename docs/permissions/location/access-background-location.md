@@ -74,7 +74,7 @@ Nation-state implants log location continuously to build movement profiles. The 
 | TheTruthSpy | Persistent background tracking marketed for "partner monitoring" |
 | Cerberus | Background geofencing combined with overlay injection |
 | Monokle (STC) | Background location as part of full surveillance toolkit |
-| PhoneSpy | Background tracking with location history stored in local SQLite |
+| [PhoneSpy](../../malware/families/phonespy.md) | Background tracking with location history stored in local SQLite |
 
 ## Android Version Changes
 

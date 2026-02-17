@@ -49,6 +49,7 @@ dpm.wipeData(DevicePolicyManager.WIPE_EXTERNAL_STORAGE);
 | [BingoMod](../malware/families/bingomod.md) | Post-fraud evidence destruction | Remote wipe via C2 command | [Cleafy](https://www.cleafy.com/cleafy-labs/bingomod-the-new-android-rat-that-steals-money-and-wipes-data) |
 | [Cerberus](../malware/families/cerberus.md) | C2 kill command | Device admin wipe | [Malpedia](https://malpedia.caad.fkie.fraunhofer.de/details/apk.cerberus) |
 | [Rafel RAT](../malware/families/rafelrat.md) | C2 command, ransomware module | Device admin wipe + file encryption | [Check Point](https://research.checkpoint.com/2024/rafel-rat-android-malware/) |
+| [DeVixor](../malware/families/devixor.md) | Banking + ransomware module | File encryption with TRON ransom payments | [Cyble](https://cyble.com/blog/devixor-rat-iranian-android-malware/) |
 
 ## Android Ransomware Evolution
 
@@ -75,7 +76,7 @@ dpm.resetPassword(randomPin, DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
 
 **Simplocker** (June 2014): The first Android ransomware to actually encrypt files. Scanned external storage for media files (images, documents, video) and encrypted them with AES. Demanded ransom in Ukrainian hryvnia, indicating Ukrainian origin. C2 communication routed through Tor `.onion` addresses.
 
-**DoubleLocker** (October 2017): [ESET documented](https://www.welivesecurity.com/2017/10/13/doublelocker-innovative-android-malware/) the first Android ransomware combining both file encryption and PIN lock. Based on the Svpeng banking trojan's accessibility service code. DoubleLocker:
+**DoubleLocker** (October 2017): [ESET documented](https://www.welivesecurity.com/2017/10/13/doublelocker-innovative-android-malware/) the first Android ransomware combining both file encryption and PIN lock. Based on the [Svpeng](../malware/families/svpeng.md) banking trojan's accessibility service code. DoubleLocker:
 
 1. Encrypted user files with AES
 2. Changed the device PIN to a random value
@@ -136,6 +137,7 @@ Sideloaded ransomware can still request `MANAGE_EXTERNAL_STORAGE` and trick user
 | SOVA v5 | No | No | AES (`.enc`) | No | 2022 |
 | [BingoMod](../malware/families/bingomod.md) | No | No | No | Remote wipe | 2024 |
 | [Rafel RAT](../malware/families/rafelrat.md) | Overlay | Yes | AES | `wipeData()` | 2024 |
+| [DeVixor](../malware/families/devixor.md) | Overlay | No | Yes | No | 2025 |
 
 ## Platform Lifecycle
 

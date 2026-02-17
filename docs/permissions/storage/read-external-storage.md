@@ -69,7 +69,7 @@ Families known to target WhatsApp data:
 | GravityRAT | Exfiltrates WhatsApp backup databases |
 | Dracarys | Steals WhatsApp media and documents |
 | RatMilad | Targets WhatsApp and Telegram data directories |
-| PhoneSpy | Harvests all media including WhatsApp images |
+| [PhoneSpy](../../malware/families/phonespy.md) | Harvests all media including WhatsApp images |
 
 ### Credential File Harvesting
 

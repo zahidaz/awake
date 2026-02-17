@@ -169,6 +169,7 @@ The `accessibilityDataSensitive` attribute (Android 14+) is the most significant
 | [Xenomorph](../malware/families/xenomorph.md) | Accessibility | Targeted keylogging as part of ATS workflow |
 | [Octo](../malware/families/octo.md) | Accessibility | Combines keylogging with screen streaming |
 | [Vultur](../malware/families/vultur.md) | Accessibility | Keylogging alongside MediaProjection screen recording |
+| [BTMOB RAT](../malware/families/btmob.md) | Accessibility | Keystroke capture across all apps, combined with WebView credential phishing |
 
 ## Credential Theft Workflow
 

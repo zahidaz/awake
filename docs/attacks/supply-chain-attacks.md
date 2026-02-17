@@ -13,13 +13,13 @@ See also: [Play Store Evasion](play-store-evasion.md), [Dynamic Code Loading](dy
     | [T1474.002](https://attack.mitre.org/techniques/T1474/002/) | Compromise Hardware Supply Chain | Initial Access |
     | [T1474.003](https://attack.mitre.org/techniques/T1474/003/) | Compromise Software Supply Chain | Initial Access |
 
-    T1474.001 covers Gradle/Maven dependency attacks (MavenGate, typosquatting, dependency confusion). T1474.002 covers firmware pre-installs during manufacturing (BADBOX, Triada firmware). T1474.003 covers SDK poisoning (SpinOk, Necro, Goldoson) and app acquisition attacks.
+    T1474.001 covers Gradle/Maven dependency attacks (MavenGate, typosquatting, dependency confusion). T1474.002 covers firmware pre-installs during manufacturing (BADBOX, Triada firmware). T1474.003 covers SDK poisoning ([SpinOk](../malware/families/spinok.md), Necro, Goldoson) and app acquisition attacks.
 
 !!! warning "Scale"
 
     | Vector | Largest Documented Case | Devices Affected |
     |--------|------------------------|-----------------|
-    | SDK poisoning | [SpinOk](https://news.drweb.com/show?i=14705&lng=en) (2023) | 421M+ downloads |
+    | SDK poisoning | [SpinOk](../malware/families/spinok.md) (2023) | 421M+ downloads |
     | OEM pre-installed SDKs | [IMDEA study](https://networks.imdea.org/a-study-analyzes-pre-installed-software-on-android-devices-and-its-privacy-risks-for-users/) (2019) | 11,000+ SDKs across 214 brands |
     | Firmware pre-install | [BADBOX 2.0](https://www.humansecurity.com/learn/blog/badbox-peachpit-and-the-fraudulent-device-in-your-delivery-box/) (2023-2025) | 10M+ devices |
     | Build dependency | [MavenGate](https://blog.oversecured.com/Introducing-MavenGate-a-supply-chain-attack-method-for-Java-and-Android-applications/) (2024) | 18% of Maven domains vulnerable |
@@ -39,7 +39,7 @@ The most effective Android supply chain vector. A malicious SDK presents itself 
 
 ### Major Cases
 
-**SpinOk** (2023): A malicious SDK distributed as a minigame/engagement component. [Discovered by Dr.Web](https://news.drweb.com/show?i=14705&lng=en) in May 2023, then [expanded by CloudSEK](https://www.cloudsek.com/threatintelligence/supply-chain-attack-infiltrates-android-apps-with-malicious-sdk) to 193 affected apps. The SDK collected files, images, clipboard content, and could hijack cryptocurrency payments. Over 421 million combined downloads across 101+ apps. 43 apps were still active on the Play Store at time of discovery.
+**[SpinOk](../malware/families/spinok.md)** (2023): A malicious SDK distributed as a minigame/engagement component. [Discovered by Dr.Web](https://news.drweb.com/show?i=14705&lng=en) in May 2023, then [expanded by CloudSEK](https://www.cloudsek.com/threatintelligence/supply-chain-attack-infiltrates-android-apps-with-malicious-sdk) to 193 affected apps. The SDK collected files, images, clipboard content, and could hijack cryptocurrency payments. Over 421 million combined downloads across 101+ apps. 43 apps were still active on the Play Store at time of discovery.
 
 **[Goldoson](../malware/families/goldoson.md)** (2023): Malicious third-party library in 60+ legitimate South Korean apps. [Discovered by McAfee](https://www.mcafee.com/blogs/other-blogs/mcafee-labs/goldoson-privacy-invasive-and-clicker-android-adware-found-in-popular-apps-in-south-korea/) in April 2023. Collected installed app data, WiFi/Bluetooth device info, GPS locations, and performed background ad click fraud. Over 100 million combined downloads.
 
@@ -173,7 +173,7 @@ Malware built using the Xamarin framework, hiding malicious behavior in Xamarin 
 | [Goldoson](../malware/families/goldoson.md) | Malicious third-party library in Korean apps | 100M+ downloads |
 | [SparkCat](../malware/families/sparkcat.md) | OCR SDK targeting crypto wallets | 242K+ downloads |
 | [Joker](../malware/families/joker.md) | Various SDK wrappers, versioning attacks | Millions across hundreds of apps |
-| SpinOk | Malicious engagement/minigame SDK | 421M+ downloads |
+| [SpinOk](../malware/families/spinok.md) | Malicious engagement/minigame SDK | 421M+ downloads |
 | ExpensiveWall | Packed "gtk" SDK | 5.9M-21.1M downloads |
 | Chamois | Firmware pre-install + SDK distribution | 199M installs at peak |
 | GMobi | Adware SDK pre-installed on ~40 OEM device models | ~40 device models + ASUS/Trend Micro apps |

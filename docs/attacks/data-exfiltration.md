@@ -420,6 +420,7 @@ Spyware families like [Pegasus](../malware/families/pegasus.md) and [FinSpy](../
 | [PJobRAT](../malware/families/pjobrat.md) | Yes | Yes | Yes | Yes | No | No | No | Yes | Yes |
 | [KoSpy](../malware/families/kospy.md) | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
 | [PlainGnome](../malware/families/plaingnome.md) | Yes | Yes | Yes | Yes | Yes | No | No | Yes | Yes |
+| [DCHSpy](../malware/families/dchspy.md) | Yes | Yes | Yes | Yes | Yes | No | No | Yes | Yes |
 
 State-sponsored spyware ([Pegasus](../malware/families/pegasus.md), [Predator](../malware/families/predator.md), [Hermit](../malware/families/hermit.md), [FinSpy](../malware/families/finspy.md)) exfiltrates everything. Banking trojans focus on SMS/OTPs and device info. Loan apps ([SpyLoan](../malware/families/spyloan.md)) target contacts and photos for extortion.
 

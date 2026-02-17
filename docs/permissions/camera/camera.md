@@ -91,7 +91,7 @@ Camera pointed at another screen can read QR codes, capture credentials displaye
 | Dendroid RAT | Remote camera activation, photo + video |
 | DroidJack / SandroRAT | Live camera streaming to C2 |
 | [Hermit](../../malware/families/hermit.md) (RCS Lab) | Camera capture as part of lawful intercept toolkit |
-| PhoneSpy | Stalkerware with continuous camera access |
+| [PhoneSpy](../../malware/families/phonespy.md) | Stalkerware with continuous camera access |
 | [Mandrake](../../malware/families/mandrake.md) | Camera-based environment profiling |
 | [BoneSpy](../../malware/families/bonespy.md) | Covert photo capture for Gamaredon-linked espionage operations |
 | [PlainGnome](../../malware/families/plaingnome.md) | Camera capture in second-stage surveillance payload |

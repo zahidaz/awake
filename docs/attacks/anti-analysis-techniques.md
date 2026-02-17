@@ -76,7 +76,7 @@ private boolean checkEmulatorFiles() {
 
 [Trend Micro documented](https://www.trendmicro.com/en_us/research.html) malware using motion sensor data to distinguish real phones from emulators. BatterySaverMobi and Currency Converter (discovered on Play Store) checked accelerometer readings -- emulators return static or zero values because they don't simulate physical motion. The malware only activated its dropper payload after detecting non-zero accelerometer variance over time.
 
-[SpinOk SDK](../attacks/app-collusion.md) used gyroscope and magnetometer data as anti-emulation checks before activating its data harvesting across 193 apps with 451 million downloads.
+[SpinOk](../malware/families/spinok.md) SDK used gyroscope and magnetometer data as anti-emulation checks before activating its data harvesting across 193 apps with 451 million downloads.
 
 ### Hardware Property Checks
 

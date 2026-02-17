@@ -91,7 +91,7 @@ Premium call fraud has largely been replaced by banking trojans, but still appea
 | Android.Trojan.MMarketPay | Automated premium service subscription via calls |
 | FakePlayer | Premium SMS/call hybrid fraud |
 | Acecard | Call forwarding setup to intercept bank verification calls |
-| Svpeng | USSD-based balance drain on Russian carriers |
+| [Svpeng](../../malware/families/svpeng.md) | USSD-based balance drain on Russian carriers |
 
 ## Android Version Changes
 

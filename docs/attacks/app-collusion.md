@@ -96,9 +96,9 @@ The SDK collected precise GPS location, email addresses, phone numbers, clipboar
 
 [Predicio](https://www.vice.com/en/article/dy8eba/google-predicio-ban-muslim-prayer-app) (France-based) was part of a supply chain funneling data: individual apps -> SDK providers -> middlemen -> Gravy Analytics -> Venntel (US government contractor selling to ICE and CBP). This represents SDK-mediated collusion at its most extreme: the SDK operator aggregates data from many independently-developed apps to build a surveillance product. [EFF covered the broader implications](https://www.eff.org/deeplinks/2021/03/apple-and-google-kicked-two-location-data-brokers-out-their-app-stores-good-now).
 
-### SpinOk SDK (Trojan Module in 100+ Apps)
+### [SpinOk](../malware/families/spinok.md) SDK (Trojan Module in 100+ Apps)
 
-[Dr.Web discovered](https://news.drweb.com/show?i=14705&lng=en) SpinOk in May 2023, a trojan SDK disguised as an advertising module found in [193 apps with over 451 million cumulative downloads](https://www.bleepingcomputer.com/news/security/spinok-android-malware-found-in-more-apps-with-30-million-installs/). Collected device sensor data, file listings, clipboard content, and could execute arbitrary JavaScript. Used anti-emulation techniques (gyroscope, magnetometer data) to avoid sandbox detection. Notable affected apps: Noizz (100M), Zapya (100M), vFly (50M), MVBit (50M). Developers embedded it unknowingly.
+[Dr.Web discovered](https://news.drweb.com/show?i=14705&lng=en) [SpinOk](../malware/families/spinok.md) in May 2023, a trojan SDK disguised as an advertising module found in [193 apps with over 451 million cumulative downloads](https://www.bleepingcomputer.com/news/security/spinok-android-malware-found-in-more-apps-with-30-million-installs/). Collected device sensor data, file listings, clipboard content, and could execute arbitrary JavaScript. Used anti-emulation techniques (gyroscope, magnetometer data) to avoid sandbox detection. Notable affected apps: Noizz (100M), Zapya (100M), vFly (50M), MVBit (50M). Developers embedded it unknowingly.
 
 ### Salmonads SDK (IMEI Sharing via Filesystem)
 

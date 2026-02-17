@@ -127,6 +127,8 @@ A full ATS-driven account takeover chains multiple techniques:
 | [GodFather](../malware/families/godfather.md) | Scripted | Configurable | v2 (2023) | 400+ targets |
 | [Medusa](../malware/families/medusa.md) | VNC-based | Operator-controlled | v2 (2024) | European banks |
 | [BingoMod](../malware/families/bingomod.md) | VNC + scripted | Hybrid | 2024 | Italian banks |
+| [Albiriox](../malware/families/albiriox.md) | VNC-based | Operator-controlled | 2025 | 400+ targets |
+| [RatOn](../malware/families/raton.md) | Scripted | Accessibility-driven | 2025 | Czech/Slovak banks |
 | [TsarBot](../malware/families/tsarbot.md) | Scripted | Configurable | 2024 | 750+ targets |
 | [Copybara](../malware/families/copybara.md) | VNC + scripted | Hybrid | 2024 | Italian banks |
 | [Herodotus](../malware/families/herodotus.md) | Scripted | Human behavior mimicry | 2025 | EU banks |

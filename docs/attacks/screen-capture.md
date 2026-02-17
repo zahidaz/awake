@@ -153,6 +153,8 @@ Most malware relies on accessibility tree reading as the FLAG_SECURE bypass sinc
 | [BingoMod](../malware/families/bingomod.md) | VNC via MediaProjection | Screen-based VNC for on-device fraud |
 | [Brokewell](../malware/families/brokewell.md) | MediaProjection streaming | Real-time screen mirroring to attacker |
 | [Gigabud](../malware/families/gigabud.md) | MediaProjection | Screen recording triggered via accessibility, avoids overlay attacks entirely |
+| [Albiriox](../malware/families/albiriox.md) | VNC via accessibility | Real-time VNC remote control for on-device fraud, black screen concealment |
+| [BTMOB RAT](../malware/families/btmob.md) | MediaProjection | Live screen streaming to C2 via Media Projection API |
 
 ## Detection During Analysis
 

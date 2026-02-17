@@ -168,12 +168,14 @@ nav:
           - LightSpy: malware/families/lightspy.md
           - Mamont: malware/families/mamont.md
           - Mandrake: malware/families/mandrake.md
+          - Marcher: malware/families/marcher.md
           - Medusa: malware/families/medusa.md
           - MoqHao: malware/families/moqhao.md
           - Necro: malware/families/necro.md
           - NGate: malware/families/ngate.md
           - Octo: malware/families/octo.md
           - Pegasus: malware/families/pegasus.md
+          - PhoneSpy: malware/families/phonespy.md
           - PixPirate: malware/families/pixpirate.md
           - PJobRAT: malware/families/pjobrat.md
           - PlainGnome: malware/families/plaingnome.md
@@ -183,10 +185,12 @@ nav:
           - SharkBot: malware/families/sharkbot.md
           - SoumniBot: malware/families/soumnibot.md
           - SparkCat: malware/families/sparkcat.md
+          - SpinOk: malware/families/spinok.md
           - SpyAgent: malware/families/spyagent.md
           - SpyLoan: malware/families/spyloan.md
           - SpyNote: malware/families/spynote.md
           - Sturnus: malware/families/sturnus.md
+          - Svpeng: malware/families/svpeng.md
           - ToxicPanda: malware/families/toxicpanda.md
           - Triada: malware/families/triada.md
           - TrickMo: malware/families/trickmo.md
