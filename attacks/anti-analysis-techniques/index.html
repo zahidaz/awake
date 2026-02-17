@@ -1667,22 +1667,77 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#frida-detection" class="md-nav__link">
+  <a href="#hooking-framework-detection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Frida Detection
+        Hooking Framework Detection
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Frida Detection">
+    <nav class="md-nav" aria-label="Hooking Framework Detection">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#detection-techniques" class="md-nav__link">
+  <a href="#evolution" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Detection Techniques
+        Evolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hooking-frameworks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hooking Frameworks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frida-specific-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frida-Specific Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xposed-lsposed-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xposed / LSPosed Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-inline-hook-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic Inline Hook Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-protectors-implement-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Protectors Implement Detection
       
     </span>
   </a>
@@ -1702,17 +1757,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#xposed-detection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Xposed Detection
-      
-    </span>
-  </a>
   
 </li>
       
@@ -10404,22 +10448,77 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#frida-detection" class="md-nav__link">
+  <a href="#hooking-framework-detection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Frida Detection
+        Hooking Framework Detection
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Frida Detection">
+    <nav class="md-nav" aria-label="Hooking Framework Detection">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#detection-techniques" class="md-nav__link">
+  <a href="#evolution" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Detection Techniques
+        Evolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hooking-frameworks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hooking Frameworks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frida-specific-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frida-Specific Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xposed-lsposed-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Xposed / LSPosed Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generic-inline-hook-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic Inline Hook Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-protectors-implement-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Protectors Implement Detection
       
     </span>
   </a>
@@ -10439,17 +10538,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#xposed-detection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Xposed Detection
-      
-    </span>
-  </a>
   
 </li>
       
@@ -10853,9 +10941,91 @@
 </table>
 <h3 id="safetynet-play-integrity">SafetyNet / Play Integrity<a class="headerlink" href="#safetynet-play-integrity" title="Permanent link">&para;</a></h3>
 <p>Some malware checks <a href="../../platform-abuse/play-integrity/">Play Integrity</a> attestation before executing, refusing to operate on devices that fail hardware attestation. This is unusual (most malware avoids Google APIs) but has been observed in families that want to ensure they are running on a real, unmodified device to maximize fraud success.</p>
-<h2 id="frida-detection">Frida Detection<a class="headerlink" href="#frida-detection" title="Permanent link">&para;</a></h2>
-<p><a href="https://frida.re/">Frida</a> is the primary dynamic instrumentation tool used by Android researchers. Detecting it is a priority for any malware that wants to resist analysis.</p>
-<h3 id="detection-techniques">Detection Techniques<a class="headerlink" href="#detection-techniques" title="Permanent link">&para;</a></h3>
+<h2 id="hooking-framework-detection">Hooking Framework Detection<a class="headerlink" href="#hooking-framework-detection" title="Permanent link">&para;</a></h2>
+<p>Hooking frameworks let analysts (and attackers) intercept function calls at runtime. Detecting them is a priority for both malware resisting analysis and protectors defending banking apps. The detection landscape has evolved significantly: early approaches targeted specific frameworks by name, while modern protectors use generic techniques that catch any inline hook regardless of the framework that placed it.</p>
+<h3 id="evolution">Evolution<a class="headerlink" href="#evolution" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Era</th>
+<th>Approach</th>
+<th>What It Catches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2017-2020</td>
+<td>Framework-specific signatures</td>
+<td>Frida by name (<code>frida-agent</code> strings, port 27042, process name)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2020-2022</td>
+<td>Evasion tools emerge</td>
+<td>Renamed Frida binaries, Gadget injection, ZygiskFrida bypass phase-1 checks</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2022-present</td>
+<td>Generic inline hook detection</td>
+<td>Any framework: Frida, Dobby, ShadowHook, ByteHook, custom hooks</td>
+</tr>
+</tbody>
+</table>
+<p>The shift from phase 1 to phase 3 is the most important trend. Protectors that only check for <code>frida-agent</code> strings are trivially bypassed. Protectors that verify function prologue integrity catch everything.</p>
+<h3 id="hooking-frameworks">Hooking Frameworks<a class="headerlink" href="#hooking-frameworks" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Type</th>
+<th>Footprint</th>
+<th>Where It Shows Up</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://frida.re/">Frida</a></td>
+<td>Full instrumentation runtime</td>
+<td>Heavy (JS engine, server process, agent library)</td>
+<td>Primary RE tool, automated analysis pipelines</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jmpews/Dobby">Dobby</a></td>
+<td>Native inline hooking library</td>
+<td>Minimal (~300 KB .so, no server, no ports)</td>
+<td>Zygisk modules (PlayIntegrityFix, root hiding), game mods, malware</td>
+</tr>
+<tr>
+<td><a href="https://github.com/bytedance/android-inline-hook">ShadowHook</a></td>
+<td>Native inline hooking (ByteDance)</td>
+<td>Minimal</td>
+<td>ByteDance apps internally, open-source adoption growing</td>
+</tr>
+<tr>
+<td><a href="https://github.com/bytedance/bhook">ByteHook</a></td>
+<td>PLT/GOT hooking (ByteDance)</td>
+<td>Minimal</td>
+<td>PLT-level interception, less invasive than inline</td>
+</tr>
+<tr>
+<td><a href="https://github.com/LSPosed/LSPlant">LSPlant</a></td>
+<td>ART Java method hooking</td>
+<td>Minimal</td>
+<td>LSPosed framework, Xposed module ecosystem</td>
+</tr>
+<tr>
+<td><a href="https://github.com/canyie/pine">Pine</a></td>
+<td>ART Java method hooking</td>
+<td>Minimal</td>
+<td>Alternative to LSPlant for Java-level hooks</td>
+</tr>
+</tbody>
+</table>
+<p>Frida's detection surface is large: a server process, a full JavaScript runtime injected as a shared library, network ports, and characteristic strings in memory. Dobby and similar lightweight frameworks trade flexibility for stealth -- they compile as a small native library with no server, no JS engine, and no characteristic strings. The analyst controls the .so name. The only artifacts are modified function prologues and allocated trampoline memory pages.</p>
+<h3 id="frida-specific-detection">Frida-Specific Detection<a class="headerlink" href="#frida-specific-detection" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -10872,13 +11042,13 @@
 </tr>
 <tr>
 <td><code>/proc/self/maps</code> scan</td>
-<td>Read memory mappings, search for <code>frida-agent</code>, <code>frida-gadget</code></td>
-<td>Medium</td>
+<td>Search memory mappings for <code>frida-agent</code>, <code>frida-gadget</code></td>
+<td>Medium (bypassed by renaming)</td>
 </tr>
 <tr>
 <td>Process enumeration</td>
 <td>List running processes for <code>frida-server</code>, <code>frida-helper</code></td>
-<td>Medium</td>
+<td>Medium (bypassed by renaming)</td>
 </tr>
 <tr>
 <td>Named pipe detection</td>
@@ -10887,30 +11057,18 @@
 </tr>
 <tr>
 <td><code>pthread</code> enumeration</td>
-<td>Scan thread names for frida-related strings</td>
+<td>Scan thread names for Frida-related strings (<code>gmain</code>, <code>gdbus</code>)</td>
 <td>Medium-High</td>
 </tr>
 <tr>
 <td>Library detection</td>
-<td><code>dlopen</code> check for <code>frida-agent.so</code> in memory</td>
+<td>Enumerate loaded libraries for Frida agent patterns</td>
 <td>Medium</td>
-</tr>
-<tr>
-<td>Inline hook detection</td>
-<td>Check function prologues for <code>0xd503201f</code> (NOP sled) or trampolines</td>
-<td>High</td>
 </tr>
 </tbody>
 </table>
-<h3 id="bypass-strategies">Bypass Strategies<a class="headerlink" href="#bypass-strategies" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Rename <code>frida-server</code> binary to a random name</li>
-<li>Use non-default port (<code>frida-server -l 0.0.0.0:1337</code>)</li>
-<li><a href="https://github.com/AhMyth/ZygiskFrida">ZygiskFrida</a> -- loads Frida gadget via Zygisk, avoiding frida-server entirely</li>
-<li><a href="https://github.com/LSPosed/LSPosed.github.io">Shamiko</a> -- Zygisk module that hides root and Frida from DenyList processes</li>
-<li>Patch <code>/proc/self/maps</code> reads via Frida itself (hook <code>fopen</code>/<code>fgets</code> to filter frida strings)</li>
-</ul>
-<h2 id="xposed-detection">Xposed Detection<a class="headerlink" href="#xposed-detection" title="Permanent link">&para;</a></h2>
+<p>These signature-based checks are the easiest to bypass: rename the binary, change the port, use <a href="https://github.com/lico-n/ZygiskFrida">ZygiskFrida</a> to inject Frida Gadget via Zygisk instead of running a server. Patch <code>/proc/self/maps</code> reads via Frida itself to filter out Frida strings. <a href="https://github.com/LSPosed/LSPosed.github.io">Shamiko</a> hides root and Frida artifacts from DenyList processes.</p>
+<h3 id="xposed-lsposed-detection">Xposed / LSPosed Detection<a class="headerlink" href="#xposed-lsposed-detection" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -10936,66 +11094,151 @@
 <td>Xposed hooks modify exception handling chain</td>
 </tr>
 <tr>
-<td>Field count check</td>
-<td>Xposed adds hidden fields to hooked methods</td>
+<td>ART method structure</td>
+<td>LSPlant modifies ART internal method structures; integrity checks on <code>ArtMethod</code> fields detect this</td>
 </tr>
 </tbody>
 </table>
-<p><a href="https://github.com/LSPosed/LSPosed">LSPosed</a> (modern Xposed framework) operates through Zygisk, making it harder to detect via traditional methods. Most modern malware focuses on Frida detection rather than Xposed.</p>
+<p><a href="https://github.com/LSPosed/LSPosed">LSPosed</a> operates through Zygisk, making traditional Xposed detection (class names, JAR in maps) ineffective. Detection now requires checking ART internals for method structure modifications.</p>
+<h3 id="generic-inline-hook-detection">Generic Inline Hook Detection<a class="headerlink" href="#generic-inline-hook-detection" title="Permanent link">&para;</a></h3>
+<p>These techniques catch any framework that modifies native function code in memory, regardless of name or origin. This is where the arms race currently sits.</p>
+<p><strong>Prologue integrity checking</strong>: The protector stores hashes of the first 16-32 bytes of critical functions at initialization. Periodically (or before sensitive operations), it re-reads those bytes and compares. Any inline hook overwrites the prologue with a branch instruction, breaking the hash. This is the most reliable detection method.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">expected_prologue</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* stored at build/init time */</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">current_prologue</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">memcpy</span><span class="p">(</span><span class="n">current_prologue</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">target_function</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">);</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">memcmp</span><span class="p">(</span><span class="n">expected_prologue</span><span class="p">,</span><span class="w"> </span><span class="n">current_prologue</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="c1">// Function has been hooked</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Anonymous executable memory scanning</strong>: Inline hooking frameworks allocate executable memory pages for trampolines. These appear in <code>/proc/self/maps</code> as anonymous regions with execute permission (<code>r-xp</code> with no backing file). Normal processes have very few anonymous executable pages. A protector scanning for these can detect Dobby, Frida Interceptor, ShadowHook, and any other inline hook framework.</p>
+<p><strong>Instruction pattern detection</strong>: On ARM64, a Dobby hook replaces the function prologue with <code>LDR Xn, [PC, #offset]</code> followed by <code>BR Xn</code> (load absolute address, branch to it). Frida's Interceptor uses a similar pattern. Scanning function entry points for these characteristic instruction sequences detects hooks without knowing which framework placed them.</p>
+<p><strong><code>.text</code> section integrity</strong>: Compare the in-memory <code>.text</code> section of loaded libraries against the on-disk copy. Any byte difference indicates patching. More expensive than prologue checking but catches hooks placed anywhere in a function, not just the entry point.</p>
+<p><strong>Timing analysis</strong>: A hooked function traverses the trampoline (relocated original instructions, jump back), adding nanoseconds of latency. Tight timing loops around sensitive functions can reveal the overhead, though this is noisy in practice.</p>
+<h3 id="how-protectors-implement-detection">How Protectors Implement Detection<a class="headerlink" href="#how-protectors-implement-detection" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Protector</th>
+<th>Detection Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../../packers/promon/">Promon SHIELD</a></td>
+<td>RASP-focused. Runtime integrity checks on critical functions, environment fingerprinting. Primarily behavioral detection rather than signature scanning.</td>
+</tr>
+<tr>
+<td><a href="../../packers/arxan/">Arxan (Digital.ai)</a></td>
+<td>Guard network: dozens of native guard functions that verify each other's integrity in a mesh. Hooking one guard triggers detection by others. Prologue integrity is checked across the guard network.</td>
+</tr>
+<tr>
+<td><a href="../../packers/liapp/">LIAPP</a></td>
+<td>Aggressive multi-layer: Frida-specific signature checks, Magisk-aware root detection, and native function integrity verification. Server-side token validation adds a layer that client-side hooks cannot bypass.</td>
+</tr>
+<tr>
+<td><a href="../../packers/appdome/">Appdome</a></td>
+<td><a href="https://www.appdome.com/how-to/mobile-malware-prevention/android-malware-detection/detect-hooking-frameworks/">Multi-vector framework detection</a>: signature scanning for known frameworks, generic inline hook detection, memory map analysis. Covers Frida, Xposed, Dobby, and custom hooks.</td>
+</tr>
+<tr>
+<td><a href="../../packers/dexprotector/">DexProtector</a></td>
+<td>Native bridge with integrity checks. Anti-Frida and anti-debug at the native layer. White-box crypto module (vTEE) adds cryptographic verification that hooks cannot fake without the key material.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bypass-strategies">Bypass Strategies<a class="headerlink" href="#bypass-strategies" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Detection Type</th>
+<th>Bypass Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frida-specific signatures</td>
+<td>Rename binaries, change ports, use ZygiskFrida or Frida Gadget</td>
+</tr>
+<tr>
+<td><code>/proc/self/maps</code> scanning</td>
+<td>Hook <code>fopen</code>/<code>fgets</code> to filter results, or use kernel-level hiding (Shamiko)</td>
+</tr>
+<tr>
+<td>Prologue integrity</td>
+<td>Frida Stalker (copies and instruments code blocks without modifying originals)</td>
+</tr>
+<tr>
+<td>Anonymous RWX pages</td>
+<td>Allocate trampolines in existing RX regions or use code-cave injection</td>
+</tr>
+<tr>
+<td><code>.text</code> integrity</td>
+<td>Kernel-level hooking below the protector's visibility</td>
+</tr>
+<tr>
+<td>Guard networks (Arxan)</td>
+<td>Identify and patch all guards simultaneously, or hook the integrity check function itself</td>
+</tr>
+<tr>
+<td>Timing analysis</td>
+<td>Minimize trampoline overhead, add compensating delays</td>
+</tr>
+</tbody>
+</table>
+<p>The current state of the art: protectors layer multiple detection types so that bypassing one doesn't disable all. Analysts counter by combining Zygisk-based injection (avoids process-level artifacts), Frida Stalker (avoids prologue modification), and Shamiko (hides root and maps entries). Neither side has a decisive advantage.</p>
 <h2 id="debugger-detection">Debugger Detection<a class="headerlink" href="#debugger-detection" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isDebugged</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Debug</span><span class="p">.</span><span class="na">isDebuggerConnected</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Debug</span><span class="p">.</span><span class="na">waitingForDebugger</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">FileReader</span><span class="p">(</span><span class="s">&quot;/proc/self/status&quot;</span><span class="p">));</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">line</span><span class="p">;</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="na">readLine</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="na">startsWith</span><span class="p">(</span><span class="s">&quot;TracerPid:&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">parseInt</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="na">trim</span><span class="p">());</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">            </span><span class="p">}</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ignored</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">isDebugged</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Debug</span><span class="p">.</span><span class="na">isDebuggerConnected</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Debug</span><span class="p">.</span><span class="na">waitingForDebugger</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="n">BufferedReader</span><span class="w"> </span><span class="n">reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BufferedReader</span><span class="p">(</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">            </span><span class="k">new</span><span class="w"> </span><span class="n">FileReader</span><span class="p">(</span><span class="s">&quot;/proc/self/status&quot;</span><span class="p">));</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">line</span><span class="p">;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reader</span><span class="p">.</span><span class="na">readLine</span><span class="p">())</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="na">startsWith</span><span class="p">(</span><span class="s">&quot;TracerPid:&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">                </span><span class="kt">int</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Integer</span><span class="p">.</span><span class="na">parseInt</span><span class="p">(</span><span class="n">line</span><span class="p">.</span><span class="na">substring</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="na">trim</span><span class="p">());</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">            </span><span class="p">}</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">Exception</span><span class="w"> </span><span class="n">ignored</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="timing-based-detection">Timing-Based Detection<a class="headerlink" href="#timing-based-detection" title="Permanent link">&para;</a></h3>
 <p>Malware measures execution time of code blocks. Under a debugger or instrumentation framework, execution is significantly slower. <a href="https://attack.mitre.org/techniques/T1497/003/">MITRE ATT&amp;CK T1497.003</a> documents this as "Time Based Evasion."</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">long</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SystemClock</span><span class="p">.</span><span class="na">uptimeMillis</span><span class="p">();</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">performDecoyComputation</span><span class="p">();</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kt">long</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SystemClock</span><span class="p">.</span><span class="na">uptimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">;</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">elapsed</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">THRESHOLD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="c1">// Likely under instrumentation</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">long</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SystemClock</span><span class="p">.</span><span class="na">uptimeMillis</span><span class="p">();</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">performDecoyComputation</span><span class="p">();</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kt">long</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SystemClock</span><span class="p">.</span><span class="na">uptimeMillis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">elapsed</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">THRESHOLD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="c1">// Likely under instrumentation</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="av-and-security-app-detection">AV and Security App Detection<a class="headerlink" href="#av-and-security-app-detection" title="Permanent link">&para;</a></h2>
 <p>Malware checks for installed security apps to decide whether to activate. Some families disable Play Protect via <a href="../accessibility-abuse/">accessibility</a> before proceeding.</p>
 <h3 id="package-name-checks">Package Name Checks<a class="headerlink" href="#package-name-checks" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">hasSecurityApp</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">avPackages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">        </span><span class="s">&quot;com.avast.android.mobilesecurity&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">        </span><span class="s">&quot;com.eset.ems2.gp&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="s">&quot;com.kaspersky.security.cloud&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="s">&quot;com.bitdefender.security&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="s">&quot;org.malwarebytes.antimalware&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="s">&quot;com.symantec.mobilesecurity&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">        </span><span class="s">&quot;com.lookout&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">        </span><span class="s">&quot;com.zimperium.zips&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="s">&quot;com.trendmicro.tmmspersonal&quot;</span><span class="p">,</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">        </span><span class="s">&quot;com.drweb.pro&quot;</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="p">};</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="n">PackageManager</span><span class="w"> </span><span class="n">pm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getPackageManager</span><span class="p">();</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">pkg</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">avPackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">            </span><span class="n">pm</span><span class="p">.</span><span class="na">getPackageInfo</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">NameNotFoundException</span><span class="w"> </span><span class="n">ignored</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">private</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">hasSecurityApp</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">avPackages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="s">&quot;com.avast.android.mobilesecurity&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="s">&quot;com.eset.ems2.gp&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="s">&quot;com.kaspersky.security.cloud&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="s">&quot;com.bitdefender.security&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="s">&quot;org.malwarebytes.antimalware&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="s">&quot;com.symantec.mobilesecurity&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="s">&quot;com.lookout&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="s">&quot;com.zimperium.zips&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="s">&quot;com.trendmicro.tmmspersonal&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="s">&quot;com.drweb.pro&quot;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">    </span><span class="n">PackageManager</span><span class="w"> </span><span class="n">pm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getPackageManager</span><span class="p">();</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">pkg</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">avPackages</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">            </span><span class="n">pm</span><span class="p">.</span><span class="na">getPackageInfo</span><span class="p">(</span><span class="n">pkg</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">NameNotFoundException</span><span class="w"> </span><span class="n">ignored</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="p">}</span>
 </code></pre></div>
 <h3 id="play-protect-suppression">Play Protect Suppression<a class="headerlink" href="#play-protect-suppression" title="Permanent link">&para;</a></h3>
 <p>Multiple families use accessibility to disable Google Play Protect:</p>
