@@ -805,10 +805,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10098,10 +10098,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10152,6 +10152,31 @@
 
 <h1 id="overlay-attacks">Overlay Attacks<a class="headerlink" href="#overlay-attacks" title="Permanent link">&para;</a></h1>
 <p>Drawing a fake UI on top of a legitimate app to steal credentials. The defining technique of Android banking malware since ~2016. The attacker creates a window that looks identical to a banking app's login screen, and the user types their credentials into the attacker's view.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1417/002/">T1417.002</a></td>
+<td>Input Capture: GUI Input Capture</td>
+<td>Credential Access, Collection</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1453/">T1453</a></td>
+<td>Abuse Accessibility Features</td>
+<td>Collection, Credential Access</td>
+</tr>
+</tbody>
+</table>
+<p>T1417.002 explicitly covers overlay attacks using <code>SYSTEM_ALERT_WINDOW</code> and fake login screens. T1453 applies when accessibility services trigger the overlay based on foreground app detection.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10283,40 +10308,81 @@
 </tbody>
 </table>
 <p>The trend is away from pure overlay attacks toward on-device fraud using accessibility to operate the real banking app directly. Overlays are still used for initial credential capture, but the real value is in accessibility-based ATS. The most recent evolution (<a href="../../malware/families/godfather/">GodFather v3</a>) bypasses overlays entirely by running the real banking app inside a virtual environment and intercepting all interactions at runtime.</p>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p class="admonition-title">Every mitigation pushed malware toward heavier reliance on accessibility services</p>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 8</td>
-<td><code>TYPE_APPLICATION_OVERLAY</code> renders below permission dialogs</td>
-<td>Attacker doesn't need to overlay permission dialogs</td>
+<td>4.0</td>
+<td>14</td>
+<td><code>TYPE_SYSTEM_ALERT</code> window type</td>
+<td>Original overlay mechanism, draws over all apps</td>
 </tr>
 <tr>
-<td>Android 10</td>
-<td>Overlays can't appear over focused app activities</td>
-<td>Accessibility gestures bypass this entirely</td>
+<td>5.0</td>
+<td>21</td>
+<td><code>UsageStatsManager</code> for foreground detection</td>
+<td>Polling-based overlay trigger without accessibility</td>
 </tr>
 <tr>
-<td>Android 12</td>
-<td><code>FLAG_WINDOW_IS_PARTIALLY_OBSCURED</code> warns apps of overlays</td>
+<td>6.0</td>
+<td>23</td>
+<td><code>SYSTEM_ALERT_WINDOW</code> becomes a runtime permission</td>
+<td>Auto-granted from Play Store installs until API 26</td>
+</tr>
+<tr>
+<td>8.0</td>
+<td>26</td>
+<td><code>TYPE_APPLICATION_OVERLAY</code> replaces <code>TYPE_SYSTEM_ALERT</code></td>
+<td>Renders below permission dialogs, but attacker doesn't need to overlay those</td>
+</tr>
+<tr>
+<td>8.0</td>
+<td>26</td>
+<td><code>SYSTEM_ALERT_WINDOW</code> no longer auto-granted from Play Store</td>
+<td>Malware pivots to accessibility-triggered overlays</td>
+</tr>
+<tr>
+<td>10</td>
+<td>29</td>
+<td>Overlays cannot appear over focused app activities</td>
+<td><a href="../accessibility-abuse/">Accessibility</a> gestures bypass this entirely</td>
+</tr>
+<tr>
+<td>12</td>
+<td>31</td>
+<td><a href="https://developer.android.com/reference/android/view/MotionEvent#FLAG_WINDOW_IS_PARTIALLY_OBSCURED"><code>FLAG_WINDOW_IS_PARTIALLY_OBSCURED</code></a> warns apps of overlays</td>
 <td>Most apps don't check this flag</td>
 </tr>
 <tr>
-<td>Android 12</td>
+<td>12</td>
+<td>31</td>
 <td>Overlays untouchable over system dialogs</td>
 <td>Accessibility service performs the touches instead</td>
 </tr>
+<tr>
+<td>12</td>
+<td>31</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events">Untrusted touch events blocked</a> when overlay obscures the target</td>
+<td>Malware uses <code>FLAG_NOT_TOUCHABLE</code> with <code>alpha &lt; 0.8</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>35</td>
+<td>Further restrictions on overlay interaction patterns</td>
+<td>Drives adoption of <a href="../app-virtualization/">app virtualization</a> as alternative</td>
+</tr>
 </tbody>
 </table>
+<div class="admonition info">
+<p class="admonition-title">Every overlay restriction pushed malware toward heavier reliance on <a href="../accessibility-abuse/">accessibility services</a></p>
 </div>
 <h2 id="families-using-this-technique">Families Using This Technique<a class="headerlink" href="#families-using-this-technique" title="Permanent link">&para;</a></h2>
 <table>

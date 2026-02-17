@@ -1874,10 +1874,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10276,10 +10276,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10331,6 +10331,31 @@
 <h1 id="camera-microphone-surveillance">Camera &amp; Microphone Surveillance<a class="headerlink" href="#camera-microphone-surveillance" title="Permanent link">&para;</a></h1>
 <p>Silent capture of audio and video from a compromised Android device. Spyware and banking trojans use the camera and microphone for ambient recording, live streaming, screenshot capture, and call recording. The objective ranges from targeted intelligence gathering (state-sponsored spyware like <a href="../../malware/families/pegasus/">Pegasus</a>) to mass credential harvesting (banking trojans recording screen during login).</p>
 <p>See also: <a href="../screen-capture/">Screen Capture</a>, <a href="../keylogging/">Keylogging</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../call-interception/">Call Interception</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1429/">T1429</a></td>
+<td>Audio Capture</td>
+<td>Collection</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1512/">T1512</a></td>
+<td>Video Capture</td>
+<td>Collection</td>
+</tr>
+</tbody>
+</table>
+<p>T1429 covers microphone-based audio recording and call recording. T1512 covers camera capture (photo and video). Both techniques are core collection capabilities for spyware and RATs.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10522,68 +10547,74 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact on Surveillance</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Pre-6.0</td>
+<td>&lt;23</td>
 <td>Camera/microphone permissions granted at install</td>
-<td>Trivial access</td>
+<td>Trivial access to both sensors</td>
 </tr>
 <tr>
 <td>6.0</td>
-<td>Runtime permissions for <code>CAMERA</code> and <code>RECORD_AUDIO</code></td>
-<td>User must grant explicitly; accessibility auto-grants</td>
+<td>23</td>
+<td><a href="https://developer.android.com/training/permissions/requesting">Runtime permissions</a> for <code>CAMERA</code> and <code>RECORD_AUDIO</code></td>
+<td>User must grant explicitly; <a href="../accessibility-abuse/">accessibility</a> auto-grants</td>
 </tr>
 <tr>
 <td>9.0</td>
+<td>28</td>
 <td>Background camera access restricted</td>
 <td>Foreground service required; must be started while app is visible</td>
 </tr>
 <tr>
 <td>9.0</td>
+<td>28</td>
 <td><code>VOICE_CALL</code> audio source restricted</td>
 <td>Call recording moves to <code>MIC</code> source workarounds</td>
 </tr>
 <tr>
 <td>10</td>
+<td>29</td>
 <td>Background microphone access restricted</td>
 <td>Foreground service required</td>
 </tr>
 <tr>
 <td>11</td>
-<td>Foreground service must declare <code>camera</code>/<code>microphone</code> type</td>
+<td>30</td>
+<td><a href="https://developer.android.com/about/versions/11/privacy/foreground-services">Foreground service must declare <code>camera</code>/<code>microphone</code> type</a></td>
 <td>Manifest declaration reveals intent</td>
 </tr>
 <tr>
 <td>12</td>
-<td>Privacy indicators (green dot) for camera/microphone</td>
-<td>Visual indicator to user; bypassed by LianSpy</td>
+<td>31</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-all#mic-camera-indicators">Privacy indicators</a> (green dot) for camera/microphone</td>
+<td>Visual indicator to user; bypassed by LianSpy via <code>icon_blacklist</code></td>
 </tr>
 <tr>
 <td>14</td>
-<td>Foreground service type <code>camera</code>/<code>microphone</code> required</td>
+<td>34</td>
+<td><a href="https://developer.android.com/about/versions/14/changes/fgs-types-required">Foreground service type <code>camera</code>/<code>microphone</code> required</a></td>
 <td>Cannot start camera/microphone FGS from background</td>
 </tr>
 <tr>
 <td>14</td>
+<td>34</td>
 <td>Microphone FGS cannot launch from <code>BOOT_COMPLETED</code></td>
 <td>Breaks boot-time ambient recording</td>
 </tr>
 <tr>
-<td>14</td>
-<td>System CA certificates moved to immutable APEX</td>
-<td>Related: HTTPS interception for data exfil harder</td>
-</tr>
-<tr>
 <td>15</td>
+<td>35</td>
 <td>Camera FGS also blocked from <code>BOOT_COMPLETED</code></td>
 <td>Further restricts boot-time surveillance</td>
 </tr>

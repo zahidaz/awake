@@ -1021,10 +1021,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10164,10 +10164,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10219,6 +10219,26 @@
 <h1 id="notification-listener-abuse">Notification Listener Abuse<a class="headerlink" href="#notification-listener-abuse" title="Permanent link">&para;</a></h1>
 <p>Exploiting <code>NotificationListenerService</code> to silently read, exfiltrate, and dismiss notifications from every app on the device. As Android progressively restricted SMS permissions and Google Play banned their use in most apps, malware pivoted to notification listeners as the primary channel for OTP theft, message surveillance, and evidence suppression.</p>
 <p>See also: <a href="../notification-suppression/">Notification Suppression</a>, <a href="../sms-interception/">SMS Interception</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1517/">T1517</a></td>
+<td>Access Notifications</td>
+<td>Collection, Credential Access</td>
+</tr>
+</tbody>
+</table>
+<p>T1517 covers both reading notification content and dismissing notifications to suppress evidence. Malware listed under this technique on MITRE includes FlixOnline and <a href="../../malware/families/mandrake/">Mandrake</a>.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10463,43 +10483,56 @@
 </tbody>
 </table>
 <p>Notification listeners hit the sweet spot: broad coverage, ability to suppress evidence, no runtime permission dialog, and less Play Store scrutiny than accessibility services.</p>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 4.3 (API 18)</td>
-<td><code>NotificationListenerService</code> introduced with manual user enablement</td>
-<td>Social engineering or accessibility auto-enable</td>
+<td>4.3</td>
+<td>18</td>
+<td><a href="https://developer.android.com/reference/android/service/notification/NotificationListenerService"><code>NotificationListenerService</code></a> introduced</td>
+<td>New attack surface for notification interception</td>
 </tr>
 <tr>
-<td>Android 5.0 (API 21)</td>
+<td>5.0</td>
+<td>21</td>
 <td><code>cancelNotification(key)</code> added for precise dismissal</td>
-<td>Malware uses this offensively to suppress evidence</td>
+<td>Malware dismisses individual OTP/alert notifications</td>
 </tr>
 <tr>
-<td>Android 8.0 (API 26)</td>
-<td>Notification channels provide more context</td>
+<td>7.0</td>
+<td>24</td>
+<td><code>getActiveNotifications()</code> for reading all current notifications</td>
+<td>Retroactive notification access on service bind</td>
+</tr>
+<tr>
+<td>8.0</td>
+<td>26</td>
+<td>Notification channels provide more structured metadata</td>
 <td>Gives listeners more filtering capability, not less</td>
 </tr>
 <tr>
-<td>Android 11 (API 30)</td>
-<td>Notification history API (<code>getNotificationHistory()</code>)</td>
+<td>11</td>
+<td>30</td>
+<td><code>getNotificationHistory()</code> added</td>
 <td>Listeners retroactively access recent notifications even if not running when posted</td>
 </tr>
 <tr>
-<td>Android 13 (API 33)</td>
-<td>Restricted settings for sideloaded apps; cannot direct to notification access settings</td>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk">Restricted settings</a> for sideloaded apps</td>
 <td>Bypassed via session-based installers or store distribution</td>
 </tr>
 <tr>
-<td>Android 14 (API 34)</td>
+<td>14</td>
+<td>34</td>
 <td>Further tightening of restricted settings</td>
 <td>Malware adapts installer package name to appear store-distributed</td>
 </tr>

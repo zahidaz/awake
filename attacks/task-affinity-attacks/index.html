@@ -861,10 +861,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10115,10 +10115,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10186,6 +10186,26 @@
 
 <h1 id="task-affinity-attacks">Task Affinity Attacks<a class="headerlink" href="#task-affinity-attacks" title="Permanent link">&para;</a></h1>
 <p>Manipulating Android's activity back stack to place a malicious activity inside a target app's task. The user believes they're interacting with the legitimate app because the malicious activity appears in its task and recent apps entry. Also known as "StrandHogg" after the vulnerability disclosure that popularized it.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1635/001/">T1635.001</a></td>
+<td>Masquerading: Match Legitimate Name or Location</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>Task affinity manipulation is a form of masquerading where the malicious activity appears within the target app's task context. MITRE ATT&amp;CK Mobile does not have a dedicated technique for Android task manipulation; this is an area where AWAKE provides deeper coverage.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10271,30 +10291,40 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 10 (API 29)</td>
-<td>Restricted task affinity behavior for background-launched activities (StrandHogg v1 patch)</td>
-<td>Variations remain possible with certain launch mode configurations</td>
+<td>1.0</td>
+<td>1</td>
+<td>Task affinity and <code>allowTaskReparenting</code> available</td>
+<td>Any app can join another app's task via manifest declaration</td>
 </tr>
 <tr>
-<td>May 2020 Security Patch</td>
+<td>10</td>
+<td>29</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#background-activity-starts">Restricted task affinity for background-launched activities</a> (StrandHogg v1 patch)</td>
+<td>Variations remain with certain launch mode configurations</td>
+</tr>
+<tr>
+<td>May 2020 patch</td>
+<td>29</td>
 <td>Patched StrandHogg 2.0 (CVE-2020-0096)</td>
-<td>Only applies to devices receiving the patch</td>
+<td>Only applies to devices receiving the security update</td>
 </tr>
 <tr>
-<td>Android 12+</td>
-<td>Additional restrictions on background activity starts</td>
-<td>The underlying task model hasn't fundamentally changed; residual risk remains on unpatched devices</td>
+<td>12</td>
+<td>31</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-12#back-press">Additional restrictions on background activity starts</a></td>
+<td>Underlying task model unchanged; residual risk on unpatched devices</td>
 </tr>
 </tbody>
 </table>

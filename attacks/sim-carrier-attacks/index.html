@@ -2495,10 +2495,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle-ussd" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle (USSD)
       
     </span>
   </a>
@@ -10537,10 +10537,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle-ussd" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle (USSD)
       
     </span>
   </a>
@@ -10675,6 +10675,36 @@
 <h1 id="sim-carrier-level-attacks">SIM &amp; Carrier-Level Attacks<a class="headerlink" href="#sim-carrier-level-attacks" title="Permanent link">&para;</a></h1>
 <p>Exploiting the cellular infrastructure layer -- SIM cards, carrier billing systems, USSD codes, and baseband processors -- to steal money, intercept communications, and bypass authentication. Many of these attacks operate below the Android OS, making them invisible to on-device security tools. When combined with on-device malware, they form a complete attack chain: the malware handles credential theft while carrier-level manipulation defeats 2FA and enables silent monetization.</p>
 <p>See also: <a href="../sms-interception/">SMS Interception</a>, <a href="../call-interception/">Call Interception</a>, <a href="../phishing-techniques/">Phishing Techniques</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1451/">T1451</a></td>
+<td>SIM Card Swap</td>
+<td>Credential Access, Initial Access</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1449/">T1449</a></td>
+<td>Exploit SS7 to Track Device Location</td>
+<td>Collection, Discovery</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1640/">T1640</a></td>
+<td>Generate Fraudulent Advertising Revenue</td>
+<td>Impact</td>
+</tr>
+</tbody>
+</table>
+<p>T1451 covers SIM swapping and eSIM manipulation for 2FA bypass. T1449 covers carrier-infrastructure-level location tracking and interception. Carrier billing fraud and USSD exploitation do not have dedicated MITRE techniques; this is an area where AWAKE provides deeper coverage. Simjacker and WIBattack (SIM toolkit attacks) are not represented in ATT&amp;CK Mobile.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10966,30 +10996,40 @@
 <li>SMS messages containing clickable <code>tel:</code> links</li>
 </ul>
 <p>Samsung patched this, and modern Android versions display a confirmation dialog before dialing USSD codes via <code>tel:</code> URIs. The incident demonstrated why programmatic USSD execution without user consent is dangerous.</p>
-<h3 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h3>
+<h3 id="platform-lifecycle-ussd">Platform Lifecycle (USSD)<a class="headerlink" href="#platform-lifecycle-ussd" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Pre-4.2</td>
+<td>&lt;17</td>
 <td>No confirmation required for <code>tel:</code> URI USSD codes</td>
+<td>Silent factory reset via web page (<a href="#samsung-ussd-vulnerability-cve-2012-4001">CVE-2012-4001</a>)</td>
 </tr>
 <tr>
-<td>4.2+</td>
-<td><code>tel:</code> URI USSD codes show a confirmation dialog instead of executing directly</td>
+<td>4.2</td>
+<td>17</td>
+<td><code>tel:</code> URI USSD codes show confirmation dialog</td>
+<td>Direct web-triggered USSD eliminated</td>
 </tr>
 <tr>
-<td>8.0+</td>
-<td><code>sendUssdRequest()</code> API added with proper permission checks</td>
+<td>8.0</td>
+<td>26</td>
+<td><a href="https://developer.android.com/reference/android/telephony/TelephonyManager#sendUssdRequest(java.lang.String,%20android.telephony.TelephonyManager.UssdResponseCallback,%20android.os.Handler)"><code>sendUssdRequest()</code></a> API with proper permission checks</td>
+<td>Programmatic USSD execution still works with <code>CALL_PHONE</code></td>
 </tr>
 <tr>
-<td>10+</td>
-<td>Background activity launch restrictions limit silent USSD dialing</td>
+<td>10</td>
+<td>29</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#background-activity-starts">Background activity launch restrictions</a></td>
+<td>Silent USSD dialing from background limited</td>
 </tr>
 </tbody>
 </table>

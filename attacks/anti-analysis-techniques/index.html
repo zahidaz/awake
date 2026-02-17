@@ -10753,6 +10753,61 @@
 <h1 id="anti-analysis-techniques">Anti-Analysis Techniques<a class="headerlink" href="#anti-analysis-techniques" title="Permanent link">&para;</a></h1>
 <p>Detecting and evading analysis environments, security tools, and human researchers. Nearly every modern Android banking trojan implements multiple layers of anti-analysis checks before executing any malicious behavior. The goal is simple: if the malware suspects it is being analyzed, it does nothing, resulting in a clean verdict from automated sandboxes and wasted hours for manual analysts.</p>
 <p>See also: <a href="../play-store-evasion/">Play Store Evasion</a>, <a href="../dynamic-code-loading/">Dynamic Code Loading</a>, <a href="../persistence-techniques/">Persistence Techniques</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1633/">T1633</a></td>
+<td>Virtualization/Sandbox Evasion</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1633/001/">T1633.001</a></td>
+<td>System Checks</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1627/">T1627</a></td>
+<td>Execution Guardrails</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1627/001/">T1627.001</a></td>
+<td>Geofencing</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1406/">T1406</a></td>
+<td>Obfuscated Files or Information</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1628/">T1628</a></td>
+<td>Hide Artifacts</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1630/">T1630</a></td>
+<td>Indicator Removal on Host</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1629/">T1629</a></td>
+<td>Impair Defenses</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>T1633 covers emulator/sandbox detection via build properties, telephony, sensors, and filesystem artifacts. T1627 covers execution guardrails including geofencing, delayed activation, and SIM checks. T1406 covers string encryption, packing, and code obfuscation. T1628/T1630 cover hiding the app icon, clearing logs, and removing forensic artifacts. T1629 covers disabling Play Protect and security tools.</p>
+</div>
 <h2 id="emulator-detection">Emulator Detection<a class="headerlink" href="#emulator-detection" title="Permanent link">&para;</a></h2>
 <p>The most common first check. Emulators expose artifacts through build properties, hardware fingerprinting, telephony state, and sensor data that differ from physical devices.</p>
 <h3 id="build-property-checks">Build Property Checks<a class="headerlink" href="#build-property-checks" title="Permanent link">&para;</a></h3>

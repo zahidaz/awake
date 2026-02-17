@@ -2289,10 +2289,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10109,10 +10109,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10175,6 +10175,25 @@
 <h1 id="screen-recording-mediaprojection-abuse">Screen Recording &amp; MediaProjection Abuse<a class="headerlink" href="#screen-recording-mediaprojection-abuse" title="Permanent link">&para;</a></h1>
 <p>Capturing the victim's screen in real time to steal credentials, monitor activity, or enable remote device control. Unlike <a href="../overlay-attacks/">overlay attacks</a> that present fake UI, screen capture techniques passively observe the real UI -- the victim interacts with their actual banking app while the attacker watches or records every frame.</p>
 <p>See also: <a href="../camera-mic-surveillance/">Camera &amp; Mic Surveillance</a>, <a href="../notification-suppression/#screen-blackout-during-fraud">Notification Suppression</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1513/">T1513</a></td>
+<td>Screen Capture</td>
+<td>Collection</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10329,66 +10348,76 @@
 </tbody>
 </table>
 <p>Most malware relies on accessibility tree reading as the FLAG_SECURE bypass since it requires no root and works across all Android versions. The pixel-level bypasses are limited to rooted devices or exploit chains.</p>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact on Malware</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 5.0</td>
-<td>MediaProjection API introduced</td>
-<td>Screen recording possible without root</td>
+<td>5.0</td>
+<td>21</td>
+<td><a href="https://developer.android.com/reference/android/media/projection/MediaProjection"><code>MediaProjection</code></a> API introduced</td>
+<td>Screen recording possible without root for the first time</td>
 </tr>
 <tr>
-<td>Android 5.0-9</td>
+<td>5.0-9</td>
+<td>21-28</td>
 <td>Consent dialog, no ongoing indicator</td>
 <td>Malware shows dialog once, records indefinitely</td>
 </tr>
 <tr>
-<td>Android 10</td>
+<td>10</td>
+<td>29</td>
 <td><code>FOREGROUND_SERVICE_MEDIA_PROJECTION</code> type required</td>
 <td>Must declare foreground service type in manifest</td>
 </tr>
 <tr>
-<td>Android 10</td>
+<td>10</td>
+<td>29</td>
 <td>Persistent notification required for media projection</td>
 <td>User sees ongoing notification (malware disguises it)</td>
 </tr>
 <tr>
-<td>Android 11</td>
+<td>11</td>
+<td>30</td>
 <td>MediaProjection token no longer reusable across app restarts</td>
 <td>Must re-trigger consent after process death</td>
 </tr>
 <tr>
-<td>Android 12</td>
+<td>12</td>
+<td>31</td>
 <td>StatusBar indicator for active screen sharing</td>
 <td>User may notice colored dot indicator</td>
 </tr>
 <tr>
-<td>Android 14</td>
-<td>Consent dialog shown before each capture session</td>
+<td>14</td>
+<td>34</td>
+<td><a href="https://developer.android.com/about/versions/14/behavior-changes-14#screen-sharing">Consent dialog shown before each capture session</a></td>
 <td>Breaks single-consent-then-record-forever pattern</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>14</td>
+<td>34</td>
 <td><code>onCapturedContentVisibilityChanged()</code> callback</td>
 <td>Apps can detect when they are being captured</td>
 </tr>
 <tr>
-<td>Android 15</td>
-<td>Screenshot detection API (<code>Activity.ScreenCaptureCallback</code>)</td>
+<td>15</td>
+<td>35</td>
+<td><a href="https://developer.android.com/reference/android/app/Activity.ScreenCaptureCallback">Screenshot detection API</a> (<code>Activity.ScreenCaptureCallback</code>)</td>
 <td>Target apps can respond to capture events</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition info">
-<p class="admonition-title">Android Version Trend</p>
-<p>Each version makes MediaProjection harder to abuse silently. This pushes malware toward accessibility-based screen reading, which remains unaffected by these mitigations.</p>
+<p class="admonition-title">Trend</p>
+<p>Each version makes MediaProjection harder to abuse silently. This pushes malware toward <a href="../accessibility-abuse/#screen-streaming--vnc">accessibility-based screen reading</a>, which remains unaffected by these mitigations.</p>
 </div>
 <h2 id="families-using-this-technique">Families Using This Technique<a class="headerlink" href="#families-using-this-technique" title="Permanent link">&para;</a></h2>
 <table>

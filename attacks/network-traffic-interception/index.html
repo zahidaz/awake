@@ -2182,10 +2182,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#network-security-configuration-evolution" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Network Security Configuration Evolution
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10332,10 +10332,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#network-security-configuration-evolution" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Network Security Configuration Evolution
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10387,6 +10387,26 @@
 <h1 id="network-traffic-interception">Network Traffic Interception<a class="headerlink" href="#network-traffic-interception" title="Permanent link">&para;</a></h1>
 <p>Intercepting, modifying, and redirecting network traffic on Android devices through VPN service abuse, DNS manipulation, proxy configuration, and certificate store attacks. Malware uses these techniques to capture credentials transmitted over HTTPS, redirect banking traffic to phishing servers, and exfiltrate data through controlled network tunnels.</p>
 <p>See also: <a href="../c2-techniques/">C2 Communication</a>, <a href="../webview-exploitation/">WebView Exploitation</a>, <a href="../phishing-techniques/">Phishing Techniques</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1638/">T1638</a></td>
+<td>Adversary-in-the-Middle</td>
+<td>Credential Access, Collection</td>
+</tr>
+</tbody>
+</table>
+<p>T1638 covers network-level interception including VPN abuse, DNS hijacking, and MITM attacks for credential capture and traffic manipulation.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10560,59 +10580,69 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nt">&lt;/network-security-config&gt;</span>
 </code></pre></div>
 <p>Pinning is bypassed by hooking the TLS verification at runtime (Frida, Xposed), patching the <code>network_security_config.xml</code>, or hooking <code>TrustManager</code> implementations. Malware performing MITM does not typically need to bypass pinning because it controls the device and can hook the verification process.</p>
-<h2 id="network-security-configuration-evolution">Network Security Configuration Evolution<a class="headerlink" href="#network-security-configuration-evolution" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Security Impact</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Pre-7.0</td>
+<td>&lt;24</td>
 <td>All CAs (system + user) trusted by default</td>
-<td>User CA MITM trivial</td>
+<td>User CA MITM trivial for all apps</td>
 </tr>
 <tr>
 <td>7.0</td>
-<td>Network Security Config introduced; user CAs untrusted by default</td>
+<td>24</td>
+<td><a href="https://developer.android.com/privacy-and-security/security-config">Network Security Config</a> introduced; user CAs untrusted by default</td>
 <td>MITM requires root for system CA or app-specific config</td>
 </tr>
 <tr>
 <td>7.0</td>
-<td>Certificate pinning declarative support</td>
-<td>Apps can pin without code changes</td>
+<td>24</td>
+<td>Declarative certificate pinning support</td>
+<td>Apps can pin without code changes; attackers hook <code>TrustManager</code> to bypass</td>
 </tr>
 <tr>
 <td>9.0</td>
-<td>Cleartext (HTTP) traffic blocked by default</td>
-<td>Apps must explicitly allow HTTP via config</td>
+<td>28</td>
+<td><a href="https://developer.android.com/privacy-and-security/security-config#CleartextTrafficPermitted">Cleartext (HTTP) traffic blocked by default</a></td>
+<td>Apps must explicitly allow HTTP; credential sniffing over HTTP eliminated for compliant apps</td>
 </tr>
 <tr>
 <td>9.0</td>
+<td>28</td>
 <td>Private DNS (DNS-over-TLS) support</td>
-<td>DNS queries encrypted (when configured)</td>
+<td>DNS queries encrypted when configured; VPN-based interception still works</td>
 </tr>
 <tr>
 <td>10</td>
+<td>29</td>
 <td>TLS 1.3 enabled by default</td>
-<td>Stronger encryption, but irrelevant if VPN intercepts</td>
+<td>Stronger encryption, but irrelevant if VPN intercepts pre-TLS</td>
 </tr>
 <tr>
 <td>13</td>
+<td>33</td>
 <td>DNS-over-HTTPS support</td>
-<td>DNS encryption alternative</td>
+<td>Additional DNS encryption option</td>
 </tr>
 <tr>
 <td>14</td>
-<td>System CA store moved to immutable APEX</td>
+<td>34</td>
+<td><a href="https://httptoolkit.com/blog/android-14-breaks-system-certificate-installation/">System CA store moved to immutable APEX</a></td>
 <td>Even root cannot permanently modify trust store</td>
 </tr>
 <tr>
 <td>14</td>
-<td>Updatable root certificates via Google Play</td>
+<td>34</td>
+<td><a href="https://www.xda-developers.com/android-14-root-certificates-updatable/">Updatable root certificates via Google Play</a></td>
 <td>Faster CA revocation response</td>
 </tr>
 </tbody>

@@ -10340,8 +10340,26 @@
 
 <h1 id="app-virtualization-attacks">App Virtualization Attacks<a class="headerlink" href="#app-virtualization-attacks" title="Permanent link">&para;</a></h1>
 <p>Android app-level virtualization frameworks (VirtualApp, DroidPlugin, VirtualXposed) allow one app to run other apps inside a virtual container without installation. Malware abuses this to run real banking apps inside a hostile sandbox, intercepting all user input and network traffic without modifying the target APK. This eliminates the need for overlays, bypasses repackaging detection, and defeats most runtime integrity checks because the target app is unmodified.</p>
-<p>MITRE tracks this as <a href="https://attack.mitre.org/techniques/T1670/">T1670 - Virtualization Solution (Mobile)</a>.</p>
 <p>See also: <a href="../overlay-attacks/">Overlay Attacks</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../play-store-evasion/">Play Store Evasion</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1670/">T1670</a></td>
+<td>Virtualization Solution</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="why-it-matters">Why It Matters<a class="headerlink" href="#why-it-matters" title="Permanent link">&para;</a></h2>
 <p>Traditional banking trojans use <a href="../overlay-attacks/">overlay attacks</a> to display a fake login screen on top of the real app. This has known weaknesses: Google restricts overlay permissions since Android 10, and banking apps increasingly detect overlays.</p>
 <p>Virtualization-based attacks eliminate overlays entirely:</p>

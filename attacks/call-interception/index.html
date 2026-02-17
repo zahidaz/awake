@@ -1835,10 +1835,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10243,10 +10243,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10287,6 +10287,31 @@
 <h1 id="call-interception-voice-phishing">Call Interception &amp; Voice Phishing<a class="headerlink" href="#call-interception-voice-phishing" title="Permanent link">&para;</a></h1>
 <p>Intercepting, redirecting, and faking phone calls on Android to conduct voice phishing (vishing) attacks. Unlike traditional phishing that targets text-based credentials, call interception exploits the inherent trust users place in voice communication with their bank. The victim dials their bank's real number, but the malware silently redirects the call to an attacker-controlled line where a human operator or pre-recorded IVR extracts sensitive information.</p>
 <p>See also: <a href="../phishing-techniques/">Phishing Techniques</a>, <a href="../sms-interception/">SMS Interception</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1616/">T1616</a></td>
+<td>Call Control</td>
+<td>Collection, Command and Control, Impact</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1429/">T1429</a></td>
+<td>Audio Capture</td>
+<td>Collection</td>
+</tr>
+</tbody>
+</table>
+<p>T1616 covers making, forwarding, and blocking phone calls. T1429 applies when the interception involves recording call audio.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10504,44 +10529,51 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact on Malware</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Pre-6.0</td>
+<td>&lt;23</td>
 <td>All permissions granted at install</td>
 <td>Call interception trivial</td>
 </tr>
 <tr>
 <td>6.0</td>
+<td>23</td>
 <td>Runtime permissions for <code>CALL_PHONE</code>, <code>READ_PHONE_STATE</code></td>
-<td>User must grant explicitly; accessibility auto-grants</td>
+<td>User must grant explicitly; <a href="../accessibility-abuse/">accessibility</a> auto-grants</td>
 </tr>
 <tr>
 <td>9.0</td>
+<td>28</td>
 <td><code>VOICE_CALL</code> audio source restricted</td>
 <td>Call recording moves to <code>MIC</code> source with speakerphone</td>
 </tr>
 <tr>
 <td>10</td>
-<td><code>PROCESS_OUTGOING_CALLS</code> deprecated; <code>CallRedirectionService</code> introduced</td>
+<td>29</td>
+<td><code>PROCESS_OUTGOING_CALLS</code> deprecated; <a href="https://developer.android.com/reference/android/telecom/CallRedirectionService"><code>CallRedirectionService</code></a> introduced</td>
 <td>Malware adopts new API or uses default handler approach</td>
 </tr>
 <tr>
-<td>10+</td>
+<td>10</td>
+<td>29</td>
 <td>Background microphone restrictions</td>
 <td>Foreground service required for recording</td>
 </tr>
 <tr>
-<td>14+</td>
-<td>Foreground service type declaration required</td>
+<td>14</td>
+<td>34</td>
+<td><a href="https://developer.android.com/about/versions/14/changes/fgs-types-required">Foreground service type declaration required</a></td>
 <td>Must declare <code>microphone</code> type in manifest</td>
 </tr>
 </tbody>

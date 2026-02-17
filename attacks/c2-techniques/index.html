@@ -10407,6 +10407,46 @@
 <h1 id="c2-communication-techniques">C2 Communication Techniques<a class="headerlink" href="#c2-communication-techniques" title="Permanent link">&para;</a></h1>
 <p>How Android malware talks to its command-and-control infrastructure. The C2 channel determines how commands reach the device, how stolen data leaves, and how resilient the operation is against takedowns. Most families use multiple channels for redundancy.</p>
 <p>See also: <a href="../network-traffic-interception/">Network Traffic Interception</a>, <a href="../anti-analysis-techniques/#domain-generation-algorithms">Anti-Analysis Techniques</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1437/">T1437</a></td>
+<td>Application Layer Protocol</td>
+<td>Command and Control</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1481/">T1481</a></td>
+<td>Web Service</td>
+<td>Command and Control</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1521/">T1521</a></td>
+<td>Encrypted Channel</td>
+<td>Command and Control</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1637/001/">T1637.001</a></td>
+<td>Dynamic Resolution: Domain Generation Algorithms</td>
+<td>Command and Control</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1644/">T1644</a></td>
+<td>Out of Band Data</td>
+<td>Command and Control</td>
+</tr>
+</tbody>
+</table>
+<p>Sub-techniques: <a href="https://attack.mitre.org/techniques/T1481/001/">T1481.001</a> Dead Drop Resolver, <a href="https://attack.mitre.org/techniques/T1481/002/">T1481.002</a> Bidirectional Communication (Telegram, MQTT), <a href="https://attack.mitre.org/techniques/T1481/003/">T1481.003</a> One-Way Communication (FCM push).</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>

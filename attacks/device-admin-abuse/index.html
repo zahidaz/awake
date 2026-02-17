@@ -1941,10 +1941,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10303,10 +10303,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10419,6 +10419,26 @@
 <h1 id="device-admin-abuse">Device Admin Abuse<a class="headerlink" href="#device-admin-abuse" title="Permanent link">&para;</a></h1>
 <p>Exploiting the Device Administration API to prevent app removal, lock the screen, or wipe the device. A device admin app cannot be uninstalled until the user manually deactivates it through Settings, which malware actively obstructs through UI manipulation and social engineering.</p>
 <p>See also: <a href="../device-wipe-ransomware/">Device Wipe &amp; Ransomware</a>, <a href="../persistence-techniques/">Persistence Techniques</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1626/001/">T1626.001</a></td>
+<td>Abuse Elevation Control Mechanism: Device Administrator Permissions</td>
+<td>Privilege Escalation</td>
+</tr>
+</tbody>
+</table>
+<p>T1626.001 covers abuse of the Android Device Administration API for preventing removal, factory reset, password reset, and camera disabling.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10587,48 +10607,56 @@
 <li>Prevent factory reset via hardware buttons</li>
 </ul>
 <p>Knox abuse has been observed in targeted attacks against enterprises using Samsung fleets. The attacker gains Knox admin rights and locks down the device more aggressively than standard Android APIs allow.</p>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 2.2 (API 8)</td>
-<td>Device Administration API introduced</td>
-<td>No restrictions on third-party use</td>
+<td>2.2</td>
+<td>8</td>
+<td><a href="https://developer.android.com/guide/topics/admin/device-admin">Device Administration API</a> introduced</td>
+<td>Anti-uninstall, screen lock, wipe capabilities available</td>
 </tr>
 <tr>
-<td>Android 5.0 (API 21)</td>
-<td>Device Owner and Profile Owner introduced (more powerful than basic device admin)</td>
-<td>Malware continues using basic device admin for anti-uninstall</td>
+<td>5.0</td>
+<td>21</td>
+<td>Device Owner and Profile Owner introduced</td>
+<td>More powerful than device admin, but requires factory-fresh provisioning</td>
 </tr>
 <tr>
-<td>Android 7.0 (API 24)</td>
+<td>7.0</td>
+<td>24</td>
 <td><code>resetPassword()</code> can no longer change an existing password</td>
 <td>Only works when no password is set</td>
 </tr>
 <tr>
-<td>Android 8.0 (API 26)</td>
+<td>8.0</td>
+<td>26</td>
 <td><code>resetPassword()</code> deprecated for device admin; camera disable restricted</td>
-<td>Shift to accessibility for equivalent capabilities</td>
+<td>Shift to <a href="../accessibility-abuse/">accessibility</a> for equivalent capabilities</td>
 </tr>
 <tr>
-<td>Android 9.0 (API 28)</td>
-<td>Device admin deprecation begins: <code>resetPassword()</code>, <code>setCameraDisabled()</code> deprecated for third-party apps</td>
+<td>9.0</td>
+<td>28</td>
+<td><a href="https://developer.android.com/about/versions/pie/android-9.0-changes-all#device_security_changes">Device admin deprecation begins</a>: <code>resetPassword()</code>, <code>setCameraDisabled()</code> deprecated for third-party apps</td>
 <td>Malware shifts to accessibility service abuse</td>
 </tr>
 <tr>
-<td>Android 10 (API 29)</td>
+<td>10</td>
+<td>29</td>
 <td>Device admin cannot set password quality requirements on devices with existing screen lock</td>
 <td>Anti-uninstall still works</td>
 </tr>
 <tr>
-<td>Android 14 (API 34)</td>
+<td>14</td>
+<td>34</td>
 <td>Deprecated policies actively blocked for apps targeting API 34+; most policy methods throw <code>SecurityException</code></td>
 <td>Apps targeting lower API levels unaffected; anti-uninstall via admin activation still functional</td>
 </tr>

@@ -1372,10 +1372,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10297,10 +10297,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10484,6 +10484,32 @@
 
 <h1 id="intent-hijacking">Intent Hijacking<a class="headerlink" href="#intent-hijacking" title="Permanent link">&para;</a></h1>
 <p>Intercepting or redirecting intents meant for another app component. Possible when an app sends implicit intents or exports components without proper protection. The attacker's app registers to handle the same intent and receives data meant for the legitimate component.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<p>No standalone MITRE ATT&amp;CK Mobile technique for intent hijacking. Related techniques:</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1635/001/">T1635.001</a></td>
+<td>Steal Application Access Token: URI Hijacking</td>
+<td>Credential Access</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1624/001/">T1624.001</a></td>
+<td>Event Triggered Execution: Broadcast Receivers</td>
+<td>Persistence</td>
+</tr>
+</tbody>
+</table>
+<p>Intent hijacking as a general IPC attack surface is not explicitly modeled in ATT&amp;CK. T1635.001 covers intent-based URI interception; T1624.001 covers intercepting broadcast intents.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10573,30 +10599,46 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 5.0 (API 21)</td>
-<td>Implicit intents to services throw <code>IllegalArgumentException</code></td>
-<td>Does not affect activities or broadcast receivers</td>
+<td>1.0</td>
+<td>1</td>
+<td>Implicit intent resolution, exported components</td>
+<td>Any app can intercept implicit intents or access exported components</td>
 </tr>
 <tr>
-<td>Android 12 (API 31)</td>
-<td>Components with intent filters must explicitly declare <code>android:exported</code></td>
+<td>5.0</td>
+<td>21</td>
+<td>Implicit intents to services throw <code>IllegalArgumentException</code></td>
+<td>Service hijacking eliminated; activities and broadcast receivers unaffected</td>
+</tr>
+<tr>
+<td>12</td>
+<td>31</td>
+<td>Components with intent filters must explicitly declare <a href="https://developer.android.com/about/versions/12/behavior-changes-12#exported"><code>android:exported</code></a></td>
 <td>Developers often set <code>exported="true"</code> to resolve build errors</td>
 </tr>
 <tr>
-<td>Android 12+</td>
+<td>12</td>
+<td>31</td>
 <td><code>PendingIntent</code> mutability must be declared (<code>FLAG_MUTABLE</code> / <code>FLAG_IMMUTABLE</code>)</td>
-<td>Apps requiring <code>FLAG_MUTABLE</code> (notifications, MediaSession) remain vulnerable if base intent is not fully specified</td>
+<td>Apps requiring <code>FLAG_MUTABLE</code> remain vulnerable if base intent is not fully specified</td>
+</tr>
+<tr>
+<td>14</td>
+<td>34</td>
+<td>Restrictions on implicit intents targeting other apps' components</td>
+<td>Tighter enforcement of explicit intent requirements</td>
 </tr>
 </tbody>
 </table>

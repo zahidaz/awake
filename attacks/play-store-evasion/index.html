@@ -2360,10 +2360,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-changes" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Changes
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10397,10 +10397,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-changes" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Changes
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10441,6 +10441,41 @@
 <h1 id="play-store-evasion">Play Store Evasion<a class="headerlink" href="#play-store-evasion" title="Permanent link">&para;</a></h1>
 <p>Techniques malware uses to bypass Google Play Protect and store review to distribute through the official Play Store. The dropper-based distribution model is the dominant strategy for Android banking malware since 2020 -- a clean app passes all checks at upload, then downloads or activates its malicious payload post-installation. Understanding these techniques is essential for analyzing how malware reaches millions of devices through a trusted distribution channel.</p>
 <p>See also: <a href="../dynamic-code-loading/">Dynamic Code Loading</a>, <a href="../persistence-techniques/">Persistence Techniques</a>, <a href="../anti-analysis-techniques/">Anti-Analysis Techniques</a>, <a href="../mass-malware-generation/">Mass Malware Generation</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1661/">T1661</a></td>
+<td>Application Discovery</td>
+<td>Discovery</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1407/">T1407</a></td>
+<td>Download New Code at Runtime</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1655/">T1655</a></td>
+<td>Masquerading</td>
+<td>Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1627/001/">T1627.001</a></td>
+<td>Geofencing</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>T1407 covers the dropper-payload model where clean apps download malicious DEX/APK at runtime. T1655 covers trojanized apps masquerading as legitimate utilities. T1627.001 covers geographic targeting to avoid analysis environments. The versioning attack pattern and session-based installer bypass are not directly represented in ATT&amp;CK.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Scale of the Problem</p>
 <p>Google removed over 2.3 million apps from the Play Store in 2024 for policy violations. Despite automated scanning (Play Protect) and manual review, sophisticated droppers consistently bypass all layers. <a href="https://www.threatfabric.com/blogs/droppers-bypassing-android-13-restrictions">ThreatFabric</a> and <a href="https://www.cleafy.com/">Cleafy</a> regularly document families that survive on the store for months before detection.</p>
@@ -10708,43 +10743,50 @@
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="n">PendingIntent</span><span class="p">.</span><span class="na">FLAG_MUTABLE</span><span class="p">).</span><span class="na">getIntentSender</span><span class="p">());</span>
 </code></pre></div>
 <p><a href="../../malware/families/spynote/">SpyNote</a> and <a href="../../malware/families/anatsa/">Anatsa</a> droppers adopted this technique within weeks of Restricted Settings launching, as <a href="https://cryptax.medium.com/android-spynote-bypasses-restricted-settings-breaks-many-re-tools-8791b3e6bf38">documented by cryptax</a>.</p>
-<h2 id="android-version-changes">Android Version Changes<a class="headerlink" href="#android-version-changes" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact on Evasion</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 11</td>
-<td>Package visibility restrictions</td>
+<td>11</td>
+<td>30</td>
+<td><a href="https://developer.android.com/training/package-visibility">Package visibility restrictions</a></td>
 <td>Malware must declare <code>QUERY_ALL_PACKAGES</code> or use targeted <code>&lt;queries&gt;</code></td>
 </tr>
 <tr>
-<td>Android 13</td>
-<td>Restricted Settings for sideloaded apps</td>
-<td>Bypassed via session-based installer within weeks</td>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/changes/restricted-settings">Restricted Settings</a> for sideloaded apps</td>
+<td>Bypassed via <a href="#session-based-installer-bypass">session-based installer</a> within weeks</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>14</td>
+<td>34</td>
 <td>Restricted Settings still bypassable</td>
 <td>SecuriDropper technique persists</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>14</td>
+<td>34</td>
 <td>Dynamic code loading warnings for writable paths</td>
 <td>Malware switches to <code>InMemoryDexClassLoader</code> or read-only files</td>
 </tr>
 <tr>
-<td>Android 15</td>
+<td>15</td>
+<td>35</td>
 <td>Enhanced Play Protect live threat detection</td>
 <td>Real-time behavioral analysis catches some delayed activation</td>
 </tr>
 <tr>
-<td>Android 15</td>
+<td>15</td>
+<td>35</td>
 <td>Stricter DCL enforcement for API 35+</td>
 <td>Loaded DEX must be in read-only paths</td>
 </tr>

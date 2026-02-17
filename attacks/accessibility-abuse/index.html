@@ -1054,10 +1054,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10275,10 +10275,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10319,6 +10319,30 @@
 <h1 id="accessibility-abuse">Accessibility Abuse<a class="headerlink" href="#accessibility-abuse" title="Permanent link">&para;</a></h1>
 <p>Using Android's accessibility framework to control the device programmatically. An accessibility service can read any screen, click any button, type into any field, and perform any gesture. This gives malware full device control without exploiting any vulnerability: the framework works exactly as designed, just not for its intended purpose.</p>
 <p>See also: <a href="../../permissions/special/bind-accessibility-service/"><code>BIND_ACCESSIBILITY_SERVICE</code></a> for the permission details, <a href="../notification-suppression/">Notification Suppression</a>, <a href="../anti-analysis-techniques/#play-protect-suppression">Anti-Analysis Techniques</a>, <a href="../camera-mic-surveillance/">Camera &amp; Mic Surveillance</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1453/">T1453</a></td>
+<td>Abuse Accessibility Features</td>
+<td>Collection, Credential Access</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1516/">T1516</a></td>
+<td>Input Injection</td>
+<td>Defense Evasion, Impact</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10366,7 +10390,7 @@
 </ol>
 <p>This effectively escalates from one permission (accessibility) to all permissions.</p>
 <h3 id="on-device-fraud-ats">On-Device Fraud (ATS)<a class="headerlink" href="#on-device-fraud-ats" title="Permanent link">&para;</a></h3>
-<p>Automated Transfer System: the malware operates the real banking app to initiate transfers. Steps:</p>
+<p>Automated Transfer System (<a href="https://attack.mitre.org/techniques/T1516/">T1516</a>): the malware operates the real banking app to initiate transfers. MITRE ATT&amp;CK has no standalone technique for ATS; it is a compound behavior combining T1453 (accessibility abuse) and T1516 (input injection). Steps:</p>
 <ol>
 <li>Wait for user to log into banking app (or use stolen credentials via overlay)</li>
 <li>Navigate to transfer screen using accessibility gestures</li>
@@ -10386,7 +10410,7 @@
 <h3 id="notification-interception">Notification Interception<a class="headerlink" href="#notification-interception" title="Permanent link">&para;</a></h3>
 <p>With <code>flagRetrieveInteractiveWindows</code>, the accessibility service can read notification content from any app, functioning as an alternative to <code>BIND_NOTIFICATION_LISTENER_SERVICE</code>.</p>
 <h3 id="screen-streaming-vnc">Screen Streaming / VNC<a class="headerlink" href="#screen-streaming-vnc" title="Permanent link">&para;</a></h3>
-<p>Some families (Hook, Octo) use accessibility events to build a real-time representation of the screen and stream it to the attacker, creating a VNC-like remote access capability.</p>
+<p>Some families (<a href="../../malware/families/hook/">Hook</a>, <a href="../../malware/families/octo/">Octo</a>) use accessibility events to build a real-time representation of the screen and stream it to the attacker, creating a VNC-like remote access capability. See <a href="../screen-capture/">Screen Capture</a> for the full breakdown of MediaProjection vs. accessibility-based approaches.</p>
 <h2 id="malware-families-by-accessibility-capability">Malware Families by Accessibility Capability<a class="headerlink" href="#malware-families-by-accessibility-capability" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -10513,41 +10537,100 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 11</td>
-<td><code>isAccessibilityTool</code> metadata required for visibility</td>
-<td>Only affects apps targeting API 30+</td>
+<td>1.6</td>
+<td>4</td>
+<td>Accessibility framework introduced</td>
+<td>Basic screen reading only</td>
 </tr>
 <tr>
-<td>Android 13</td>
-<td>Restricted settings for sideloaded apps</td>
-<td>Bypassed by session-based installers</td>
+<td>4.0</td>
+<td>14</td>
+<td><code>canRetrieveWindowContent</code> added</td>
+<td>Full screen content extraction</td>
 </tr>
 <tr>
-<td>Android 13</td>
+<td>4.1</td>
+<td>16</td>
+<td><code>TYPE_WINDOW_STATE_CHANGED</code> events</td>
+<td>Real-time foreground app detection for <a href="../overlay-attacks/">overlay</a> triggering</td>
+</tr>
+<tr>
+<td>4.3</td>
+<td>18</td>
+<td><code>flagRetrieveInteractiveWindows</code></td>
+<td>Cross-window content access including notifications</td>
+</tr>
+<tr>
+<td>7.0</td>
+<td>24</td>
+<td><a href="https://developer.android.com/reference/android/accessibilityservice/AccessibilityService#dispatchGesture(android.accessibilityservice.GestureDescription,%20android.accessibilityservice.AccessibilityService.GestureResultCallback,%20android.os.Handler)"><code>dispatchGesture()</code></a> API</td>
+<td>Programmatic gestures enable <a href="../automated-transfer-systems/">ATS</a></td>
+</tr>
+<tr>
+<td>7.0</td>
+<td>24</td>
+<td><code>GLOBAL_ACTION_LOCK_SCREEN</code></td>
+<td>Lock device during fraud operations</td>
+</tr>
+<tr>
+<td>8.0</td>
+<td>26</td>
+<td>Must declare handled event types in config XML</td>
+<td>Malware declares all types</td>
+</tr>
+<tr>
+<td>11</td>
+<td>30</td>
+<td><code>isAccessibilityTool</code> metadata required for Play Store visibility</td>
+<td>Only affects apps targeting API 30+; sideloaded malware unaffected</td>
+</tr>
+<tr>
+<td>12</td>
+<td>31</td>
+<td>Password field text redaction in <code>AccessibilityNodeInfo</code></td>
+<td>Partial, depends on app implementation</td>
+</tr>
+<tr>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk">Restricted settings</a> for sideloaded apps</td>
+<td>Bypassed by <a href="../play-store-evasion/">session-based installers</a></td>
+</tr>
+<tr>
+<td>13</td>
+<td>33</td>
 <td>Accessibility shortcut warning improved</td>
-<td>Users still click through</td>
+<td>Users still click through warnings</td>
 </tr>
 <tr>
-<td>Android 15</td>
-<td>Expanded restricted settings</td>
+<td>14</td>
+<td>34</td>
+<td><a href="https://developer.android.com/reference/android/view/View#setAccessibilityDataSensitive(int)"><code>accessibilityDataSensitive</code></a> attribute</td>
+<td>Apps can hide sensitive views from non-tool services; adoption is slow</td>
+</tr>
+<tr>
+<td>15</td>
+<td>35</td>
+<td>Expanded restricted settings enforcement</td>
 <td>Closes some session-installer loopholes</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition danger">
 <p class="admonition-title">Fundamental Limitation</p>
-<p>There is no technical way to distinguish a malicious accessibility service from a legitimate one at install time. The capability is inherent to the API.</p>
+<p>There is no technical way to distinguish a malicious accessibility service from a legitimate one at install time. The capability is inherent to the API. API 24's <code>dispatchGesture()</code> was the inflection point: it turned accessibility from a passive observation tool into a full device automation framework that enables <a href="../automated-transfer-systems/">automated on-device fraud</a>.</p>
 </div>
 <h2 id="families-using-this-technique">Families Using This Technique<a class="headerlink" href="#families-using-this-technique" title="Permanent link">&para;</a></h2>
 <table>
@@ -10721,26 +10804,6 @@
 <tr>
 <td><a href="../../malware/families/pjobrat/">PJobRAT</a></td>
 <td>Data exfiltration</td>
-</tr>
-<tr>
-<td><a href="../../malware/families/blankbot/">BlankBot</a></td>
-<td>Custom keyboard keylogging</td>
-</tr>
-<tr>
-<td><a href="../../malware/families/frogblight/">Frogblight</a></td>
-<td>Custom keyboard keylogging</td>
-</tr>
-<tr>
-<td><a href="../../malware/families/toxicpanda/">ToxicPanda</a></td>
-<td>ATS</td>
-</tr>
-<tr>
-<td><a href="../../malware/families/rafelrat/">Rafel RAT</a></td>
-<td>Keylogging, device control</td>
-</tr>
-<tr>
-<td><a href="../../malware/families/vultur/">Vultur</a></td>
-<td>Screen streaming</td>
 </tr>
 <tr>
 <td><a href="../../malware/families/devixor/">DeVixor</a></td>

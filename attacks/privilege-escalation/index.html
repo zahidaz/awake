@@ -2549,10 +2549,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10730,10 +10730,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10785,6 +10785,41 @@
 <h1 id="privilege-escalation">Privilege Escalation<a class="headerlink" href="#privilege-escalation" title="Permanent link">&para;</a></h1>
 <p>Gaining elevated privileges on an Android device beyond what the app sandbox permits -- from kernel root exploits and SELinux bypasses to abusing leaked platform signing keys and chaining runtime permissions into full device control. Privilege escalation is the dividing line between commodity malware (which operates within the permission model) and commercial spyware (which breaks out of it entirely).</p>
 <p>See also: <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../device-admin-abuse/">Device Admin Abuse</a>, <a href="../../platform-abuse/selinux/">SELinux</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1404/">T1404</a></td>
+<td>Exploitation for Privilege Escalation</td>
+<td>Privilege Escalation</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1626/">T1626</a></td>
+<td>Abuse Elevation Control Mechanism</td>
+<td>Privilege Escalation, Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1626/001/">T1626.001</a></td>
+<td>Device Administrator Permissions</td>
+<td>Privilege Escalation, Defense Evasion</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1631/">T1631</a></td>
+<td>Process Injection</td>
+<td>Privilege Escalation, Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>T1404 covers kernel exploits (DirtyCow, DirtyPipe, Framaroot, Towelroot) and driver vulnerabilities. T1626 covers permission escalation chains including accessibility-to-full-control. T1631 covers native code injection and library loading for process-level escalation.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10985,80 +11020,88 @@
 <li>Attacker uses stolen credentials + OTP to take over banking/email accounts</li>
 <li>Account takeover enables further attacks (SIM swap, credential resets)</li>
 </ol>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Year</th>
-<th>Escalation-Relevant Changes</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 4.3</td>
-<td>2013</td>
+<td>4.3</td>
+<td>18</td>
 <td>SELinux introduced in permissive mode</td>
+<td>Logging only; no enforcement</td>
 </tr>
 <tr>
-<td>Android 4.4</td>
-<td>2013</td>
+<td>4.4</td>
+<td>19</td>
 <td>SELinux enforcing for core domains; <code>su</code> binary restricted</td>
+<td>Root exploits must also bypass SELinux for protected domains</td>
 </tr>
 <tr>
-<td>Android 5.0</td>
-<td>2014</td>
-<td>Full SELinux enforcement; 64-bit ABI; verified boot (warning only)</td>
+<td>5.0</td>
+<td>21</td>
+<td>Full SELinux enforcement; 64-bit ABI; <a href="https://source.android.com/docs/security/features/verifiedboot">verified boot</a> (warning only)</td>
+<td>All processes confined; exploit chains must include SELinux bypass</td>
 </tr>
 <tr>
-<td>Android 6.0</td>
-<td>2015</td>
-<td>Runtime permissions model; <code>SYSTEM_ALERT_WINDOW</code> auto-granted from Play Store</td>
+<td>6.0</td>
+<td>23</td>
+<td><a href="https://developer.android.com/training/permissions/requesting">Runtime permissions</a>; <code>SYSTEM_ALERT_WINDOW</code> auto-granted from Play Store</td>
+<td>Permission chain attacks become viable (<a href="../overlay-attacks/">overlay</a> to <a href="../accessibility-abuse/">accessibility</a>)</td>
 </tr>
 <tr>
-<td>Android 7.0</td>
-<td>2016</td>
-<td>Verified boot strictly enforced; file-based encryption; <code>resetPassword()</code> restricted</td>
+<td>7.0</td>
+<td>24</td>
+<td>Verified boot strictly enforced; file-based encryption</td>
+<td>Persistent rootkits harder; cannot modify <code>/system</code> without detection</td>
 </tr>
 <tr>
-<td>Android 8.0</td>
-<td>2017</td>
-<td>Project Treble (HAL isolation); <code>SYSTEM_ALERT_WINDOW</code> type restrictions; seccomp filter for zygote</td>
+<td>8.0</td>
+<td>26</td>
+<td><a href="https://android-developers.googleblog.com/2017/05/here-comes-treble-modular-base-for.html">Project Treble</a> (HAL isolation); seccomp filter for zygote</td>
+<td>Kernel attack surface reduced; HAL processes sandboxed</td>
 </tr>
 <tr>
-<td>Android 9.0</td>
-<td>2018</td>
-<td>Biometric API; device admin deprecated for third-party apps; kernel CFI on Pixel</td>
+<td>9.0</td>
+<td>28</td>
+<td><a href="https://developer.android.com/about/versions/pie/android-9.0-changes-all#device_security_changes">Device admin deprecated</a>; kernel CFI on Pixel</td>
+<td>Kernel control-flow integrity blocks ROP/JOP exploit chains</td>
 </tr>
 <tr>
-<td>Android 10</td>
-<td>2019</td>
-<td>Scoped storage; background activity launch restrictions; BoundsSanitizer in media codecs</td>
+<td>10</td>
+<td>29</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#scoped-storage">Scoped storage</a>; <a href="https://source.android.com/docs/security/test/bounds-sanitizer">BoundsSanitizer</a> in media codecs</td>
+<td>Media codec exploits harder; cross-app file access restricted</td>
 </tr>
 <tr>
-<td>Android 11</td>
-<td>2020</td>
-<td>One-time permissions; scoped storage enforced; <code>MANAGE_EXTERNAL_STORAGE</code> gated; async <code>binder</code> calls restricted</td>
+<td>11</td>
+<td>30</td>
+<td>One-time permissions; scoped storage enforced</td>
+<td>Temporary permission grants limit persistent access</td>
 </tr>
 <tr>
-<td>Android 12</td>
-<td>2021</td>
-<td>Approximate location option; <code>SameSite</code> cookies in WebView; ART module updatable via Play</td>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/changes/restricted-settings">Restricted settings</a> for sideloaded apps</td>
+<td>Sideloaded apps blocked from enabling accessibility/notification listener directly</td>
 </tr>
 <tr>
-<td>Android 13</td>
-<td>2022</td>
-<td>Restricted settings for sideloaded apps (blocks accessibility/notification listener); notification permission required; intent filter matching stricter</td>
+<td>14</td>
+<td>34</td>
+<td><a href="https://developer.android.com/about/versions/14/behavior-changes-14#minimum-target-sdk-version">Minimum target SDK enforced</a>; background activity launch restricted</td>
+<td>Cannot install APKs targeting very old APIs; reduces legacy API abuse</td>
 </tr>
 <tr>
-<td>Android 14</td>
-<td>2023</td>
-<td>Minimum target SDK enforced (blocks installing very old APKs); credential manager API; background activity launch further restricted</td>
-</tr>
-<tr>
-<td>Android 15</td>
-<td>2024</td>
-<td>Expanded restricted settings; improved integrity checking; 16KB page size support reducing exploit reliability</td>
+<td>15</td>
+<td>35</td>
+<td>Expanded restricted settings; 16KB page size support</td>
+<td>Larger page sizes reduce heap exploit reliability</td>
 </tr>
 </tbody>
 </table>

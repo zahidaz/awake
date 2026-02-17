@@ -2008,10 +2008,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-restrictions" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Restrictions
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10253,10 +10253,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-restrictions" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Restrictions
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10297,6 +10297,25 @@
 <h1 id="dynamic-code-loading">Dynamic Code Loading<a class="headerlink" href="#dynamic-code-loading" title="Permanent link">&para;</a></h1>
 <p>Loading executable code at runtime rather than including it in the APK. The APK that passes Google Play Protect scanning contains no malicious code -- the real payload is downloaded, decrypted, or assembled after installation. This is the foundational technique behind dropper-based malware distribution and the primary reason Play Store scanners fail to catch banking trojans at upload time.</p>
 <p>See also: <a href="../../packers/">Packers</a>, <a href="../../reversing/hooking/">Hooking</a>, <a href="../anti-analysis-techniques/#code-level-obfuscation">Anti-Analysis Techniques</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1407/">T1407</a></td>
+<td>Download New Code at Runtime</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10603,40 +10622,64 @@
 <h2 id="connection-to-packing">Connection to Packing<a class="headerlink" href="#connection-to-packing" title="Permanent link">&para;</a></h2>
 <p>Commercial packers and malware dynamic loaders solve the same problem: executing code that is not visible in the APK's primary <code>classes.dex</code>. A packer encrypts the original DEX and bundles a stub that decrypts and loads it at runtime. The only architectural difference is that packers include the encrypted payload within the APK, while malware droppers download it from an external source.</p>
 <p>See: <a href="../../packers/">Packers</a> for detailed analysis of commercial packing solutions.</p>
-<h2 id="android-restrictions">Android Restrictions<a class="headerlink" href="#android-restrictions" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Restriction</th>
-<th>Impact</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 8</td>
-<td><code>InMemoryDexClassLoader</code> introduced</td>
-<td>Enabled fileless payload loading</td>
+<td>1.0</td>
+<td>1</td>
+<td><code>DexClassLoader</code> available</td>
+<td>Runtime DEX loading from disk</td>
 </tr>
 <tr>
-<td>Android 10</td>
+<td>5.0</td>
+<td>21</td>
+<td>ART replaces Dalvik, OAT compilation</td>
+<td>DEX still loadable, compiled to native at load time</td>
+</tr>
+<tr>
+<td>8.0</td>
+<td>26</td>
+<td><a href="https://developer.android.com/reference/dalvik/system/InMemoryDexClassLoader"><code>InMemoryDexClassLoader</code></a> introduced</td>
+<td>Fileless payload loading from <code>ByteBuffer</code>, no filesystem trace</td>
+</tr>
+<tr>
+<td>10</td>
+<td>29</td>
 <td>Restricted access to <code>/data/local/tmp</code></td>
-<td>Minor -- malware uses app-private dirs</td>
+<td>Minor, malware uses app-private directories</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-13">Dynamic code loading audit warnings</a></td>
+<td>Logged but not enforced</td>
+</tr>
+<tr>
+<td>14</td>
+<td>34</td>
 <td>Dynamic code loading from writable paths triggers warning</td>
 <td>DEX files in writable directories flagged by <code>DexFile</code> loading checks</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>14</td>
+<td>34</td>
 <td><code>ENFORCE_DYNAMIC_CODE_LOADING</code> flag</td>
 <td>Apps can opt into read-only enforcement for loaded code</td>
 </tr>
 <tr>
-<td>Android 15</td>
+<td>15</td>
+<td>35</td>
 <td>Stricter enforcement for apps targeting API 35</td>
-<td>Loaded DEX must be in read-only paths, breaks writable DexClassLoader pattern</td>
+<td>Loaded DEX must be in read-only paths; malware marks files read-only after writing or uses <code>InMemoryDexClassLoader</code></td>
 </tr>
 </tbody>
 </table>

@@ -10408,6 +10408,31 @@
 
 <h1 id="fake-biometric-prompts">Fake Biometric Prompts<a class="headerlink" href="#fake-biometric-prompts" title="Permanent link">&para;</a></h1>
 <p>Stealing device unlock credentials through fake lockscreens and abusing the BiometricPrompt API. Distinct from standard overlay phishing, which targets banking app credentials. This technique captures the device PIN, password, or unlock pattern, giving attackers the ability to unlock the device during remote access sessions and bypass device encryption at rest.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1417/002/">T1417.002</a></td>
+<td>Input Capture: GUI Input Capture</td>
+<td>Credential Access, Collection</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1516/">T1516</a></td>
+<td>Input Injection</td>
+<td>Defense Evasion, Impact</td>
+</tr>
+</tbody>
+</table>
+<p>T1417.002 covers the overlay-based capture of device unlock credentials (PIN, pattern, password). T1516 covers the accessibility-driven biometric downgrade that forces PIN entry. MITRE does not have a dedicated technique for fake lockscreen overlays; this is an AWAKE-specific coverage area.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>

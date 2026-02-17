@@ -1098,10 +1098,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10120,10 +10120,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10174,6 +10174,26 @@
 
 <h1 id="broadcast-theft">Broadcast Theft<a class="headerlink" href="#broadcast-theft" title="Permanent link">&para;</a></h1>
 <p>Intercepting broadcast intents meant for other apps. Android's broadcast system sends messages to all registered receivers. If a broadcast carries sensitive data and isn't properly protected, any app can register a receiver and read it.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1624/001/">T1624.001</a></td>
+<td>Event Triggered Execution: Broadcast Receivers</td>
+<td>Persistence</td>
+</tr>
+</tbody>
+</table>
+<p>T1624.001 covers registering for intents broadcasted by other applications, enabling interception of broadcasts not intended for the malicious app.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10279,39 +10299,51 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 3.1 (API 12)</td>
+<td>1.0</td>
+<td>1</td>
+<td>Broadcast system with ordered broadcasts</td>
+<td>Any app can intercept any unprotected broadcast</td>
+</tr>
+<tr>
+<td>3.1</td>
+<td>12</td>
 <td>Apps in stopped state don't receive broadcasts</td>
 <td>Must be launched once; malware is typically already running</td>
 </tr>
 <tr>
-<td>Android 4.4 (API 19)</td>
+<td>4.4</td>
+<td>19</td>
 <td>Only default SMS app can abort <code>SMS_RECEIVED</code></td>
 <td>Malware can still read SMS content without aborting</td>
 </tr>
 <tr>
-<td>Android 5.0 (API 21)</td>
+<td>5.0</td>
+<td>21</td>
 <td>Sticky broadcasts deprecated</td>
 <td>Legacy sticky broadcasts like <code>ACTION_BATTERY_CHANGED</code> still work</td>
 </tr>
 <tr>
-<td>Android 8.0 (API 26)</td>
-<td>Implicit broadcast restrictions; most not delivered to manifest receivers</td>
+<td>8.0</td>
+<td>26</td>
+<td><a href="https://developer.android.com/about/versions/oreo/background#broadcasts">Implicit broadcast restrictions</a></td>
 <td>Exempt broadcasts (<code>BOOT_COMPLETED</code>, <code>SMS_RECEIVED</code>) still delivered; dynamic registration still works</td>
 </tr>
 <tr>
-<td>Android 14 (API 34)</td>
-<td>Context-registered receivers must declare <code>RECEIVER_EXPORTED</code> or <code>RECEIVER_NOT_EXPORTED</code></td>
+<td>14</td>
+<td>34</td>
+<td>Context-registered receivers must declare <a href="https://developer.android.com/about/versions/14/behavior-changes-14#runtime-receivers-exported"><code>RECEIVER_EXPORTED</code> or <code>RECEIVER_NOT_EXPORTED</code></a></td>
 <td>Malware explicitly sets <code>RECEIVER_EXPORTED</code></td>
 </tr>
 </tbody>

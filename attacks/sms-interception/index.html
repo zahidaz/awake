@@ -1159,10 +1159,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10197,10 +10197,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10263,6 +10263,31 @@
 <h1 id="sms-interception-theft">SMS Interception &amp; Theft<a class="headerlink" href="#sms-interception-theft" title="Permanent link">&para;</a></h1>
 <p>Intercepting, reading, sending, and forwarding SMS messages for OTP theft, premium fraud, worm propagation, and command-and-control. SMS interception was the original 2FA bypass technique in Android banking malware and remains relevant despite Android's progressive restrictions, because many financial institutions still rely on SMS-based authentication.</p>
 <p>See also: <a href="../notification-suppression/#sms-notification-suppression">Notification Suppression</a>, <a href="../call-interception/">Call Interception</a>, <a href="../notification-listener-abuse/">Notification Listener Abuse</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1636/004/">T1636.004</a></td>
+<td>Protected User Data: SMS Messages</td>
+<td>Collection</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1582/">T1582</a></td>
+<td>SMS Control</td>
+<td>Impact</td>
+</tr>
+</tbody>
+</table>
+<p>T1636.004 covers passive collection and active interception of SMS. T1582 covers sending, modifying, and deleting SMS (premium fraud, worm propagation, C2 channel).</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10466,45 +10491,70 @@
 <p class="admonition-title">Notification Listener is the Modern Replacement</p>
 <p>Since 2020, most banking trojans use <a href="../notification-listener-abuse/">notification listener abuse</a> to read OTP codes from notification content instead of requesting SMS permissions. If a sample requests <code>RECEIVE_SMS</code> alongside <code>BIND_NOTIFICATION_LISTENER_SERVICE</code>, the SMS path is likely a fallback for devices where notification access was not granted.</p>
 </div>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 4.4 (API 19)</td>
-<td>Only the default SMS app can call <code>abortBroadcast()</code> on <code>SMS_RECEIVED</code></td>
+<td>1.6</td>
+<td>4</td>
+<td><code>SMS_RECEIVED</code> broadcast available</td>
+<td>Any app can intercept all incoming SMS</td>
+</tr>
+<tr>
+<td>4.4</td>
+<td>19</td>
+<td>Only the default SMS app can call <code>abortBroadcast()</code></td>
 <td>Other apps still receive the broadcast, just cannot suppress it</td>
 </tr>
 <tr>
-<td>Android 5.0 (API 21)</td>
+<td>5.0</td>
+<td>21</td>
 <td><code>SMS_DELIVER</code> broadcast sent only to default SMS app</td>
-<td><code>SMS_RECEIVED</code> still goes to all receivers</td>
+<td><code>SMS_RECEIVED</code> still goes to all registered receivers</td>
 </tr>
 <tr>
-<td>Android 6.0 (API 23)</td>
-<td>SMS permissions become runtime permissions</td>
+<td>6.0</td>
+<td>23</td>
+<td>SMS permissions become <a href="https://developer.android.com/training/permissions/requesting">runtime permissions</a></td>
 <td>Social engineering user to grant at runtime</td>
 </tr>
 <tr>
-<td>Android 8.0 (API 26)</td>
-<td>Implicit broadcast restrictions</td>
+<td>8.0</td>
+<td>26</td>
+<td><a href="https://developer.android.com/about/versions/oreo/background#broadcasts">Implicit broadcast restrictions</a></td>
 <td><code>SMS_RECEIVED</code> is exempt, still delivered to manifest-registered receivers</td>
 </tr>
 <tr>
-<td>Android 10 (API 29)</td>
-<td><code>READ_SMS</code> restricted to default SMS app or active accessibility service; <code>ROLE_SMS</code> replaces <code>ACTION_CHANGE_DEFAULT</code></td>
-<td>Accessibility service grants access to SMS content provider</td>
+<td>10</td>
+<td>29</td>
+<td><code>READ_SMS</code> restricted to default SMS app or active accessibility service</td>
+<td><a href="../accessibility-abuse/">Accessibility</a> service grants access to SMS content provider</td>
 </tr>
 <tr>
-<td>Android 13 (API 33)</td>
-<td>Restricted settings prevent sideloaded apps from being set as default SMS app</td>
+<td>10</td>
+<td>29</td>
+<td><code>ROLE_SMS</code> replaces <code>ACTION_CHANGE_DEFAULT</code></td>
+<td>Malware uses <code>RoleManager</code> API for default SMS request</td>
+</tr>
+<tr>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk">Restricted settings</a> prevent sideloaded apps from becoming default SMS app</td>
 <td>Session-based package installer bypass</td>
+</tr>
+<tr>
+<td>14</td>
+<td>34</td>
+<td>Apps must declare <code>FOREGROUND_SERVICE_SPECIAL_USE</code> for SMS-related foreground services</td>
+<td>Minimal impact, malware declares the type</td>
 </tr>
 </tbody>
 </table>

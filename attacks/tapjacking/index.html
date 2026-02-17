@@ -839,15 +839,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Android Mitigations">
+    <nav class="md-nav" aria-label="Platform Lifecycle">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -10199,15 +10199,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Android Mitigations">
+    <nav class="md-nav" aria-label="Platform Lifecycle">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -10342,6 +10342,31 @@
 
 <h1 id="tapjacking">Tapjacking<a class="headerlink" href="#tapjacking" title="Permanent link">&para;</a></h1>
 <p>Tricking the user into tapping on something they didn't intend to by placing a transparent or partially obscuring overlay over a sensitive UI element. A specific application of <a href="../overlay-attacks/">overlay attacks</a> focused on manipulating touch events rather than phishing credentials.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1417/002/">T1417.002</a></td>
+<td>Input Capture: GUI Input Capture</td>
+<td>Credential Access, Collection</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1516/">T1516</a></td>
+<td>Input Injection</td>
+<td>Defense Evasion, Impact</td>
+</tr>
+</tbody>
+</table>
+<p>Tapjacking is a variant of overlay-based input capture (T1417.002) where clicks are simulated or redirected via T1516.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10387,35 +10412,40 @@
 <p>Only part of the screen is covered. The unobscured area contains the target (e.g., the "Install" button), while the overlay hides surrounding context that would alert the user.</p>
 <h3 id="timing-based">Timing-Based<a class="headerlink" href="#timing-based" title="Permanent link">&para;</a></h3>
 <p>The overlay appears and disappears rapidly, showing for just long enough to catch a tap the user was already making. Harder to detect but less reliable.</p>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Mitigation</th>
-<th>Bypass</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 4.0.3</td>
-<td><code>filterTouchesWhenObscured</code> attribute added</td>
+<td>4.0.3</td>
+<td>15</td>
+<td><a href="https://developer.android.com/reference/android/view/View#attr_android:filterTouchesWhenObscured"><code>filterTouchesWhenObscured</code></a> attribute added</td>
 <td>Opt-in; most apps don't implement it</td>
 </tr>
 <tr>
-<td>Android 6.0</td>
+<td>6.0</td>
+<td>23</td>
 <td><code>SYSTEM_ALERT_WINDOW</code> moved to special permission (Settings toggle)</td>
 <td>Accessibility service can auto-enable</td>
 </tr>
 <tr>
-<td>Android 8.0</td>
+<td>8.0</td>
+<td>26</td>
 <td><code>TYPE_APPLICATION_OVERLAY</code> renders below system dialogs</td>
 <td>Third-party app UIs remain vulnerable</td>
 </tr>
 <tr>
-<td>Android 12</td>
-<td>System dialogs set <code>FLAG_WINDOW_IS_PARTIALLY_OBSCURED</code>; overlays untouchable over sensitive system UI</td>
-<td>Accessibility gestures bypass all overlay mitigations entirely</td>
+<td>12</td>
+<td>31</td>
+<td>System dialogs set <code>FLAG_WINDOW_IS_PARTIALLY_OBSCURED</code>; <a href="https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events">overlays untouchable</a> over sensitive system UI</td>
+<td><a href="../accessibility-abuse/">Accessibility</a> gestures bypass all overlay mitigations entirely</td>
 </tr>
 </tbody>
 </table>

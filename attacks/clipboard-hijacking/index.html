@@ -1841,10 +1841,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10154,10 +10154,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10208,6 +10208,25 @@
 
 <h1 id="clipboard-hijacking">Clipboard Hijacking<a class="headerlink" href="#clipboard-hijacking" title="Permanent link">&para;</a></h1>
 <p>Monitoring or modifying clipboard contents to steal sensitive data. Android's <code>ClipboardManager</code> API provides a system-wide clipboard that any foreground app can read and write. Malware abuses this to intercept cryptocurrency wallet addresses, passwords, OTPs, and banking data as users copy and paste between apps. The most destructive variant, the crypto clipper, silently replaces a copied wallet address with one controlled by the attacker, redirecting transactions without the victim noticing.</p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1414/">T1414</a></td>
+<td>Clipboard Data</td>
+<td>Collection, Credential Access</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10300,40 +10319,52 @@
 <p>Anything copied is logged and exfiltrated to C2. Users routinely copy credentials from password managers, notes apps, and messages, creating a steady stream of sensitive data through the clipboard.</p>
 <h3 id="otp-theft">OTP Theft<a class="headerlink" href="#otp-theft" title="Permanent link">&para;</a></h3>
 <p>When a user receives a one-time password via SMS or authenticator app and copies it, the clipboard briefly contains the OTP. Malware with a clipboard listener captures this immediately. Combined with other stolen credentials, this enables account takeover. Some banking apps auto-fill OTPs from SMS, but users who manually copy-paste from their SMS app or authenticator expose the code through clipboard.</p>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact on Attack</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 10 (API 29)</td>
-<td>Background apps cannot read clipboard</td>
-<td>Malware must maintain foreground state or use accessibility service. Accessibility bypass remains fully effective.</td>
+<td>1.0</td>
+<td>1</td>
+<td><code>ClipboardManager</code> API available</td>
+<td>Any app can read/write clipboard at any time</td>
 </tr>
 <tr>
-<td>Android 12 (API 31)</td>
+<td>10</td>
+<td>29</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#clipboard-data">Background clipboard access restricted</a></td>
+<td>Malware must maintain foreground state or use accessibility service</td>
+</tr>
+<tr>
+<td>12</td>
+<td>31</td>
 <td>Toast notification when an app reads clipboard</td>
-<td>User sees "[App] pasted from your clipboard" toast. Accessibility services bypass this notification. Apps that set clipboard data themselves don't trigger it.</td>
+<td>User sees "[App] pasted from your clipboard"; accessibility services bypass this</td>
 </tr>
 <tr>
-<td>Android 12 (API 31)</td>
+<td>12</td>
+<td>31</td>
 <td><code>ClipDescription.getConfidential()</code> flag</td>
-<td>Keyboard and IME apps can mark clipboard content as sensitive, preventing it from appearing in content suggestions. Does not prevent programmatic reads.</td>
+<td>Keyboard/IME apps can mark content as sensitive; does not prevent programmatic reads</td>
 </tr>
 <tr>
-<td>Android 13 (API 33)</td>
-<td>Clipboard auto-cleared after approximately 1 hour</td>
-<td>Limits the time window for passive clipboard monitoring. Active listeners still capture content in real-time before the auto-clear. Crypto clippers are unaffected since they operate at the moment of copy.</td>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-all#clipboard-preview">Clipboard auto-cleared after ~1 hour</a></td>
+<td>Active listeners still capture in real-time; crypto clippers unaffected</td>
 </tr>
 <tr>
-<td>Android 14 (API 34)</td>
+<td>14</td>
+<td>34</td>
 <td>Background activity launch restrictions tightened</td>
-<td>Harder for background apps to bring themselves to foreground for clipboard access. Accessibility services unaffected.</td>
+<td>Harder for background apps to reach foreground for clipboard access; accessibility unaffected</td>
 </tr>
 </tbody>
 </table>

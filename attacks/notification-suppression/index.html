@@ -2238,10 +2238,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10321,10 +10321,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10365,6 +10365,31 @@
 <h1 id="notification-suppression">Notification Suppression<a class="headerlink" href="#notification-suppression" title="Permanent link">&para;</a></h1>
 <p>Hiding, dismissing, or manipulating Android notifications to prevent victims from detecting ongoing fraud. When a banking trojan initiates an unauthorized transfer, the bank sends a transaction alert via SMS or push notification. If the victim sees that alert, the operation fails. Notification suppression ensures the victim remains unaware while the attacker drains their account.</p>
 <p>See also: <a href="../notification-listener-abuse/">Notification Listener Abuse</a>, <a href="../sms-interception/">SMS Interception</a>, <a href="../automated-transfer-systems/">Automated Transfer Systems</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1517/">T1517</a></td>
+<td>Access Notifications</td>
+<td>Collection, Credential Access</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1629/003/">T1629.003</a></td>
+<td>Impair Defenses: Disable or Modify Tools</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>T1517 covers reading and dismissing notifications via <code>NotificationListenerService</code>. T1629.003 covers disabling Play Protect and suppressing security warnings.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10619,48 +10644,56 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>4.3</td>
-<td><code>NotificationListenerService</code> introduced</td>
+<td>18</td>
+<td><a href="https://developer.android.com/reference/android/service/notification/NotificationListenerService"><code>NotificationListenerService</code></a> introduced</td>
 <td>First programmatic notification access</td>
 </tr>
 <tr>
 <td>4.4</td>
+<td>19</td>
 <td>Default SMS handler required for SMS access</td>
 <td><code>abortBroadcast()</code> trick eliminated</td>
 </tr>
 <tr>
 <td>5.0</td>
+<td>21</td>
 <td>Notification access requires explicit user toggle in Settings</td>
-<td>Social engineering required to enable</td>
+<td>Social engineering or <a href="../accessibility-abuse/">accessibility</a> required to enable</td>
 </tr>
 <tr>
 <td>8.0</td>
-<td>Notification channels introduced</td>
-<td>Apps can create low-importance channels to hide their own notifications</td>
+<td>26</td>
+<td><a href="https://developer.android.com/develop/ui/views/notifications#ManageChannels">Notification channels</a> introduced</td>
+<td>Apps can create low-importance channels to hide own notifications</td>
 </tr>
 <tr>
 <td>13</td>
-<td><code>POST_NOTIFICATIONS</code> requires runtime permission</td>
+<td>33</td>
+<td><a href="https://developer.android.com/develop/ui/views/notifications/notification-permission"><code>POST_NOTIFICATIONS</code></a> requires runtime permission</td>
 <td>Malware must request or auto-grant via accessibility</td>
 </tr>
 <tr>
 <td>13</td>
-<td>Restricted Settings blocks sideloaded apps from notification listener</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/changes/restricted-settings">Restricted Settings</a> blocks sideloaded apps from notification listener</td>
 <td><a href="../runtime-permission-manipulation/#session-based-installer-bypass-android-13">Session-based installer bypass</a> circumvents this</td>
 </tr>
 <tr>
 <td>14</td>
+<td>34</td>
 <td>Restricted Settings expanded</td>
 <td>Session-based bypass persists</td>
 </tr>

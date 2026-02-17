@@ -2158,10 +2158,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10721,10 +10721,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10765,6 +10765,46 @@
 <h1 id="data-exfiltration">Data Exfiltration<a class="headerlink" href="#data-exfiltration" title="Permanent link">&para;</a></h1>
 <p>Stealing data from compromised Android devices and transmitting it to attacker-controlled infrastructure. Data exfiltration is the operational objective behind most Android malware -- permissions, persistence, and evasion exist to support it. The scope ranges from targeted credential theft (banking trojans) to bulk surveillance (state-sponsored spyware) to opportunistic harvesting (adware SDKs collecting more than they should).</p>
 <p>See also: <a href="../c2-techniques/">C2 Communication</a>, <a href="../sms-interception/">SMS Interception</a>, <a href="../keylogging/">Keylogging</a>, <a href="../screen-capture/">Screen Capture</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1646/">T1646</a></td>
+<td>Exfiltration Over C2 Channel</td>
+<td>Exfiltration</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1639/">T1639</a></td>
+<td>Exfiltration Over Alternative Protocol</td>
+<td>Exfiltration</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1639/001/">T1639.001</a></td>
+<td>Exfiltration Over Unencrypted Non-C2 Protocol</td>
+<td>Exfiltration</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1532/">T1532</a></td>
+<td>Archive Collected Data</td>
+<td>Collection</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1636/">T1636</a></td>
+<td>Protected User Data</td>
+<td>Collection</td>
+</tr>
+</tbody>
+</table>
+<p>T1646 covers HTTP/HTTPS exfiltration to C2 servers. T1639 covers cloud service abuse (Telegram, Firebase, Discord) and SMS-based exfiltration. T1532 covers ZIP compression before upload. T1636 and its sub-techniques cover collection of contacts (.003), SMS (.004), call logs (.002), and calendar (.001).</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -11615,73 +11655,73 @@
 </tbody>
 </table>
 <p>State-sponsored spyware (<a href="../../malware/families/pegasus/">Pegasus</a>, <a href="../../malware/families/predator/">Predator</a>, <a href="../../malware/families/hermit/">Hermit</a>, <a href="../../malware/families/finspy/">FinSpy</a>) exfiltrates everything. Banking trojans focus on SMS/OTPs and device info. Loan apps (<a href="../../malware/families/spyloan/">SpyLoan</a>) target contacts and photos for extortion.</p>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
 <th>API</th>
 <th>Change</th>
-<th>Impact on Data Exfiltration</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 6.0</td>
+<td>6.0</td>
 <td>23</td>
-<td>Runtime permissions</td>
-<td>Contacts, SMS, call log, storage require user grant at runtime</td>
+<td><a href="https://developer.android.com/training/permissions/requesting">Runtime permissions</a></td>
+<td>Contacts, SMS, call log, storage require user grant; <a href="../accessibility-abuse/">accessibility</a> auto-grants</td>
 </tr>
 <tr>
-<td>Android 7.0</td>
+<td>7.0</td>
 <td>24</td>
 <td><code>GET_ACCOUNTS</code> restricted</td>
 <td>Third-party account enumeration limited</td>
 </tr>
 <tr>
-<td>Android 8.0</td>
+<td>8.0</td>
 <td>26</td>
-<td>Background execution limits</td>
+<td><a href="https://developer.android.com/about/versions/oreo/background">Background execution limits</a></td>
 <td>Background services killed, affects continuous monitoring</td>
 </tr>
 <tr>
-<td>Android 10</td>
+<td>10</td>
 <td>29</td>
-<td>Scoped storage, background location restrictions, clipboard restrictions</td>
-<td>File access limited to own sandbox, clipboard reading restricted to foreground</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#scoped-storage">Scoped storage</a>, clipboard restrictions</td>
+<td>File access limited to own sandbox; clipboard reading restricted to foreground app</td>
 </tr>
 <tr>
-<td>Android 10</td>
+<td>10</td>
 <td>29</td>
-<td>Non-resettable identifiers restricted</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#non-resettable-device-ids">Non-resettable identifiers restricted</a></td>
 <td>IMEI, serial number inaccessible without <code>READ_PRIVILEGED_PHONE_STATE</code></td>
 </tr>
 <tr>
-<td>Android 11</td>
+<td>11</td>
 <td>30</td>
-<td><code>MANAGE_EXTERNAL_STORAGE</code> for all-files access, package visibility filtering</td>
-<td>Full storage access requires special permission, installed app list requires <code>QUERY_ALL_PACKAGES</code></td>
+<td><a href="https://developer.android.com/training/data-storage/manage-all-files"><code>MANAGE_EXTERNAL_STORAGE</code></a> for all-files access, <a href="https://developer.android.com/training/package-visibility">package visibility filtering</a></td>
+<td>Full storage access requires special permission; installed app list requires <code>QUERY_ALL_PACKAGES</code></td>
 </tr>
 <tr>
-<td>Android 12</td>
+<td>12</td>
 <td>31</td>
-<td>Approximate location option, clipboard access toast, Bluetooth permissions split</td>
-<td>Users can grant coarse location only, clipboard reads visible to user</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-12#approximate-location">Approximate location option</a>, clipboard toast</td>
+<td>Users can grant coarse location only; clipboard reads visible to user</td>
 </tr>
 <tr>
-<td>Android 13</td>
+<td>13</td>
 <td>33</td>
-<td>Granular media permissions, notification permission required, photo picker</td>
-<td><code>READ_MEDIA_IMAGES</code>/<code>VIDEO</code>/<code>AUDIO</code> replace storage permission, photo picker limits access to selected files</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-13#granular-media-permissions">Granular media permissions</a>, <a href="https://developer.android.com/training/data-storage/shared/photopicker">photo picker</a></td>
+<td><code>READ_MEDIA_IMAGES</code>/<code>VIDEO</code>/<code>AUDIO</code> replace storage permission; photo picker limits bulk theft</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>14</td>
 <td>34</td>
-<td>Selected photos access, credential manager</td>
+<td><a href="https://developer.android.com/about/versions/14/changes/partial-photo-video-access">Selected photos access</a></td>
 <td>Users can grant access to specific photos only</td>
 </tr>
 <tr>
-<td>Android 15</td>
+<td>15</td>
 <td>35</td>
 <td>Screen recording detection, enhanced privacy sandbox</td>
 <td>Apps can detect when they are being recorded</td>

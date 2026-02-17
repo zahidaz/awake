@@ -2242,10 +2242,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10553,10 +10553,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10597,6 +10597,41 @@
 <h1 id="location-tracking-geofencing">Location Tracking &amp; Geofencing<a class="headerlink" href="#location-tracking-geofencing" title="Permanent link">&para;</a></h1>
 <p>Collecting device location data for victim surveillance, movement tracking, and geographically targeted malware activation. Location is a core data collection capability for every major spyware family and a common activation gate for banking trojans that only operate in target countries. Unlike most attack techniques that require complex permission escalation, coarse location data can be derived without any device permissions at all through IP geolocation and cell tower inference.</p>
 <p>See also: <a href="../../permissions/location/access-fine-location/"><code>ACCESS_FINE_LOCATION</code></a>, <a href="../../permissions/location/access-coarse-location/"><code>ACCESS_COARSE_LOCATION</code></a>, <a href="../../permissions/location/access-background-location/"><code>ACCESS_BACKGROUND_LOCATION</code></a>, <a href="../anti-analysis-techniques/#geographic-and-locale-checks">Anti-Analysis Techniques</a>, <a href="../play-store-evasion/#geographic-targeting">Play Store Evasion</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1430/">T1430</a></td>
+<td>Location Tracking</td>
+<td>Collection, Discovery</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1430/001/">T1430.001</a></td>
+<td>Remote Device Management Services</td>
+<td>Collection, Discovery</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1430/002/">T1430.002</a></td>
+<td>Impersonate SS7 Nodes</td>
+<td>Collection, Discovery</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1627/001/">T1627.001</a></td>
+<td>Geofencing</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>T1430 covers GPS, cell tower, and WiFi-based location collection. T1627.001 covers SIM/locale/IP geofencing used to restrict malware activation to target regions.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -11131,106 +11166,100 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
 <th>API</th>
-<th>Year</th>
-<th>Location Change</th>
+<th>Change</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1.0</td>
 <td>1</td>
-<td>2008</td>
 <td><code>ACCESS_FINE_LOCATION</code>, <code>ACCESS_COARSE_LOCATION</code> introduced</td>
+<td>Location available to any installed app</td>
 </tr>
 <tr>
 <td>6.0</td>
 <td>23</td>
-<td>2015</td>
-<td>Location becomes runtime permission (user must grant explicitly)</td>
+<td><a href="https://developer.android.com/training/permissions/requesting">Runtime permissions</a> for location</td>
+<td>User must grant explicitly; <a href="../accessibility-abuse/">accessibility</a> auto-grants</td>
 </tr>
 <tr>
 <td>8.0</td>
 <td>26</td>
-<td>2017</td>
-<td>Background location throttled to a few updates per hour</td>
+<td><a href="https://developer.android.com/about/versions/oreo/background-location-limits">Background location throttled</a> to a few updates per hour</td>
+<td>Active GPS polling from background services degraded</td>
 </tr>
 <tr>
 <td>8.0</td>
 <td>26</td>
-<td>2017</td>
-<td>Background service execution limits kill persistent location services</td>
+<td><a href="https://developer.android.com/about/versions/oreo/background">Background service execution limits</a></td>
+<td>Persistent location services killed; foreground service required</td>
 </tr>
 <tr>
 <td>9.0</td>
 <td>28</td>
-<td>2018</td>
 <td>WiFi scan throttling (foreground: 4/2min, background: 1/30min)</td>
+<td>WiFi BSSID-based positioning rate-limited</td>
 </tr>
 <tr>
 <td>10</td>
 <td>29</td>
-<td>2019</td>
-<td><code>ACCESS_BACKGROUND_LOCATION</code> introduced as separate permission</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#app-access-device-location"><code>ACCESS_BACKGROUND_LOCATION</code></a> as separate permission</td>
+<td>User must explicitly grant background location in addition to foreground</td>
 </tr>
 <tr>
 <td>10</td>
 <td>29</td>
-<td>2019</td>
 <td><code>ACCESS_FINE_LOCATION</code> required for WiFi scan results</td>
+<td>WiFi positioning requires location permission</td>
 </tr>
 <tr>
 <td>11</td>
 <td>30</td>
-<td>2020</td>
-<td>Background location can only be granted from Settings (not runtime dialog)</td>
+<td><a href="https://developer.android.com/about/versions/11/privacy/location">Background location can only be granted from Settings</a></td>
+<td>No runtime dialog; <a href="../accessibility-abuse/">accessibility</a> navigates Settings to grant</td>
 </tr>
 <tr>
 <td>11</td>
 <td>30</td>
-<td>2020</td>
-<td>One-time location permission option added</td>
+<td>One-time location permission option</td>
+<td>Location access revoked after app backgrounded</td>
 </tr>
 <tr>
 <td>12</td>
 <td>31</td>
-<td>2021</td>
-<td>Approximate vs precise location choice in permission dialog</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-12#approximate-location">Approximate vs precise location</a> choice in permission dialog</td>
+<td>User can grant only coarse location, degrading tracking precision</td>
 </tr>
 <tr>
 <td>12</td>
 <td>31</td>
-<td>2021</td>
-<td><code>Location.isMock()</code> replaces deprecated <code>isFromMockProvider()</code></td>
-</tr>
-<tr>
-<td>12</td>
-<td>31</td>
-<td>2021</td>
 <td>Bluetooth scan no longer requires location permission</td>
+<td>Reduces legitimate reasons to request location</td>
 </tr>
 <tr>
 <td>13</td>
 <td>33</td>
-<td>2022</td>
-<td>Foreground service type <code>location</code> must be declared in manifest</td>
+<td><a href="https://developer.android.com/about/versions/14/changes/fgs-types-required">Foreground service type <code>location</code> required</a> in manifest</td>
+<td>Service must declare intent in manifest</td>
 </tr>
 <tr>
 <td>14</td>
 <td>34</td>
-<td>2023</td>
 <td>Stricter foreground service type enforcement</td>
+<td><code>USE_EXACT_ALARM</code> restricted for periodic polling</td>
 </tr>
 <tr>
 <td>15</td>
 <td>35</td>
-<td>2024</td>
 <td>Enhanced background location audit, Play Store review hardened</td>
+<td>Play Store scrutiny on <code>ACCESS_BACKGROUND_LOCATION</code> increased</td>
 </tr>
 </tbody>
 </table>

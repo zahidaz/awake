@@ -1734,10 +1734,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10153,10 +10153,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-mitigations" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Mitigations
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10197,6 +10197,31 @@
 <h1 id="automated-transfer-systems-ats">Automated Transfer Systems (ATS)<a class="headerlink" href="#automated-transfer-systems-ats" title="Permanent link">&para;</a></h1>
 <p>On-device fraud that automates money transfers without user interaction. Rather than stealing credentials and replaying them from an attacker-controlled device, ATS operates the victim's real banking app directly using accessibility services. The transaction originates from the victim's trusted device, IP address, and session -- making it nearly invisible to bank-side fraud detection.</p>
 <p>See also: <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../overlay-attacks/">Overlay Attacks</a>, <a href="../notification-suppression/">Notification Suppression</a>, <a href="../device-wipe-ransomware/#post-fraud-factory-reset">Device Wipe &amp; Ransomware</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1516/">T1516</a></td>
+<td>Input Injection</td>
+<td>Defense Evasion, Impact</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1453/">T1453</a></td>
+<td>Abuse Accessibility Features</td>
+<td>Collection, Credential Access</td>
+</tr>
+</tbody>
+</table>
+<p>MITRE ATT&amp;CK has no standalone technique for Automated Transfer Systems. ATS is a compound banking fraud methodology combining accessibility abuse (T1453) for device control with input injection (T1516) for automated UI interaction. This is a gap in ATT&amp;CK's coverage that AWAKE addresses.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10522,43 +10547,62 @@
 <a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="p">}</span>
 </code></pre></div>
 </details>
-<h2 id="android-mitigations">Android Mitigations<a class="headerlink" href="#android-mitigations" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
-<th>Restriction</th>
+<th>Android Version</th>
+<th>API</th>
+<th>Change</th>
 <th>ATS Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Android 7</td>
-<td>Background execution limits</td>
-<td>Minimal -- accessibility runs as foreground service</td>
+<td>7.0</td>
+<td>24</td>
+<td><a href="https://developer.android.com/reference/android/accessibilityservice/AccessibilityService#dispatchGesture(android.accessibilityservice.GestureDescription,%20android.accessibilityservice.AccessibilityService.GestureResultCallback,%20android.os.Handler)"><code>dispatchGesture()</code></a> API added</td>
+<td>Makes ATS viable: programmatic gestures can navigate banking app UI</td>
 </tr>
 <tr>
-<td>Android 10</td>
+<td>7.0</td>
+<td>24</td>
+<td>Background execution limits</td>
+<td>Minimal, accessibility runs as foreground service</td>
+</tr>
+<tr>
+<td>10</td>
+<td>29</td>
 <td>Background activity launch restrictions</td>
 <td>ATS must wait for user interaction or use <code>USE_FULL_SCREEN_INTENT</code></td>
 </tr>
 <tr>
-<td>Android 13</td>
-<td>Restricted settings for sideloaded apps</td>
-<td>Accessibility harder to enable -- bypassed via session-based install</td>
+<td>12</td>
+<td>31</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events">Untrusted touch blocking</a></td>
+<td>Does not affect accessibility-based input injection</td>
 </tr>
 <tr>
-<td>Android 13</td>
+<td>13</td>
+<td>33</td>
+<td><a href="https://developer.android.com/about/versions/13/behavior-changes-13#restricted_non_sdk">Restricted settings</a> for sideloaded apps</td>
+<td>Accessibility harder to enable; bypassed via session-based install</td>
+</tr>
+<tr>
+<td>13</td>
+<td>33</td>
 <td>Non-dismissible notification for active accessibility</td>
-<td>User may notice -- malware hides behind legitimate-looking service name</td>
+<td>User may notice; malware hides behind legitimate-looking service name</td>
 </tr>
 <tr>
-<td>Android 14</td>
+<td>14</td>
+<td>34</td>
 <td>Accessibility declaration restrictions</td>
 <td>Apps must declare specific accessibility capabilities</td>
 </tr>
 <tr>
-<td>Android 15</td>
+<td>15</td>
+<td>35</td>
 <td>Expanded restricted settings enforcement</td>
 <td>Closes session-installer bypass for some OEMs</td>
 </tr>

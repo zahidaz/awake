@@ -1986,10 +1986,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10265,10 +10265,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#android-version-timeline" class="md-nav__link">
+  <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Android Version Timeline
+        Platform Lifecycle
       
     </span>
   </a>
@@ -10309,6 +10309,41 @@
 <h1 id="device-wipe-ransomware">Device Wipe &amp; Ransomware<a class="headerlink" href="#device-wipe-ransomware" title="Permanent link">&para;</a></h1>
 <p>Destroying data, locking devices, and encrypting files on Android for extortion or evidence destruction. Android ransomware has evolved from simple screen lockers (2013) through PIN-changing lockers to file-encrypting variants, while banking trojans adopted factory reset as a post-fraud cleanup technique to destroy forensic evidence.</p>
 <p>See also: <a href="../device-admin-abuse/">Device Admin Abuse</a>, <a href="../accessibility-abuse/">Accessibility Abuse</a>, <a href="../persistence-techniques/">Persistence Techniques</a></p>
+<div class="admonition abstract">
+<p class="admonition-title">MITRE ATT&amp;CK</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Technique</th>
+<th>Tactic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1471/">T1471</a></td>
+<td>Data Encrypted for Impact</td>
+<td>Impact</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1662/">T1662</a></td>
+<td>Data Destruction</td>
+<td>Impact</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1640/">T1640</a></td>
+<td>Generate Fraudulent Advertising Revenue</td>
+<td>Impact</td>
+</tr>
+<tr>
+<td><a href="https://attack.mitre.org/techniques/T1629/002/">T1629.002</a></td>
+<td>Impair Defenses: Device Lockout</td>
+<td>Defense Evasion</td>
+</tr>
+</tbody>
+</table>
+<p>T1471 covers file encryption ransomware (Simplocker, DoubleLocker, SOVA v5). T1662 covers factory reset as evidence destruction (BRATA, BingoMod). T1629.002 covers screen locking and PIN changing as device lockout.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Requirements</p>
 <table>
@@ -10569,64 +10604,75 @@
 </tr>
 </tbody>
 </table>
-<h2 id="android-version-timeline">Android Version Timeline<a class="headerlink" href="#android-version-timeline" title="Permanent link">&para;</a></h2>
+<h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Version</th>
+<th>Android Version</th>
+<th>API</th>
 <th>Change</th>
-<th>Impact on Ransomware</th>
+<th>Offensive Impact</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>4.0</td>
-<td>Device admin API available</td>
+<td>2.2</td>
+<td>8</td>
+<td><a href="https://developer.android.com/guide/topics/admin/device-admin">Device Administration API</a> introduced</td>
 <td><code>wipeData()</code> and <code>resetPassword()</code> accessible</td>
 </tr>
 <tr>
 <td>5.0</td>
-<td>SELinux enforcing</td>
+<td>21</td>
+<td>SELinux enforcing for all domains</td>
 <td>Root-based wipe harder without exploit</td>
 </tr>
 <tr>
 <td>6.0</td>
+<td>23</td>
 <td><code>SYSTEM_ALERT_WINDOW</code> requires explicit grant (sideloaded)</td>
 <td>Overlay-based lockers need user interaction</td>
 </tr>
 <tr>
 <td>7.0</td>
+<td>24</td>
 <td><code>resetPassword()</code> requires current password if one is set</td>
 <td>PIN change harder if device already has PIN</td>
 </tr>
 <tr>
 <td>8.0</td>
-<td><code>resetPassword()</code> deprecated for device admin</td>
+<td>26</td>
+<td><a href="https://developer.android.com/about/versions/oreo/android-8.0-changes#dp"><code>resetPassword()</code> deprecated</a> for device admin</td>
 <td>PIN-locking ransomware vector eliminated for 8.0+</td>
 </tr>
 <tr>
 <td>9.0</td>
-<td>Device admin deprecated for enterprise</td>
+<td>28</td>
+<td><a href="https://developer.android.com/about/versions/pie/android-9.0-changes-all#device_security_changes">Device admin deprecation begins</a></td>
 <td>Fewer legitimate uses, easier to flag abuse</td>
 </tr>
 <tr>
 <td>10</td>
-<td>Scoped storage introduced (opt-in)</td>
+<td>29</td>
+<td><a href="https://developer.android.com/about/versions/10/privacy/changes#scoped-storage">Scoped storage</a> introduced (opt-in)</td>
 <td>File encryption scope reduced</td>
 </tr>
 <tr>
 <td>11</td>
+<td>30</td>
 <td>Scoped storage enforced</td>
 <td>Ransomware cannot access shared files without <code>MANAGE_EXTERNAL_STORAGE</code></td>
 </tr>
 <tr>
 <td>12</td>
-<td><code>SYSTEM_ALERT_WINDOW</code> overlay restrictions</td>
+<td>31</td>
+<td><a href="https://developer.android.com/about/versions/12/behavior-changes-all#untrusted-touch-events">Overlay restrictions over system windows</a></td>
 <td>Harder to maintain persistent full-screen lock</td>
 </tr>
 <tr>
 <td>14</td>
-<td>Foreground service type declarations required</td>
+<td>34</td>
+<td><a href="https://developer.android.com/about/versions/14/changes/fgs-types-required">Foreground service type declarations required</a></td>
 <td>Malicious services more visible in manifest</td>
 </tr>
 </tbody>
