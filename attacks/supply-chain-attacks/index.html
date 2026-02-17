@@ -2978,6 +2978,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -4301,6 +4309,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/marcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Marcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/medusa/" class="md-nav__link">
         
   
@@ -4449,6 +4485,34 @@
     
   
     Pegasus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware/families/phonespy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PhoneSpy
   
 
     
@@ -4721,6 +4785,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/spinok/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpinOk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/spyagent/" class="md-nav__link">
         
   
@@ -4813,6 +4905,34 @@
     
   
     Sturnus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware/families/svpeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Svpeng
   
 
     
@@ -10652,7 +10772,7 @@
 </tr>
 </tbody>
 </table>
-<p>T1474.001 covers Gradle/Maven dependency attacks (MavenGate, typosquatting, dependency confusion). T1474.002 covers firmware pre-installs during manufacturing (BADBOX, Triada firmware). T1474.003 covers SDK poisoning (SpinOk, Necro, Goldoson) and app acquisition attacks.</p>
+<p>T1474.001 covers Gradle/Maven dependency attacks (MavenGate, typosquatting, dependency confusion). T1474.002 covers firmware pre-installs during manufacturing (BADBOX, Triada firmware). T1474.003 covers SDK poisoning (<a href="../../malware/families/spinok/">SpinOk</a>, Necro, Goldoson) and app acquisition attacks.</p>
 </details>
 <div class="admonition warning">
 <p class="admonition-title">Scale</p>
@@ -10667,7 +10787,7 @@
 <tbody>
 <tr>
 <td>SDK poisoning</td>
-<td><a href="https://news.drweb.com/show?i=14705&amp;lng=en">SpinOk</a> (2023)</td>
+<td><a href="../../malware/families/spinok/">SpinOk</a> (2023)</td>
 <td>421M+ downloads</td>
 </tr>
 <tr>
@@ -10704,7 +10824,7 @@
 <li>SDK updates can introduce malicious code after initial review</li>
 </ul>
 <h3 id="major-cases">Major Cases<a class="headerlink" href="#major-cases" title="Permanent link">&para;</a></h3>
-<p><strong>SpinOk</strong> (2023): A malicious SDK distributed as a minigame/engagement component. <a href="https://news.drweb.com/show?i=14705&amp;lng=en">Discovered by Dr.Web</a> in May 2023, then <a href="https://www.cloudsek.com/threatintelligence/supply-chain-attack-infiltrates-android-apps-with-malicious-sdk">expanded by CloudSEK</a> to 193 affected apps. The SDK collected files, images, clipboard content, and could hijack cryptocurrency payments. Over 421 million combined downloads across 101+ apps. 43 apps were still active on the Play Store at time of discovery.</p>
+<p><strong><a href="../../malware/families/spinok/">SpinOk</a></strong> (2023): A malicious SDK distributed as a minigame/engagement component. <a href="https://news.drweb.com/show?i=14705&amp;lng=en">Discovered by Dr.Web</a> in May 2023, then <a href="https://www.cloudsek.com/threatintelligence/supply-chain-attack-infiltrates-android-apps-with-malicious-sdk">expanded by CloudSEK</a> to 193 affected apps. The SDK collected files, images, clipboard content, and could hijack cryptocurrency payments. Over 421 million combined downloads across 101+ apps. 43 apps were still active on the Play Store at time of discovery.</p>
 <p><strong><a href="../../malware/families/goldoson/">Goldoson</a></strong> (2023): Malicious third-party library in 60+ legitimate South Korean apps. <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/goldoson-privacy-invasive-and-clicker-android-adware-found-in-popular-apps-in-south-korea/">Discovered by McAfee</a> in April 2023. Collected installed app data, WiFi/Bluetooth device info, GPS locations, and performed background ad click fraud. Over 100 million combined downloads.</p>
 <p><strong><a href="../../malware/families/necro/">Necro</a> / Coral SDK</strong> (2024): Malicious advertising SDK using <a href="../play-store-evasion/#steganographic-payloads">image steganography</a> to hide payloads in PNG files. <a href="https://securelist.com/necro-trojan-is-back-on-google-play/113881/">Kaspersky found it</a> in Wuta Camera (10M+) and Max Browser (1M+) on Google Play. Native library obfuscated with OLLVM, modular plugin architecture for ad fraud and proxy tunneling. 11M+ total infections. The original 2019 Necro variant hit CamScanner (100M+ installs) through a different SDK ("AdHub").</p>
 <p><strong><a href="../../malware/families/sparkcat/">SparkCat</a></strong> (2024-2025): SDK in Android and iOS apps using Google ML Kit OCR to scan photo galleries for cryptocurrency wallet recovery phrases. <a href="https://securelist.com/sparkcat-stealer-in-app-store-and-google-play/115385/">Discovered by Kaspersky</a>, oldest build dated March 2024. 242,000+ downloads. First cross-platform SDK supply chain attack hitting both Google Play and Apple App Store simultaneously.</p>
@@ -10830,7 +10950,7 @@
 <td>Millions across hundreds of apps</td>
 </tr>
 <tr>
-<td>SpinOk</td>
+<td><a href="../../malware/families/spinok/">SpinOk</a></td>
 <td>Malicious engagement/minigame SDK</td>
 <td>421M+ downloads</td>
 </tr>

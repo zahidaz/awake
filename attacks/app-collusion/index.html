@@ -2856,6 +2856,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -4179,6 +4187,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/marcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Marcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/medusa/" class="md-nav__link">
         
   
@@ -4327,6 +4363,34 @@
     
   
     Pegasus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware/families/phonespy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PhoneSpy
   
 
     
@@ -4599,6 +4663,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/spinok/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpinOk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/spyagent/" class="md-nav__link">
         
   
@@ -4691,6 +4783,34 @@
     
   
     Sturnus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware/families/svpeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Svpeng
   
 
     
@@ -10513,8 +10633,8 @@
 <h3 id="x-mode-social-predicio-location-data-brokers">X-Mode Social / Predicio (Location Data Brokers)<a class="headerlink" href="#x-mode-social-predicio-location-data-brokers" title="Permanent link">&para;</a></h3>
 <p><a href="https://techcrunch.com/2021/01/28/x-mode-location-google-apple-ban/">X-Mode Social SDK</a> collected granular location data from apps including Muslim Pro (98M+ downloads), selling data to US military contractors. Apple and Google both ordered developers to remove the SDK in December 2020.</p>
 <p><a href="https://www.vice.com/en/article/dy8eba/google-predicio-ban-muslim-prayer-app">Predicio</a> (France-based) was part of a supply chain funneling data: individual apps -&gt; SDK providers -&gt; middlemen -&gt; Gravy Analytics -&gt; Venntel (US government contractor selling to ICE and CBP). This represents SDK-mediated collusion at its most extreme: the SDK operator aggregates data from many independently-developed apps to build a surveillance product. <a href="https://www.eff.org/deeplinks/2021/03/apple-and-google-kicked-two-location-data-brokers-out-their-app-stores-good-now">EFF covered the broader implications</a>.</p>
-<h3 id="spinok-sdk-trojan-module-in-100-apps">SpinOk SDK (Trojan Module in 100+ Apps)<a class="headerlink" href="#spinok-sdk-trojan-module-in-100-apps" title="Permanent link">&para;</a></h3>
-<p><a href="https://news.drweb.com/show?i=14705&amp;lng=en">Dr.Web discovered</a> SpinOk in May 2023, a trojan SDK disguised as an advertising module found in <a href="https://www.bleepingcomputer.com/news/security/spinok-android-malware-found-in-more-apps-with-30-million-installs/">193 apps with over 451 million cumulative downloads</a>. Collected device sensor data, file listings, clipboard content, and could execute arbitrary JavaScript. Used anti-emulation techniques (gyroscope, magnetometer data) to avoid sandbox detection. Notable affected apps: Noizz (100M), Zapya (100M), vFly (50M), MVBit (50M). Developers embedded it unknowingly.</p>
+<h3 id="spinok-sdk-trojan-module-in-100-apps"><a href="../../malware/families/spinok/">SpinOk</a> SDK (Trojan Module in 100+ Apps)<a class="headerlink" href="#spinok-sdk-trojan-module-in-100-apps" title="Permanent link">&para;</a></h3>
+<p><a href="https://news.drweb.com/show?i=14705&amp;lng=en">Dr.Web discovered</a> <a href="../../malware/families/spinok/">SpinOk</a> in May 2023, a trojan SDK disguised as an advertising module found in <a href="https://www.bleepingcomputer.com/news/security/spinok-android-malware-found-in-more-apps-with-30-million-installs/">193 apps with over 451 million cumulative downloads</a>. Collected device sensor data, file listings, clipboard content, and could execute arbitrary JavaScript. Used anti-emulation techniques (gyroscope, magnetometer data) to avoid sandbox detection. Notable affected apps: Noizz (100M), Zapya (100M), vFly (50M), MVBit (50M). Developers embedded it unknowingly.</p>
 <h3 id="salmonads-sdk-imei-sharing-via-filesystem">Salmonads SDK (IMEI Sharing via Filesystem)<a class="headerlink" href="#salmonads-sdk-imei-sharing-via-filesystem" title="Permanent link">&para;</a></h3>
 <p><a href="https://www.usenix.org/conference/usenixsecurity19/presentation/reardon">Documented in "50 Ways to Leak Your Data"</a> at USENIX Security 2019. Chinese developers' assistant platform that wrote the device IMEI to <code>/sdcard/.googlex9/.xamdeco0962</code>. Other apps using the same SDK but without <code>READ_PHONE_STATE</code> permission could read the IMEI from that file. Lower bound of affected installs: ~17.6 million.</p>
 <h3 id="cross-library-data-harvesting-xldh">Cross-Library Data Harvesting (XLDH)<a class="headerlink" href="#cross-library-data-harvesting-xldh" title="Permanent link">&para;</a></h3>

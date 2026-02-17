@@ -2823,6 +2823,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -4146,6 +4154,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/marcher/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Marcher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/medusa/" class="md-nav__link">
         
   
@@ -4294,6 +4330,34 @@
     
   
     Pegasus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware/families/phonespy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PhoneSpy
   
 
     
@@ -4566,6 +4630,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/spinok/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SpinOk
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/spyagent/" class="md-nav__link">
         
   
@@ -4658,6 +4750,34 @@
     
   
     Sturnus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../malware/families/svpeng/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Svpeng
   
 
     
@@ -10417,6 +10537,12 @@
 <td>Device admin wipe + file encryption</td>
 <td><a href="https://research.checkpoint.com/2024/rafel-rat-android-malware/">Check Point</a></td>
 </tr>
+<tr>
+<td><a href="../../malware/families/devixor/">DeVixor</a></td>
+<td>Banking + ransomware module</td>
+<td>File encryption with TRON ransom payments</td>
+<td><a href="https://cyble.com/blog/devixor-rat-iranian-android-malware/">Cyble</a></td>
+</tr>
 </tbody>
 </table>
 <h2 id="android-ransomware-evolution">Android Ransomware Evolution<a class="headerlink" href="#android-ransomware-evolution" title="Permanent link">&para;</a></h2>
@@ -10432,7 +10558,7 @@
 </code></pre></div>
 <h3 id="file-encryption-2014-present">File Encryption (2014-Present)<a class="headerlink" href="#file-encryption-2014-present" title="Permanent link">&para;</a></h3>
 <p><strong>Simplocker</strong> (June 2014): The first Android ransomware to actually encrypt files. Scanned external storage for media files (images, documents, video) and encrypted them with AES. Demanded ransom in Ukrainian hryvnia, indicating Ukrainian origin. C2 communication routed through Tor <code>.onion</code> addresses.</p>
-<p><strong>DoubleLocker</strong> (October 2017): <a href="https://www.welivesecurity.com/2017/10/13/doublelocker-innovative-android-malware/">ESET documented</a> the first Android ransomware combining both file encryption and PIN lock. Based on the Svpeng banking trojan's accessibility service code. DoubleLocker:</p>
+<p><strong>DoubleLocker</strong> (October 2017): <a href="https://www.welivesecurity.com/2017/10/13/doublelocker-innovative-android-malware/">ESET documented</a> the first Android ransomware combining both file encryption and PIN lock. Based on the <a href="../../malware/families/svpeng/">Svpeng</a> banking trojan's accessibility service code. DoubleLocker:</p>
 <ol>
 <li>Encrypted user files with AES</li>
 <li>Changed the device PIN to a random value</li>
@@ -10601,6 +10727,14 @@
 <td style="text-align: center;">AES</td>
 <td style="text-align: center;"><code>wipeData()</code></td>
 <td>2024</td>
+</tr>
+<tr>
+<td><a href="../../malware/families/devixor/">DeVixor</a></td>
+<td style="text-align: center;">Overlay</td>
+<td style="text-align: center;">No</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">No</td>
+<td>2025</td>
 </tr>
 </tbody>
 </table>
