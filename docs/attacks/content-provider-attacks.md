@@ -137,6 +137,24 @@ This exposes the entire filesystem. The default template from StackOverflow answ
 | [Triada](../malware/families/triada.md) | System-level abuse | Pre-installed in firmware, accessed content providers with system-level permissions |
 | [SpyNote](../malware/families/spynote.md) | Data exfiltration | Queries SMS, contacts, and call log content providers after obtaining permissions |
 
+### Inter-App Coordination via ContentProvider
+
+Ad fraud and analytics SDKs use exported ContentProviders as a device-level discovery mechanism. Each app running the SDK registers a ContentProvider that responds to queries with its package name and SDK version. Other instances of the same SDK can query known authorities to discover all SDK-equipped apps on the device:
+
+```java
+@Override
+public Cursor query(Uri uri, String[] projection, String selection,
+        String[] selectionArgs, String sortOrder) {
+    MatrixCursor cursor = new MatrixCursor(new String[]{"package", "version"});
+    cursor.addRow(new Object[]{getContext().getPackageName(), SDK_VERSION});
+    return cursor;
+}
+```
+
+The authority is typically derived from the host app's package name (e.g., `<package>.sdkprovider`), making discovery predictable. The `syncable="true"` attribute allows integration with Android's sync framework for periodic coordination.
+
+This enables cross-app ad frequency capping, coordinated ad display scheduling, and attribution data sharing without any network communication -- all via local IPC.
+
 Content provider attacks are more commonly exploited in app-to-app vulnerability research than in malware. [Oversecured's research](https://blog.oversecured.com/Android-Access-to-app-protected-components/) has documented these vulnerabilities across Google, Samsung, TikTok, and banking applications.
 
 ## Detection During Analysis

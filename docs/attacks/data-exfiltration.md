@@ -373,6 +373,25 @@ Legitimate cloud services used as exfiltration endpoints, making traffic harder 
 
 Low-bandwidth fallback when internet connectivity is unavailable. The malware sends stolen data (OTP codes, short text) via SMS to an attacker-controlled number. Limited by SMS message length (160 characters) and per-message cost. Used primarily by [Rafel RAT](../malware/families/rafelrat.md) and older banking trojans as a secondary channel.
 
+### IPC Broadcast Exfiltration
+
+Data exfiltration via `sendBroadcast()` to a co-installed receiver app. The malware sends stolen data as Intent extras to a companion app (or another instance of the same SDK in a different host app), which handles the actual network upload:
+
+```java
+Intent intent = new Intent("com.sdk.DATA_READY");
+intent.putExtra("payload", collectedData);
+intent.putExtra("device_id", androidId);
+sendBroadcast(intent);
+```
+
+This pattern evades network-based detection: the data-collecting component never makes a network call. The upload responsibility is distributed across multiple apps, making attribution difficult. Ad fraud SDKs use this to coordinate data aggregation across all apps on the device running the same SDK.
+
+### Geo-Targeted Exfiltration
+
+Adware and spyware SDKs use MCC (Mobile Country Code) whitelists/blacklists to selectively enable data collection. The MCC is read from `TelephonyManager.getSimOperator()` and compared against a remotely-configurable country list. Exfiltration is disabled in countries with strong privacy regulation (EU, US) and enabled in target regions. See [Anti-Analysis Techniques](anti-analysis-techniques.md#mcc-based-geo-targeting) for the implementation pattern.
+
+Combined with SDK version checks (disable on Android 12+ where permissions are stricter), this creates layered execution guardrails that maximize data collection while minimizing regulatory exposure.
+
 ### Compressed Archive Upload
 
 For bulk data theft (photos, documents, database files), malware creates ZIP archives and uploads them on a schedule or when connected to WiFi to avoid mobile data charges:

@@ -33,6 +33,47 @@ Apps that generate fake ad impressions, clicks, or installs in the background to
 
 **Invisible Adware** (2023): [McAfee uncovered 43 apps on Google Play](https://www.mcafee.com/blogs/other-blogs/mcafee-labs/invisible-adware-unveiling-ad-fraud-targeting-android-users/) with 2.5M downloads that loaded ads only when the device screen was off. The apps waited multiple weeks after installation before activating and requested "power saving exclusion" and "draw over other apps" permissions to maintain background execution.
 
+## Attribution Theft
+
+A distinct fraud category where a malicious SDK embedded in a legitimate-looking app steals attribution data from co-installed analytics SDKs (AppsFlyer, Adjust, Branch, Kochava) to fraudulently claim credit for app installs and user actions.
+
+### How It Works
+
+1. The malicious SDK initializes early (often via a `ContentProvider` with high `initOrder` to run before the app's `Application.onCreate()`)
+2. It detects which attribution SDKs are present via reflection or SharedPreferences inspection
+3. It reads attribution data: install source, campaign ID, ad group, creative, tracker tokens
+4. It exfiltrates this data to its own servers, claiming the install attribution
+
+```java
+Object attribution = Adjust.getAttribution();
+JSONObject stolen = new JSONObject();
+stolen.put("campaign", getField(attribution, "campaign"));
+stolen.put("adgroup", getField(attribution, "adgroup"));
+stolen.put("network", getField(attribution, "network"));
+stolen.put("tracker_token", getField(attribution, "trackerToken"));
+exfiltrate(stolen);
+```
+
+For AppsFlyer, the SDK reads from SharedPreferences (`appsflyer-data` key) to extract the `attributionId` without calling any AppsFlyer API.
+
+### Grey-Market Ad SDKs
+
+Undocumented ad monetization SDKs with no public website, documentation, or SDK marketplace listing operate as grey-market attribution thieves. They embed in apps distributed through Play Store and third-party markets, providing minimal ad revenue to the host developer while stealing attribution data and injecting their own ads.
+
+Common characteristics:
+
+| Feature | Implementation |
+|---------|---------------|
+| Early initialization | `ContentProvider` with `initOrder` set high to load before the app |
+| Anti-analysis | HTTP proxy detection (`System.getProperty("http.proxyHost")`) -- refuses to initialize if analyst proxy detected |
+| Inter-app coordination | Exported `ContentProvider` allows other apps running the same SDK to discover each other on the device |
+| Regional endpoints | Separate C2/ad server URLs for China vs. international traffic |
+| Remote configuration | Encrypted JSON config fetched periodically, controls ad slots, delay ranges, feature switches |
+| Ad format injection | Multiple ad formats (native, HTML interstitial, video, CSS-styled) injected into the host app via reflection-based object graph crawling |
+| Coordination broadcast | `BroadcastReceiver` registered with action derived from package name hash, enabling cross-app signaling between SDK instances |
+
+Detection: look for undocumented ContentProviders at high `initOrder`, reflection calls targeting AppsFlyer or Adjust classes, and SharedPreferences files belonging to unknown SDK namespaces.
+
 ## Technical Indicators
 
 - `PACKAGE_ADDED` broadcast receiver (click injection vector)
@@ -41,6 +82,9 @@ Apps that generate fake ad impressions, clicks, or installs in the background to
 - Abnormal battery drain and background data consumption
 - Ad SDK network traffic volume disproportionate to app usage
 - Wake locks held during screen-off periods for background rendering
+- Reflection calls targeting `AppsFlyerLib`, `Adjust`, or other attribution SDK classes
+- Unknown ContentProviders with `exported="true"` and `syncable="true"`
+- HTTP proxy detection via `System.getProperty("http.proxyHost")`
 
 ## Notification & Ad Injection
 

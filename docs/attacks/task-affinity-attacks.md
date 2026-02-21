@@ -121,3 +121,18 @@ Both task affinity attacks and [overlay attacks](overlay-attacks.md) achieve the
 | Modern usage | Rare | Standard |
 
 The shift happened because overlays are more flexible (can trigger on any app launch, don't require prior task setup) and accessibility abuse provides far more capabilities beyond just phishing.
+
+### Ad Fraud Activity Isolation
+
+Task affinity manipulation is also used by ad fraud SDKs to hide ad activities from the user's Recent Apps screen. All ad-related activities are declared with a custom `taskAffinity` (separate from the host app's package), `excludeFromRecents="true"`, and `finishOnCloseSystemDialogs="true"`:
+
+```xml
+<activity
+    android:name=".ads.InterstitialActivity"
+    android:taskAffinity="v8.ui"
+    android:excludeFromRecents="true"
+    android:finishOnCloseSystemDialogs="true"
+    android:label="@string/empty" />
+```
+
+This creates a separate, invisible task for the entire ad pipeline. The ad activities don't appear in Recent Apps, don't show the host app's icon/label, and automatically dismiss when the user opens the system dialog (Home long-press). The user experiences intrusive ads that seem to come from nowhere, with no way to identify which app is responsible.

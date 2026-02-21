@@ -120,6 +120,28 @@ alarmManager.setExactAndAllowWhileIdle(
     pending);
 ```
 
+### WorkManager
+
+Android's [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) API is designed for deferrable, guaranteed background work. Malware abuses it by creating self-rescheduling workers that create an infinite execution loop surviving app kills and reboots.
+
+```java
+public class PersistentWorker extends Worker {
+    @Override
+    public Result doWork() {
+        performMaliciousTask();
+        WorkManager.getInstance(getApplicationContext())
+            .enqueue(new OneTimeWorkRequest.Builder(PersistentWorker.class)
+                .setInitialDelay(30, TimeUnit.SECONDS)
+                .build());
+        return Result.success();
+    }
+}
+```
+
+Each execution enqueues the next run with a short delay (typically 15-60 seconds). WorkManager persists its work queue in a SQLite database (`app_data/databases/androidx.work.workdb`), so pending work survives process death and reboots. Unlike `JobScheduler` (minimum 15-minute periodicity), WorkManager's `OneTimeWorkRequest` chaining has no minimum interval, enabling near-continuous execution.
+
+The pattern is difficult to detect at the manifest level because WorkManager registration is purely programmatic. Look for `Worker` subclasses that call `WorkManager.enqueue()` from within `doWork()`.
+
 ### AccountManager Sync Adapter
 
 An underused but effective persistence method. The malware registers as a sync adapter for a custom account type. Android's sync framework periodically triggers the adapter, providing reliable execution without visible notifications.
@@ -178,6 +200,95 @@ startActivity(intent);
 
 This shows a system dialog. Some families use accessibility to auto-tap "Allow" on this dialog. Others disguise the request behind a fake loading screen so the user doesn't realize what they're approving.
 
+## Device Protected Storage
+
+Android 7.0 introduced Direct Boot and [device protected storage](https://developer.android.com/training/articles/direct-boot) -- a storage area accessible before the user unlocks the device for the first time after a reboot. By declaring `android:directBootAware="true"` and `android:defaultToDeviceProtectedStorage="true"` in the manifest, an app's SharedPreferences and files are stored in a credential-protected context that survives the locked state.
+
+```xml
+<application
+    android:directBootAware="true"
+    android:defaultToDeviceProtectedStorage="true">
+```
+
+Malware uses this to ensure its configuration, C2 URLs, and operational state persist and are accessible immediately at boot, before the user enters their PIN/password. Combined with a `BOOT_COMPLETED` receiver (which fires during Direct Boot for direct-boot-aware apps), this enables malicious activity before the device is fully unlocked.
+
+Detection: check for `directBootAware="true"` in the manifest, especially on components that don't have a legitimate reason for pre-unlock execution.
+
+## Launcher Icon Toggle
+
+### Activity-Alias Switching
+
+Instead of disabling the launcher activity entirely (which can be reversed via `pm enable`), malware uses multiple `activity-alias` declarations pointing to the same target activity. One alias is the visible launcher entry; the other is a hidden replacement.
+
+```xml
+<activity-alias
+    android:name=".VisibleLauncher"
+    android:targetActivity=".MainActivity"
+    android:enabled="true">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity-alias>
+
+<activity-alias
+    android:name=".HiddenLauncher"
+    android:targetActivity=".MainActivity"
+    android:enabled="false">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.INFO" />
+    </intent-filter>
+</activity-alias>
+```
+
+At runtime, the app enables the hidden alias (which uses `INFO` category instead of `LAUNCHER`, so it won't appear in the app drawer) and disables the visible one:
+
+```java
+pm.setComponentEnabledSetting(
+    new ComponentName(this, "com.app.VisibleLauncher"),
+    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+pm.setComponentEnabledSetting(
+    new ComponentName(this, "com.app.HiddenLauncher"),
+    PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+```
+
+The app disappears from the launcher but remains findable in Settings > Apps. The `INFO` category alias keeps the app discoverable by the system for deep links and intents, maintaining functionality while being invisible to the user.
+
+## MAX_INT Priority Receivers
+
+BroadcastReceivers can declare `android:priority` up to `Integer.MAX_VALUE` (2147483647). Receivers with higher priority receive broadcasts before lower-priority ones and can abort ordered broadcasts. Malware uses this to:
+
+1. **Preempt competing receivers**: fire before any other app's receiver for system events like `BOOT_COMPLETED` or `CONNECTIVITY_CHANGE`
+2. **Monitor all app lifecycle events**: register for `PACKAGE_ADDED`, `PACKAGE_REMOVED`, `PACKAGE_REPLACED` at maximum priority to track every app install/uninstall on the device
+3. **React to device state changes**: monitor battery, storage, locale, wallpaper, and Bluetooth state changes to trigger context-aware behavior (e.g., show ads when the device is charging)
+
+```xml
+<receiver android:exported="true" android:priority="2147483647">
+    <intent-filter>
+        <action android:name="android.intent.action.PACKAGE_ADDED" />
+        <action android:name="android.intent.action.PACKAGE_REMOVED" />
+        <data android:scheme="package" />
+    </intent-filter>
+</receiver>
+```
+
+Ad fraud SDKs use these to detect competing app installs and trigger ad displays. The receiver bodies are often empty stubs at build time, populated dynamically via remote configuration at runtime.
+
+## MessageQueue.IdleHandler
+
+A low-visibility persistence technique. `MessageQueue.IdleHandler` callbacks execute whenever the main thread's message queue becomes idle (i.e., between UI events). Malware registers an IdleHandler to run code during these gaps:
+
+```java
+Looper.myQueue().addIdleHandler(() -> {
+    loadRemoteConfig();
+    startExfiltration();
+    return true;
+});
+```
+
+Returning `true` keeps the handler registered permanently. This provides continuous opportunistic execution without timers, alarms, or services. The execution is invisible in process dumps and doesn't appear as a running service or scheduled job.
+
 ## OEM-Specific Persistence
 
 Chinese OEMs (Xiaomi, Huawei, Oppo, Vivo) maintain their own autostart managers that independently restrict background apps. Even with `RECEIVE_BOOT_COMPLETED` and battery optimization disabled, these OEMs may kill the app unless it is whitelisted in their proprietary autostart list.
@@ -217,10 +328,13 @@ Each restriction pushed malware toward more creative solutions. The overall tren
 | Boot receiver | Yes | No | High | High | All |
 | Foreground service | No | No | Low (notification) | High | 8+ |
 | JobScheduler | Yes (persisted) | No | High | Medium | 5+ |
+| WorkManager (self-rescheduling) | Yes | No | Very high | High | 5+ |
 | AlarmManager | No | No | High | Medium | All |
 | Sync adapter | Yes | No | High | Medium | All |
+| MessageQueue.IdleHandler | No | No | Very high | Low | All |
 | Accessibility service | Yes | Yes (if enabled) | Medium | Very high | 4.1+ |
 | Device admin | N/A (anti-uninstall) | N/A | Low | High | All |
+| Device protected storage | Yes (pre-unlock) | N/A (data survival) | High | High | 7+ |
 | System app / firmware | Yes | Yes | Very high | Permanent | All |
 
 ## Families by Persistence Strategy

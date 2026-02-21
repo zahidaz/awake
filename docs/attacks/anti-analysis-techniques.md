@@ -318,11 +318,41 @@ Malware avoids executing in researcher-common locales or countries where the ope
 |-------|-----|-------------------|
 | SIM country | `TelephonyManager.getSimCountryIso()` | High (requires physical SIM) |
 | Network country | `TelephonyManager.getNetworkCountryIso()` | High (VPN doesn't change this) |
+| MCC (Mobile Country Code) | `TelephonyManager.getSimOperator().substring(0,3)` | High (requires physical SIM from target country) |
 | IP geolocation | Server-side check | Medium (VPN changes IP) |
 | System locale | `Locale.getDefault()` | Low (Settings change) |
 | Timezone | `TimeZone.getDefault()` | Low (Settings change) |
 
 [Anatsa](../malware/families/anatsa.md) campaigns specifically avoid Eastern European and Chinese IP ranges. [Mandrake](../malware/families/mandrake.md) used C2-side geofencing to avoid delivering payloads to non-target regions entirely.
+
+### MCC-Based Geo-Targeting
+
+The Mobile Country Code (first 3 digits of the SIM operator string) provides a reliable country indicator that survives VPN, locale changes, and timezone spoofing. Adware and data exfiltration SDKs use MCC whitelists or blacklists to selectively enable malicious behavior:
+
+```java
+String mcc = telephonyManager.getSimOperator().substring(0, 3);
+Set<String> blocklist = parseConfigBlocklist();
+if (blocklist.contains(mcc)) {
+    return;
+}
+startExfiltration();
+```
+
+This pattern targets regions with weaker privacy enforcement while avoiding countries where regulatory action is likely. The whitelist/blacklist is typically fetched from a remote config endpoint, allowing operators to adjust targeting without app updates. Combined with SDK version checks (e.g., disable on Android 12+ where restrictions are tighter), this creates multi-layered execution guardrails.
+
+### HTTP Proxy Detection
+
+Ad fraud and data exfiltration SDKs check for HTTP proxies as an anti-analysis measure. Security researchers commonly route traffic through intercepting proxies (Burp Suite, mitmproxy) for analysis:
+
+```java
+boolean isProxied() {
+    String host = System.getProperty("http.proxyHost");
+    String port = System.getProperty("http.proxyPort");
+    return host != null && !host.isEmpty();
+}
+```
+
+If a proxy is detected, the SDK refuses to initialize, preventing analysts from capturing network traffic. This check is trivial to bypass via Frida (hook `System.getProperty` to return null for proxy keys), but it's effective against automated sandbox environments that route all traffic through a proxy by default.
 
 ## APK and Manifest Corruption
 
@@ -349,6 +379,87 @@ Some families pad DEX files with junk data that exceeds parser buffer sizes in a
 | Dead code injection | Junk methods/classes inflate the codebase | [Joker](../malware/families/joker.md), crypter outputs |
 | Class/method renaming | `a.b.c.d()` instead of meaningful names | Nearly universal (ProGuard/R8 baseline) |
 | Dynamic class loading | Payload classes loaded from encrypted assets or C2 at runtime | [Anatsa](../malware/families/anatsa.md), [Necro](../malware/families/necro.md), [SharkBot](../malware/families/sharkbot.md) |
+
+### String Encryption Patterns
+
+String encryption is the single most common obfuscation technique. Several distinct patterns appear across the ecosystem, from open-source Gradle plugins to custom native implementations.
+
+#### XOR-Based Schemes
+
+The majority of Android string obfuscation uses XOR with a repeating key. Variations differ in encoding and key management:
+
+| Pattern | Algorithm | Reversal |
+|---------|-----------|----------|
+| Base64 + XOR | `Base64.decode(ciphertext)` XOR `Base64.decode(key)` | Extract key from decryptor class, apply same XOR |
+| Hex + XOR | Hex string to byte pairs, XOR with repeating key | Parse hex, XOR with key |
+| Single-byte XOR | Each character XOR'd with a constant (e.g., `0x10`) | Trivial: XOR all strings with the constant |
+| Nibble swap + XOR | `((b & 0x0F) << 4) \| ((b >> 4) & 0x0F)` then XOR | Reverse nibble swap after XOR decode |
+
+#### StringFog
+
+[StringFog](https://github.com/MegatronKing/StringFog) is an open-source Gradle plugin that automatically encrypts all string literals in DEX bytecode at build time. A `ClassVisitor` replaces every string constant load with an encrypted byte array and an injected call to a static decrypt method.
+
+The default algorithm is cyclic XOR:
+
+```java
+public static String decrypt(String ciphertext, String key) {
+    byte[] data = Base64.decode(ciphertext, Base64.DEFAULT);
+    byte[] keyBytes = Base64.decode(key, Base64.DEFAULT);
+    for (int i = 0; i < data.length; i++) {
+        data[i] = (byte) (data[i] ^ keyBytes[i % keyBytes.length]);
+    }
+    return new String(data);
+}
+```
+
+The key is compiled into the app. Reversal: extract the key from the `StringFogImpl` class (or hook it with Frida), then batch-decrypt all constants. [Katalina](https://github.com/nickcano/katalina) (Dalvik bytecode emulator) can deobfuscate StringFog automatically via emulation.
+
+StringFog appears in both legitimate apps (protecting API keys) and malware (hiding C2 URLs, permission strings, SharedPreferences keys). Artifact: `com.github.megatronking.stringfog` in build dependencies, `com.github.megatronking.stringfog.xor.StringFogImpl` in DEX.
+
+#### NPStringFog
+
+NPStringFog is a stripped-down variant associated with [NP Manager](https://npmanager.com/) (a Chinese APK patching tool). It uses hex-encoded strings XOR'd with a hardcoded key (commonly `"npmanager"` or a custom key). Unlike StringFog, NPStringFog has no Gradle plugin integration -- it operates at the bytecode level during repackaging.
+
+Structure: a large `StringPool` class with hundreds of static methods, each returning one decoded string via `NPStringFog.d()`. The `d()` method often has multiple polymorphic overloads with unused parameters (boolean, int) that serve as junk to confuse decompilers.
+
+Observed in the wild in banking trojans and NFC relay malware targeting Turkish and Korean users.
+
+#### Native Library Decryption
+
+The most resistant pattern delegates string decryption to a native `.so` library. The DEX code calls a JNI method with encrypted byte arrays; the native code decrypts and returns plaintext. A Java-level XOR fallback handles cases where the native library fails to load.
+
+```java
+static String decrypt(byte[] data, byte[] key) {
+    try {
+        return nativeDecrypt(data, key);
+    } catch (UnsatisfiedLinkError e) {
+        byte[] result = new byte[data.length];
+        for (int i = 0; i < data.length; i++) {
+            result[i] = (byte) (data[i] ^ key[i % key.length]);
+        }
+        return new String(result);
+    }
+}
+```
+
+This pattern forces analysts to reverse both Java and native code. The native implementation may use AES, custom ciphers, or hardware-bound keys. Reversing requires IDA/Ghidra on the `.so` or Frida hooks on the JNI call boundary.
+
+#### Frida-Based Batch Decryption
+
+For any XOR-based scheme, hooking the decrypt method at runtime recovers all strings in a single run:
+
+```javascript
+Java.perform(function() {
+    var StringFog = Java.use("com.github.megatronking.stringfog.xor.StringFogImpl");
+    StringFog.decrypt.implementation = function(data, key) {
+        var result = this.decrypt(data, key);
+        console.log("[StringFog] " + result);
+        return result;
+    };
+});
+```
+
+Adapt the class name to match the target's specific obfuscator.
 
 ### Domain Generation Algorithms
 

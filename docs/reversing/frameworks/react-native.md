@@ -283,6 +283,47 @@ if (jsiModule) {
 }
 ```
 
+## Expo and OTA Updates
+
+[Expo](https://expo.dev/) is a popular React Native development framework that adds its own layer of abstraction. Expo apps have distinct characteristics relevant to reverse engineering and malware analysis.
+
+### Identification
+
+| Indicator | Location |
+|-----------|----------|
+| `expo.modules.*` packages | DEX classes |
+| `EXPO_UPDATES_CHECK_ON_LAUNCH` | AndroidManifest metadata |
+| `EXPO_UPDATE_URL` pointing to `u.expo.dev` | AndroidManifest metadata |
+| Custom native modules under `expo.modules.*` | DEX (classes7.dex or later in multi-DEX builds) |
+
+### OTA Code Updates
+
+Expo's update system allows developers to push JavaScript bundle updates directly to installed apps without going through the Play Store. This is configured in the manifest:
+
+```xml
+<meta-data android:name="expo.modules.updates.ENABLED" android:value="true" />
+<meta-data android:name="EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS" />
+<meta-data android:name="EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0" />
+<meta-data android:name="EXPO_UPDATE_URL" android:value="https://u.expo.dev/<project-id>" />
+```
+
+When `CHECK_ON_LAUNCH` is `ALWAYS` and `LAUNCH_WAIT_MS` is `0`, the app checks for and applies updates at every launch with no delay. This allows pushing arbitrary JavaScript code to all installed instances without user approval or Play Store review.
+
+From a malware perspective: an app that passes Play Store review as benign can receive a malicious JavaScript update post-publication. The update mechanism is legitimate Expo infrastructure, making it difficult to distinguish from normal app updates.
+
+### Custom Native Expo Modules
+
+Expo apps can include custom native modules that run outside the JavaScript context. These are implemented as Java/Kotlin classes under `expo.modules.*` and have direct access to Android APIs. Common patterns in malicious or aggressive apps:
+
+| Module Purpose | Android APIs Used |
+|---------------|-------------------|
+| GPS tracking | `LocationManager`, `FusedLocationProviderClient`, foreground service with WakeLock |
+| Clock tampering detection | GPS-derived time + NTP queries to `time.google.com`, `pool.ntp.org` |
+| Background data sync | Foreground service with `dataSync` type, SQLite buffer, chunked uploads |
+| Push-triggered actions | FCM receiver launching native services with deep link routing |
+
+These modules bypass the JavaScript layer entirely, so analyzing only the JS bundle misses their functionality. Full analysis requires decompiling the DEX and examining the `expo.modules.*` package hierarchy.
+
 ## Obfuscation & Anti-Analysis
 
 ### Hermes Bytecode (Default Protection)
