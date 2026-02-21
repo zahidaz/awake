@@ -286,8 +286,11 @@ nav:
           - Special Permissions:
               - permissions/special/index.md
               - BIND_ACCESSIBILITY_SERVICE: permissions/special/bind-accessibility-service.md
+              - BIND_CALL_REDIRECTION_SERVICE: permissions/special/bind-call-redirection-service.md
+              - BIND_TELECOM_CONNECTION_SERVICE: permissions/special/bind-telecom-connection-service.md
               - BIND_DEVICE_ADMIN: permissions/special/bind-device-admin.md
               - BIND_NOTIFICATION_LISTENER_SERVICE: permissions/special/bind-notification-listener-service.md
+              - BIND_VPN_SERVICE: permissions/special/bind-vpn-service.md
               - MANAGE_EXTERNAL_STORAGE: permissions/special/manage-external-storage.md
               - PACKAGE_USAGE_STATS: permissions/special/package-usage-stats.md
               - REQUEST_DELETE_PACKAGES: permissions/special/request-delete-packages.md
@@ -297,11 +300,23 @@ nav:
               - WRITE_SETTINGS: permissions/special/write-settings.md
           - Normal (Abusable):
               - permissions/normal/index.md
+              - ACCESS_NETWORK_STATE: permissions/normal/access-network-state.md
+              - ACCESS_WIFI_STATE: permissions/normal/access-wifi-state.md
+              - CHANGE_WIFI_STATE: permissions/normal/change-wifi-state.md
+              - DISABLE_KEYGUARD: permissions/normal/disable-keyguard.md
               - FOREGROUND_SERVICE: permissions/normal/foreground-service.md
+              - GET_TASKS: permissions/normal/get-tasks.md
+              - FOREGROUND_SERVICE_DATA_SYNC: permissions/normal/foreground-service-data-sync.md
+              - FOREGROUND_SERVICE_MEDIA_PROJECTION: permissions/normal/foreground-service-media-projection.md
               - INTERNET: permissions/normal/internet.md
+              - MODIFY_AUDIO_SETTINGS: permissions/normal/modify-audio-settings.md
+              - NFC: permissions/normal/nfc.md
+              - POST_NOTIFICATIONS: permissions/normal/post-notifications.md
               - QUERY_ALL_PACKAGES: permissions/normal/query-all-packages.md
               - RECEIVE_BOOT_COMPLETED: permissions/normal/receive-boot-completed.md
+              - RECEIVE_USER_PRESENT: permissions/normal/receive-user-present.md
               - REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: permissions/normal/request-ignore-battery-optimizations.md
+              - SCHEDULE_EXACT_ALARM: permissions/normal/schedule-exact-alarm.md
               - WAKE_LOCK: permissions/normal/wake-lock.md
   - Reversing:
       - reversing/index.md

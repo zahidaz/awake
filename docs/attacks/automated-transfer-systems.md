@@ -52,7 +52,7 @@ ATS families employ stealth measures to prevent the user from noticing the fraud
 | Technique | Purpose | Implementation |
 |-----------|---------|----------------|
 | Screen brightness to 0 | User cannot see device activity | `Settings.System.SCREEN_BRIGHTNESS` set to 0 |
-| Mute all audio | Suppress notification sounds | `AudioManager.setStreamMute()` on all streams |
+| Mute all audio | Suppress notification sounds | [`AudioManager.setStreamMute()`](../permissions/normal/modify-audio-settings.md) on all streams |
 | Enable Do Not Disturb | Block incoming calls/notifications during transfer | `NotificationManager.setInterruptionFilter()` |
 | Black overlay | Cover screen with opaque window | `TYPE_APPLICATION_OVERLAY` with `Color.BLACK` |
 | Fake "updating" screen | Explain device unresponsiveness | Overlay displaying "System update in progress..." |

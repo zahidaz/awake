@@ -10,7 +10,7 @@ Relaying NFC (Near Field Communication) data from a victim's payment card to an 
 
     | Requirement | Details |
     |-------------|---------|
-    | Permission | NFC access (normal permission, auto-granted) |
+    | Permission | [`NFC`](../permissions/normal/nfc.md) (normal permission, auto-granted) |
     | Condition | Victim places physical payment card against infected device |
     | Infrastructure | Second device (mule) with NFC and HCE (Host Card Emulation) near ATM or POS terminal |
 

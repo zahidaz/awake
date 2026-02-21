@@ -126,7 +126,7 @@ Beyond suppressing real notifications, malware generates fake notifications to d
 
 During active fraud operations (especially [ATS](automated-transfer-systems.md)), some families enable Do Not Disturb mode or mute the device to prevent any audible alerts:
 
-- Set ringer mode to silent via `AudioManager.setRingerMode(RINGER_MODE_SILENT)`
+- Set ringer mode to silent via `AudioManager.setRingerMode(RINGER_MODE_SILENT)` (see [`MODIFY_AUDIO_SETTINGS`](../permissions/normal/modify-audio-settings.md))
 - Enable DND via `NotificationManager.setInterruptionFilter(INTERRUPTION_FILTER_NONE)` (requires notification policy access)
 - Reduce notification volume to zero
 
@@ -168,7 +168,7 @@ The victim sees a black screen (appearing as if the device is off or locked) whi
 | 4.4 | 19 | Default SMS handler required for SMS access | `abortBroadcast()` trick eliminated |
 | 5.0 | 21 | Notification access requires explicit user toggle in Settings | Social engineering or [accessibility](accessibility-abuse.md) required to enable |
 | 8.0 | 26 | [Notification channels](https://developer.android.com/develop/ui/views/notifications#ManageChannels) introduced | Apps can create low-importance channels to hide own notifications |
-| 13 | 33 | [`POST_NOTIFICATIONS`](https://developer.android.com/develop/ui/views/notifications/notification-permission) requires runtime permission | Malware must request or auto-grant via accessibility |
+| 13 | 33 | [`POST_NOTIFICATIONS`](../permissions/normal/post-notifications.md) requires runtime permission | Malware must request or auto-grant via accessibility |
 | 13 | 33 | [Restricted Settings](https://developer.android.com/about/versions/13/changes/restricted-settings) blocks sideloaded apps from notification listener | [Session-based installer bypass](runtime-permission-manipulation.md#session-based-installer-bypass-android-13) circumvents this |
 | 14 | 34 | Restricted Settings expanded | Session-based bypass persists |
 

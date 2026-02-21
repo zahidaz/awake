@@ -16,7 +16,7 @@ See also: [C2 Communication](c2-techniques.md), [WebView Exploitation](webview-e
 
     | Requirement | Details |
     |-------------|---------|
-    | VPN interception | `BIND_VPN_SERVICE` (user must approve VPN connection dialog) |
+    | VPN interception | [`BIND_VPN_SERVICE`](../permissions/special/bind-vpn-service.md) (user must approve VPN connection dialog) |
     | DNS manipulation | WiFi network access + router default credential exploitation |
     | Proxy configuration | `BIND_ACCESSIBILITY_SERVICE` or `BIND_DEVICE_ADMIN` to modify WiFi settings |
     | Certificate installation | User CA: Settings navigation; System CA: root access (Android 14+ requires APEX modification) |
@@ -94,7 +94,7 @@ Malware with accessibility service or device admin privileges can modify WiFi pr
 
 1. **Accessibility-based**: Navigate `Settings > WiFi > [Network] > Proxy` and configure manual proxy pointing to attacker server
 2. **Device admin**: Use `DevicePolicyManager` global proxy setting
-3. **Programmatic**: `WifiManager` API to modify network configuration (requires `CHANGE_WIFI_STATE`)
+3. **Programmatic**: `WifiManager` API to modify network configuration (requires [`CHANGE_WIFI_STATE`](../permissions/normal/change-wifi-state.md))
 
 Proxy trojans [dynamically configure proxy settings only when triggered by C2](https://zimperium.com/glossary/proxy-trojans/), minimizing their footprint and making detection harder during static analysis.
 
@@ -174,7 +174,7 @@ Pinning is bypassed by hooking the TLS verification at runtime (Frida, Xposed), 
 
 ??? example "Static Indicators"
 
-    - `BIND_VPN_SERVICE` permission in manifest
+    - [`BIND_VPN_SERVICE`](../permissions/special/bind-vpn-service.md) permission in manifest
     - `VpnService` subclass with `establish()` call
     - Router default credential strings (e.g., `admin:admin`, `admin:password`)
     - DNS server IP addresses hardcoded in code

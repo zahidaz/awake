@@ -14,7 +14,7 @@ See also: [Camera & Mic Surveillance](camera-mic-surveillance.md), [Notification
 
     | Requirement | Details |
     |-------------|---------|
-    | Permission | [`FOREGROUND_SERVICE`](../permissions/normal/foreground-service.md) + `FOREGROUND_SERVICE_MEDIA_PROJECTION` (Android 10+), or [`BIND_ACCESSIBILITY_SERVICE`](../permissions/special/bind-accessibility-service.md) |
+    | Permission | [`FOREGROUND_SERVICE`](../permissions/normal/foreground-service.md) + [`FOREGROUND_SERVICE_MEDIA_PROJECTION`](../permissions/normal/foreground-service-media-projection.md) (Android 10+), or [`BIND_ACCESSIBILITY_SERVICE`](../permissions/special/bind-accessibility-service.md) |
     | User Interaction | MediaProjection consent dialog (one-time tap), or accessibility service enablement |
     | Infrastructure | C2 server or WebSocket endpoint for live streaming |
 
@@ -127,7 +127,7 @@ Most malware relies on accessibility tree reading as the FLAG_SECURE bypass sinc
 |----------------|-----|--------|-----------------|
 | 5.0 | 21 | [`MediaProjection`](https://developer.android.com/reference/android/media/projection/MediaProjection) API introduced | Screen recording possible without root for the first time |
 | 5.0-9 | 21-28 | Consent dialog, no ongoing indicator | Malware shows dialog once, records indefinitely |
-| 10 | 29 | `FOREGROUND_SERVICE_MEDIA_PROJECTION` type required | Must declare foreground service type in manifest |
+| 10 | 29 | [`FOREGROUND_SERVICE_MEDIA_PROJECTION`](../permissions/normal/foreground-service-media-projection.md) type required | Must declare foreground service type in manifest |
 | 10 | 29 | Persistent notification required for media projection | User sees ongoing notification (malware disguises it) |
 | 11 | 30 | MediaProjection token no longer reusable across app restarts | Must re-trigger consent after process death |
 | 12 | 31 | StatusBar indicator for active screen sharing | User may notice colored dot indicator |

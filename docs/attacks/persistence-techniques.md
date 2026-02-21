@@ -107,7 +107,7 @@ scheduler.schedule(jobInfo);
 
 ### AlarmManager
 
-For more precise timing. `setExactAndAllowWhileIdle()` fires even during Doze mode, though Android 12+ restricts exact alarms and requires `SCHEDULE_EXACT_ALARM` or `USE_EXACT_ALARM`.
+For more precise timing. `setExactAndAllowWhileIdle()` fires even during Doze mode, though Android 12+ restricts exact alarms and requires [`SCHEDULE_EXACT_ALARM`](../permissions/normal/schedule-exact-alarm.md) or `USE_EXACT_ALARM`.
 
 ```java
 AlarmManager alarmManager = context.getSystemService(AlarmManager.class);
@@ -199,8 +199,8 @@ Malware targeting these regions often includes OEM-specific code that detects th
 | 10 | 29 | [Background activity launch restrictions](https://developer.android.com/guide/components/activities/background-starts) | Cannot start activities from background; use `USE_FULL_SCREEN_INTENT` or accessibility |
 | 10 | 29 | Background location limits | Foreground service with `location` type required |
 | 12 | 31 | [Foreground service launch restrictions](https://developer.android.com/about/versions/12/foreground-services) | Cannot start foreground service from background except via boot receiver, alarm, or accessibility |
-| 12 | 31 | [Exact alarm restrictions](https://developer.android.com/about/versions/12/behavior-changes-12#exact-alarm-permission) | `SCHEDULE_EXACT_ALARM` or `USE_EXACT_ALARM` required |
-| 13 | 33 | `POST_NOTIFICATIONS` runtime permission required | Social engineer the grant, or use silent channels created pre-upgrade |
+| 12 | 31 | [Exact alarm restrictions](https://developer.android.com/about/versions/12/behavior-changes-12#exact-alarm-permission) | [`SCHEDULE_EXACT_ALARM`](../permissions/normal/schedule-exact-alarm.md) or `USE_EXACT_ALARM` required |
+| 13 | 33 | [`POST_NOTIFICATIONS`](../permissions/normal/post-notifications.md) runtime permission required | Social engineer the grant, or use silent channels created pre-upgrade |
 | 14 | 34 | [Foreground service type requirements](https://developer.android.com/about/versions/14/changes/fgs-types-required) | Must declare specific foreground service type in manifest |
 | 15 | 35 | Further restrictions on foreground service types | Some types (e.g., `dataSync`) limited to 6 hours |
 

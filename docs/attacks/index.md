@@ -37,7 +37,7 @@ Organized by the Android component or mechanism being targeted.
 | [Camera & Mic Surveillance](camera-mic-surveillance.md) | Camera / MediaRecorder / MediaProjection | `CAMERA`, `RECORD_AUDIO` |
 | [Device Wipe & Ransomware](device-wipe-ransomware.md) | DevicePolicyManager / File System | `BIND_DEVICE_ADMIN`, `MANAGE_EXTERNAL_STORAGE` |
 | [Mass Malware Generation](mass-malware-generation.md) | MaaS Builders / Crypters / Repackaging | None (tooling-level) |
-| [Network Traffic Interception](network-traffic-interception.md) | VpnService / DNS / Certificate Store | `BIND_VPN_SERVICE` |
+| [Network Traffic Interception](network-traffic-interception.md) | VpnService / DNS / Certificate Store | [`BIND_VPN_SERVICE`](../permissions/special/bind-vpn-service.md) |
 | [Notification Suppression](notification-suppression.md) | NotificationListenerService / AudioManager | `BIND_NOTIFICATION_LISTENER_SERVICE` |
 
 ## Kill Chain

@@ -17,9 +17,9 @@ See also: [Phishing Techniques](phishing-techniques.md), [SMS Interception](sms-
 
     | Requirement | Details |
     |-------------|---------|
-    | Call handler | Default phone handler role (user must approve) |
+    | Call handler | Default phone handler role via [`BIND_TELECOM_CONNECTION_SERVICE`](../permissions/special/bind-telecom-connection-service.md) (user must approve) |
     | Permissions | `CALL_PHONE`, `READ_PHONE_STATE`, `BIND_ACCESSIBILITY_SERVICE` |
-    | Alternative | `CallRedirectionService` role (Android 10+) |
+    | Alternative | [`CallRedirectionService`](../permissions/special/bind-call-redirection-service.md) role (Android 10+) |
 
 ## Call Redirection Techniques
 

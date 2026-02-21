@@ -314,7 +314,7 @@ info.put("country", telephonyManager.getNetworkCountryIso());
 | Category | Data Points | Permission Required |
 |----------|------------|-------------------|
 | Hardware IDs | IMEI, IMSI, MEID, serial number | [`READ_PHONE_STATE`](../permissions/phone/read-phone-state.md) |
-| Network | MAC address, WiFi SSID, BSSID, IP address, carrier info | `ACCESS_WIFI_STATE`, [`ACCESS_FINE_LOCATION`](../permissions/location/access-fine-location.md) (for WiFi SSID on Android 8+) |
+| Network | MAC address, WiFi SSID, BSSID, IP address, carrier info | [`ACCESS_WIFI_STATE`](../permissions/normal/access-wifi-state.md), [`ACCESS_FINE_LOCATION`](../permissions/location/access-fine-location.md) (for WiFi SSID on Android 8+) |
 | SIM | SIM serial (ICCID), operator, country code, dual-SIM status | `READ_PHONE_STATE` |
 | Device | Model, manufacturer, board, hardware, bootloader version | None (Build properties are public) |
 | System | Android version, API level, build fingerprint, security patch level | None |
