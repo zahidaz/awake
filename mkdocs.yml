@@ -123,12 +123,15 @@ nav:
       - Threat Actors: malware/threat-actors.md
       - Families:
           - malware/families/index.md
+          - AirPush: malware/families/airpush.md
           - Albiriox: malware/families/albiriox.md
           - Alien: malware/families/alien.md
           - Anatsa: malware/families/anatsa.md
           - Antidot: malware/families/antidot.md
           - Anubis: malware/families/anubis.md
           - AridSpy: malware/families/aridspy.md
+          - Arsink: malware/families/arsink.md
+          - Autoins: malware/families/autoins.md
           - BankBot: malware/families/bankbot.md
           - BingoMod: malware/families/bingomod.md
           - BlankBot: malware/families/blankbot.md
@@ -138,20 +141,31 @@ nav:
           - BTMOB RAT: malware/families/btmob.md
           - Cerberus: malware/families/cerberus.md
           - Chameleon: malware/families/chameleon.md
+          - Chrysaor: malware/families/chrysaor.md
           - Copybara: malware/families/copybara.md
           - Crocodilus: malware/families/crocodilus.md
           - DCHSpy: malware/families/dchspy.md
           - DeVixor: malware/families/devixor.md
+          - DoubleLocker: malware/families/doublelocker.md
+          - DroidDream: malware/families/droiddream.md
+          - DroidKungFu: malware/families/droidkungfu.md
           - EagleMsgSpy: malware/families/eaglemsgspy.md
+          - Elibomi: malware/families/elibomi.md
           - Ermac: malware/families/ermac.md
+          - Etinu: malware/families/etinu.md
+          - Exobot: malware/families/exobot.md
           - Fakecalls: malware/families/fakecalls.md
+          - FakePlayer: malware/families/fakeplayer.md
           - FinSpy: malware/families/finspy.md
           - FireScam: malware/families/firescam.md
           - FluBot: malware/families/flubot.md
           - FluHorse: malware/families/fluhorse.md
           - Frogblight: malware/families/frogblight.md
+          - Geinimi: malware/families/geinimi.md
           - Gigabud: malware/families/gigabud.md
+          - GM Bot: malware/families/gmbot.md
           - GodFather: malware/families/godfather.md
+          - GoldDigger: malware/families/golddigger.md
           - GoldPickaxe: malware/families/goldpickaxe.md
           - Goldoson: malware/families/goldoson.md
           - GriftHorse: malware/families/grifthorse.md
@@ -161,28 +175,43 @@ nav:
           - Hermit: malware/families/hermit.md
           - Herodotus: malware/families/herodotus.md
           - Hook: malware/families/hook.md
+          - HummingBad: malware/families/hummingbad.md
           - Hydra: malware/families/hydra.md
           - Joker: malware/families/joker.md
+          - Keenadu: malware/families/keenadu.md
           - Klopatra: malware/families/klopatra.md
+          - Koler: malware/families/koler.md
           - KoSpy: malware/families/kospy.md
           - LightSpy: malware/families/lightspy.md
+          - LokiBot: malware/families/lokibot.md
           - Mamont: malware/families/mamont.md
           - Mandrake: malware/families/mandrake.md
           - Marcher: malware/families/marcher.md
           - Medusa: malware/families/medusa.md
+          - MobiDash: malware/families/mobidash.md
           - MoqHao: malware/families/moqhao.md
           - Necro: malware/families/necro.md
           - NGate: malware/families/ngate.md
+          - NotCompatible: malware/families/notcompatible.md
+          - Obad: malware/families/obad.md
           - Octo: malware/families/octo.md
           - Pegasus: malware/families/pegasus.md
           - PhoneSpy: malware/families/phonespy.md
           - PixPirate: malware/families/pixpirate.md
+          - PixStealer: malware/families/pixstealer.md
           - PJobRAT: malware/families/pjobrat.md
+          - Plankton: malware/families/plankton.md
           - PlainGnome: malware/families/plaingnome.md
           - Predator: malware/families/predator.md
+          - PromptSpy: malware/families/promptspy.md
           - Rafel RAT: malware/families/rafelrat.md
           - RatOn: malware/families/raton.md
+          - Red Alert 2.0: malware/families/redalert.md
           - SharkBot: malware/families/sharkbot.md
+          - Shedun: malware/families/shedun.md
+          - Simplocker: malware/families/simplocker.md
+          - SlemBunk: malware/families/slembunk.md
+          - SLocker: malware/families/slocker.md
           - SoumniBot: malware/families/soumnibot.md
           - SparkCat: malware/families/sparkcat.md
           - SpinOk: malware/families/spinok.md
@@ -191,13 +220,16 @@ nav:
           - SpyNote: malware/families/spynote.md
           - Sturnus: malware/families/sturnus.md
           - Svpeng: malware/families/svpeng.md
+          - Thamera: malware/families/thamera.md
           - ToxicPanda: malware/families/toxicpanda.md
           - Triada: malware/families/triada.md
           - TrickMo: malware/families/trickmo.md
           - TsarBot: malware/families/tsarbot.md
           - Vultur: malware/families/vultur.md
+          - WAMod: malware/families/wamod.md
           - Xenomorph: malware/families/xenomorph.md
           - Zanubis: malware/families/zanubis.md
+          - Ztorg: malware/families/ztorg.md
   - Grayware:
       - grayware/index.md
       - Ad Fraud: grayware/ad-fraud.md
@@ -362,6 +394,7 @@ nav:
       - Chinese Packers: packers/chinese-packers.md
       - DexGuard: packers/dexguard.md
       - DexProtector: packers/dexprotector.md
+      - Hqwar: packers/hqwar.md
       - LIAPP: packers/liapp.md
       - Promon SHIELD: packers/promon.md
       - R8 / ProGuard: packers/r8-proguard.md
