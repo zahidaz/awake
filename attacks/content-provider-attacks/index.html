@@ -1253,6 +1253,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Families Using This Technique">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inter-app-coordination-via-contentprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inter-App Coordination via ContentProvider
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -10139,6 +10156,8 @@
       
         
       
+        
+      
     
     
     
@@ -10818,6 +10837,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reversing/frameworks/sketchware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sketchware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reversing/frameworks/titanium/" class="md-nav__link">
         
   
@@ -11005,6 +11052,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -11152,14 +11211,70 @@
   
   
     <li class="md-nav__item">
-      <a href="../../packers/chinese-packers/" class="md-nav__link">
+      <a href="../../packers/apkprotect/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Chinese Packers
+    APKProtect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/baidu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Baidu Reinforcement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/bangcle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bangcle (SecNeo)
   
 
     
@@ -11264,6 +11379,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../packers/ijiami/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iJiami
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../packers/liapp/" class="md-nav__link">
         
   
@@ -11272,6 +11415,34 @@
     
   
     LIAPP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/netease-yidun/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NeteaseYiDun
   
 
     
@@ -11320,6 +11491,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../packers/qihoo-360-jiagu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qihoo 360 Jiagu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../packers/r8-proguard/" class="md-nav__link">
         
   
@@ -11328,6 +11527,34 @@
     
   
     R8 / ProGuard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/tencent-legu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tencent Legu
   
 
     
@@ -11749,6 +11976,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Families Using This Technique">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inter-app-coordination-via-contentprovider" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inter-App Coordination via ContentProvider
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -11967,6 +12211,18 @@
 </tr>
 </tbody>
 </table>
+<h3 id="inter-app-coordination-via-contentprovider">Inter-App Coordination via ContentProvider<a class="headerlink" href="#inter-app-coordination-via-contentprovider" title="Permanent link">&para;</a></h3>
+<p>Ad fraud and analytics SDKs use exported ContentProviders as a device-level discovery mechanism. Each app running the SDK registers a ContentProvider that responds to queries with its package name and SDK version. Other instances of the same SDK can query known authorities to discover all SDK-equipped apps on the device:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nd">@Override</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">Cursor</span><span class="w"> </span><span class="nf">query</span><span class="p">(</span><span class="n">Uri</span><span class="w"> </span><span class="n">uri</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">projection</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">selection</span><span class="p">,</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">        </span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">selectionArgs</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">sortOrder</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="n">MatrixCursor</span><span class="w"> </span><span class="n">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MatrixCursor</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="o">[]</span><span class="p">{</span><span class="s">&quot;package&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;version&quot;</span><span class="p">});</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="n">cursor</span><span class="p">.</span><span class="na">addRow</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">Object</span><span class="o">[]</span><span class="p">{</span><span class="n">getContext</span><span class="p">().</span><span class="na">getPackageName</span><span class="p">(),</span><span class="w"> </span><span class="n">SDK_VERSION</span><span class="p">});</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">cursor</span><span class="p">;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">}</span>
+</code></pre></div>
+<p>The authority is typically derived from the host app's package name (e.g., <code>&lt;package&gt;.sdkprovider</code>), making discovery predictable. The <code>syncable="true"</code> attribute allows integration with Android's sync framework for periodic coordination.</p>
+<p>This enables cross-app ad frequency capping, coordinated ad display scheduling, and attribution data sharing without any network communication -- all via local IPC.</p>
 <p>Content provider attacks are more commonly exploited in app-to-app vulnerability research than in malware. <a href="https://blog.oversecured.com/Android-Access-to-app-protected-components/">Oversecured's research</a> has documented these vulnerabilities across Google, Samsung, TikTok, and banking applications.</p>
 <h2 id="detection-during-analysis">Detection During Analysis<a class="headerlink" href="#detection-during-analysis" title="Permanent link">&para;</a></h2>
 <details class="example">

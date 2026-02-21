@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://zahidaz.github.io/awake/packers/dexguard/">
       
       
-        <link rel="prev" href="../chinese-packers/">
+        <link rel="prev" href="../bangcle/">
       
       
         <link rel="next" href="../dexprotector/">
@@ -9913,6 +9913,8 @@
       
         
       
+        
+      
     
     
     
@@ -10592,6 +10594,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reversing/frameworks/sketchware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sketchware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reversing/frameworks/titanium/" class="md-nav__link">
         
   
@@ -10781,6 +10811,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -10929,14 +10971,70 @@
   
   
     <li class="md-nav__item">
-      <a href="../chinese-packers/" class="md-nav__link">
+      <a href="../apkprotect/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Chinese Packers
+    APKProtect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../baidu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Baidu Reinforcement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bangcle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bangcle (SecNeo)
   
 
     
@@ -11592,6 +11690,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../ijiami/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iJiami
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../liapp/" class="md-nav__link">
         
   
@@ -11600,6 +11726,34 @@
     
   
     LIAPP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../netease-yidun/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NeteaseYiDun
   
 
     
@@ -11648,6 +11802,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../qihoo-360-jiagu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qihoo 360 Jiagu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../r8-proguard/" class="md-nav__link">
         
   
@@ -11656,6 +11838,34 @@
     
   
     R8 / ProGuard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tencent-legu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tencent Legu
   
 
     
@@ -12691,7 +12901,7 @@
 <h3 id="polymorphic-builds">Polymorphic Builds<a class="headerlink" href="#polymorphic-builds" title="Permanent link">&para;</a></h3>
 <p>Each DexGuard build produces a structurally unique output. Encryption keys, obfuscated class names, string decryption routines, and control flow transformations all vary between builds of the same application. Two APKs built from identical source with identical DexGuard configuration will have different bytecode.</p>
 <p>This is DexGuard's most significant defensive property. A Frida script written to hook string decryption in build A will fail on build B because the decryption class name, method signature, and key derivation have all changed. Attackers must re-analyze each build individually. Automated tooling that relies on fixed class names or method patterns breaks across versions.</p>
-<p>For malware analysis, this means samples from different campaigns or distribution waves require separate unpacking effort even when the underlying malware is identical. Contrast this with <a href="../dexprotector/">DexProtector</a> or <a href="../chinese-packers/">Chinese packers</a>, where a single unpacking script transfers across all protected samples.</p>
+<p>For malware analysis, this means samples from different campaigns or distribution waves require separate unpacking effort even when the underlying malware is identical. Contrast this with <a href="../dexprotector/">DexProtector</a> or <a href="../tencent-legu/">Chinese packers</a>, where a single unpacking script transfers across all protected samples.</p>
 <h3 id="certificate-pinning">Certificate Pinning<a class="headerlink" href="#certificate-pinning" title="Permanent link">&para;</a></h3>
 <p>DexGuard includes a built-in SSL/TLS certificate pinning implementation that operates at the native layer, independent of OkHttp's <code>CertificatePinner</code> or Android's <code>NetworkSecurityConfig</code>. The pinning configuration is specified in the DexGuard config file and compiled into the protection layer at build time.</p>
 <p>This means standard pinning bypass approaches that target OkHttp or <code>TrustManager</code> may be insufficient. The native-level pinning check runs before or alongside Java-layer networking, and a complete bypass requires hooking both layers. Objection's <code>android sslpinning disable</code> covers common Java-level patterns but may miss DexGuard's native implementation.</p>
@@ -13088,7 +13298,7 @@
 <th>Feature</th>
 <th>DexGuard</th>
 <th><a href="../virbox/">Virbox</a></th>
-<th><a href="../chinese-packers/">Chinese Packers</a></th>
+<th><a href="../tencent-legu/">Chinese Packers</a></th>
 </tr>
 </thead>
 <tbody>

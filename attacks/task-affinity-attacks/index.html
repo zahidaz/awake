@@ -905,6 +905,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#ad-fraud-activity-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ad Fraud Activity Isolation
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -10106,6 +10117,8 @@
       
         
       
+        
+      
     
     
     
@@ -10785,6 +10798,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reversing/frameworks/sketchware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sketchware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reversing/frameworks/titanium/" class="md-nav__link">
         
   
@@ -10972,6 +11013,18 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -11119,14 +11172,70 @@
   
   
     <li class="md-nav__item">
-      <a href="../../packers/chinese-packers/" class="md-nav__link">
+      <a href="../../packers/apkprotect/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Chinese Packers
+    APKProtect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/baidu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Baidu Reinforcement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/bangcle/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bangcle (SecNeo)
   
 
     
@@ -11231,6 +11340,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../packers/ijiami/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iJiami
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../packers/liapp/" class="md-nav__link">
         
   
@@ -11239,6 +11376,34 @@
     
   
     LIAPP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/netease-yidun/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NeteaseYiDun
   
 
     
@@ -11287,6 +11452,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../packers/qihoo-360-jiagu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Qihoo 360 Jiagu
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../packers/r8-proguard/" class="md-nav__link">
         
   
@@ -11295,6 +11488,34 @@
     
   
     R8 / ProGuard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/tencent-legu/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tencent Legu
   
 
     
@@ -11719,6 +11940,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#ad-fraud-activity-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ad Fraud Activity Isolation
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -11978,6 +12210,16 @@
 </tbody>
 </table>
 <p>The shift happened because overlays are more flexible (can trigger on any app launch, don't require prior task setup) and accessibility abuse provides far more capabilities beyond just phishing.</p>
+<h3 id="ad-fraud-activity-isolation">Ad Fraud Activity Isolation<a class="headerlink" href="#ad-fraud-activity-isolation" title="Permanent link">&para;</a></h3>
+<p>Task affinity manipulation is also used by ad fraud SDKs to hide ad activities from the user's Recent Apps screen. All ad-related activities are declared with a custom <code>taskAffinity</code> (separate from the host app's package), <code>excludeFromRecents="true"</code>, and <code>finishOnCloseSystemDialogs="true"</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">&lt;activity</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="na">android:name=</span><span class="s">&quot;.ads.InterstitialActivity&quot;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="na">android:taskAffinity=</span><span class="s">&quot;v8.ui&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="na">android:excludeFromRecents=</span><span class="s">&quot;true&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="na">android:finishOnCloseSystemDialogs=</span><span class="s">&quot;true&quot;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="na">android:label=</span><span class="s">&quot;@string/empty&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>This creates a separate, invisible task for the entire ad pipeline. The ad activities don't appear in Recent Apps, don't show the host app's icon/label, and automatically dismiss when the user opens the system dialog (Home long-press). The user experiences intrusive ads that seem to come from nowhere, with no way to identify which app is responsible.</p>
 
 
 
