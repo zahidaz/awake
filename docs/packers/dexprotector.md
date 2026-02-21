@@ -365,7 +365,7 @@ The fundamental architectural difference: DexGuard integrates at build time and 
 
 ## Malware Usage
 
-DexProtector is less frequently observed in malware than [DexGuard](dexguard.md) or [Chinese packers](chinese-packers.md), but its commercial availability has led to documented abuse.
+DexProtector is less frequently observed in malware than [DexGuard](dexguard.md) or [Chinese packers](tencent-legu.md), but its commercial availability has led to documented abuse.
 
 ### Known Campaigns
 
@@ -396,7 +396,7 @@ Malware authors who adopt DexProtector typically demonstrate higher operational 
 
 ## Comparison with Other Protectors
 
-| Feature | DexProtector | [DexGuard](dexguard.md) | [Virbox](virbox.md) | [Chinese Packers](chinese-packers.md) |
+| Feature | DexProtector | [DexGuard](dexguard.md) | [Virbox](virbox.md) | [Chinese Packers](tencent-legu.md) |
 |---------|-------------|---------|--------|----------------|
 | String encryption | White-box crypto, dynamic keys | AES/XOR with method-level keys | VM-based | Basic XOR in native layer |
 | DEX encryption | Native bridge + vtable asset hooking | Custom class loader | Full DEX virtualization | DEX-in-assets encryption |

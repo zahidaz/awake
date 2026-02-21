@@ -214,7 +214,7 @@ Use with `frida -f` in spawn mode to inject before `AppSealingZygote` initialize
 
 ## Comparison with Other Protectors
 
-| Feature | AppSealing | [DexGuard](dexguard.md) | [DexProtector](dexprotector.md) | [Chinese Packers](chinese-packers.md) |
+| Feature | AppSealing | [DexGuard](dexguard.md) | [DexProtector](dexprotector.md) | [Chinese Packers](tencent-legu.md) |
 |---------|------------|----------|--------------|----------------|
 | Delivery model | SaaS (upload APK) | Gradle plugin (source required) | Post-build CLI | SaaS / CLI |
 | DEX encryption | Yes (selective) | Yes (class-level) | Yes | Yes (whole DEX) |
@@ -226,7 +226,7 @@ Use with `frida -f` in spawn mode to inject before `AppSealingZygote` initialize
 | Unpacking difficulty | Low-Medium | Medium-Hard | Medium-Hard | Easy-Medium |
 | Public bypass tools | Yes (AppPealing, Appsealing-Reversal) | Limited | Limited | Yes (generic DEX dump) |
 
-AppSealing occupies a similar market position to [Chinese packers](chinese-packers.md) in terms of protection strength but targets the Korean and international SaaS market. Its protections are substantially weaker than [DexGuard](dexguard.md) or [DexProtector](dexprotector.md), and the existence of dedicated bypass tools (AppPealing) makes it one of the easier commercial protectors to defeat.
+AppSealing occupies a similar market position to [Chinese packers](tencent-legu.md) in terms of protection strength but targets the Korean and international SaaS market. Its protections are substantially weaker than [DexGuard](dexguard.md) or [DexProtector](dexprotector.md), and the existence of dedicated bypass tools (AppPealing) makes it one of the easier commercial protectors to defeat.
 
 ## Industry Usage
 

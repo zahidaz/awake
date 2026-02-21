@@ -79,7 +79,7 @@ This technique works transparently at the network level. The victim's phone neve
 | 2 | Spyware | Establishes VoIP infrastructure using [ZEGOCLOUD](https://www.zegocloud.com/) WebRTC SDK |
 | 3 | Call companion | Redirects calls to attacker call center, enables P2P voice/video |
 
-The VoIP layer uses WebRTC with STUN/TURN servers (including Google's public STUN servers) for NAT traversal. The same P2P channel serves as both the voice call pathway and the C2 communication channel. Evasion included [Tencent Legu](../packers/chinese-packers.md) and Bangcle obfuscation, long ZIP directory names, and manifest corruption.
+The VoIP layer uses WebRTC with STUN/TURN servers (including Google's public STUN servers) for NAT traversal. The same P2P channel serves as both the voice call pathway and the C2 communication channel. Evasion included [Tencent Legu](../packers/tencent-legu.md) and Bangcle obfuscation, long ZIP directory names, and manifest corruption.
 
 ## Fake IVR Systems
 

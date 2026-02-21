@@ -10,17 +10,17 @@ Obfuscators are a lighter category: they transform code to make it harder to rea
 
 | Packer | Vendor | Origin | Status |
 |--------|--------|--------|--------|
-| [360 Jiagu](chinese-packers.md#qihoo-360-jiagu) | Qihoo 360 | China | Documented |
-| [APKProtect](chinese-packers.md#apkprotect) | Nagain | China | Documented |
+| [360 Jiagu](qihoo-360-jiagu.md) | Qihoo 360 | China | Documented |
+| [APKProtect](apkprotect.md) | Nagain | China | Documented |
 | [Arxan (Digital.ai)](arxan.md) | Digital.ai | USA | Documented |
-| [Baidu Reinforcement](chinese-packers.md) | Baidu | China | Documented |
-| [Bangcle (SecNeo)](chinese-packers.md#bangcle-secneo) | Bangcle | China | Documented |
+| [Baidu Reinforcement](tencent-legu.md) | Baidu | China | Documented |
+| [Bangcle (SecNeo)](bangcle.md) | Bangcle | China | Documented |
 | [DexGuard](dexguard.md) | Guardsquare | Belgium | Documented |
 | [DexProtector](dexprotector.md) | Licel | Netherlands | Documented |
-| [iJiami](chinese-packers.md) | iJiami | China | Documented |
-| [NeteaseYiDun](chinese-packers.md) | NetEase | China | Documented |
+| [iJiami](tencent-legu.md) | iJiami | China | Documented |
+| [NeteaseYiDun](tencent-legu.md) | NetEase | China | Documented |
 | [Promon SHIELD](promon.md) | Promon | Norway | Documented |
-| [Tencent Legu](chinese-packers.md#tencent-legu) | Tencent | China | Documented |
+| [Tencent Legu](tencent-legu.md) | Tencent | China | Documented |
 | [Virbox](virbox.md) | SenseShield Technology | China | Documented |
 | [AppSealing](appsealing.md) | INKA Entworks | South Korea | Documented |
 | [LIAPP](liapp.md) | Lockin Company | South Korea | Documented |
@@ -62,9 +62,9 @@ Commercial packers are increasingly adopted by malware authors. The packer provi
 |--------|----------|-------|
 | [Virbox](virbox.md) | [Gigabud](../malware/families/gigabud.md), [Klopatra](../malware/families/klopatra.md), GoldDigger/GoldPickaxe | GoldFactory group standardized on Virbox. `libvdog.so` marker. |
 | [DexGuard](dexguard.md) | [Anatsa](../malware/families/anatsa.md), [Xenomorph](../malware/families/xenomorph.md) | Higher-tier MaaS families use DexGuard's commercial protection. |
-| [Tencent Legu](chinese-packers.md#tencent-legu) | [Triada](../malware/families/triada.md), various Chinese malware | Common in Chinese market. `libshella.so` / `libshellx.so` marker. |
-| [360 Jiagu](chinese-packers.md#qihoo-360-jiagu) | Chinese banking trojans, stalkerware | `libjiagu.so` marker. Multi-DEX support. |
-| [Bangcle](chinese-packers.md#bangcle-secneo) | Regional malware, adware | `libsecexe.so` / `libSecShell.so` marker. |
+| [Tencent Legu](tencent-legu.md) | [Triada](../malware/families/triada.md), various Chinese malware | Common in Chinese market. `libshella.so` / `libshellx.so` marker. |
+| [360 Jiagu](qihoo-360-jiagu.md) | Chinese banking trojans, stalkerware | `libjiagu.so` marker. Multi-DEX support. |
+| [Bangcle](bangcle.md) | Regional malware, adware | `libsecexe.so` / `libSecShell.so` marker. |
 | Custom packers | [Mandrake](../malware/families/mandrake.md), [SoumniBot](../malware/families/soumnibot.md) | OLLVM-obfuscated native loaders ([Mandrake](../malware/families/mandrake.md)), manifest parsing exploits ([SoumniBot](../malware/families/soumnibot.md)) |
 | [AppSealing](appsealing.md) | Korean banking apps, Unity games | `libcovault-appsec.so` marker. Bypass: AppPealing Xposed module. |
 | [LIAPP](liapp.md) | Korean banking apps (KBPay, NH Bank) | Hardest Korean protector. Server-side token verification. No public bypass tool. |
@@ -153,7 +153,7 @@ Custom packers are generally easier to break than commercial ones because they l
 
 Head-to-head comparison across all documented packers on the features that matter for analysis.
 
-| Feature | [Virbox](virbox.md) | [DexGuard](dexguard.md) | [DexProtector](dexprotector.md) | [Arxan](arxan.md) | [Promon](promon.md) | [Chinese](chinese-packers.md) | [AppSealing](appsealing.md) | [LIAPP](liapp.md) | [Appdome](appdome.md) | [zShield](zshield.md) | [Verimatrix](verimatrix.md) |
+| Feature | [Virbox](virbox.md) | [DexGuard](dexguard.md) | [DexProtector](dexprotector.md) | [Arxan](arxan.md) | [Promon](promon.md) | [Chinese](tencent-legu.md) | [AppSealing](appsealing.md) | [LIAPP](liapp.md) | [Appdome](appdome.md) | [zShield](zshield.md) | [Verimatrix](verimatrix.md) |
 |---------|--------|----------|--------------|-------|--------|--------|-----------|------|---------|---------|-----------|
 | DEX encryption | Yes | Yes (class-level) | Yes | Partial | No | Yes (whole DEX) | Yes (selective) | Yes (full) | Yes | Yes (.szip) | Yes |
 | DEX virtualization | Yes (core) | Optional | No | No | No | No | No | No | No | No | No |

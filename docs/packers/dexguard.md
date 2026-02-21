@@ -139,7 +139,7 @@ Each DexGuard build produces a structurally unique output. Encryption keys, obfu
 
 This is DexGuard's most significant defensive property. A Frida script written to hook string decryption in build A will fail on build B because the decryption class name, method signature, and key derivation have all changed. Attackers must re-analyze each build individually. Automated tooling that relies on fixed class names or method patterns breaks across versions.
 
-For malware analysis, this means samples from different campaigns or distribution waves require separate unpacking effort even when the underlying malware is identical. Contrast this with [DexProtector](dexprotector.md) or [Chinese packers](chinese-packers.md), where a single unpacking script transfers across all protected samples.
+For malware analysis, this means samples from different campaigns or distribution waves require separate unpacking effort even when the underlying malware is identical. Contrast this with [DexProtector](dexprotector.md) or [Chinese packers](tencent-legu.md), where a single unpacking script transfers across all protected samples.
 
 ### Certificate Pinning
 
@@ -542,7 +542,7 @@ For DexGuard builds that also pin at the Java `HttpsURLConnection` or OkHttp lev
 
 ## Comparison with Other Protectors
 
-| Feature | DexGuard | [Virbox](virbox.md) | [Chinese Packers](chinese-packers.md) |
+| Feature | DexGuard | [Virbox](virbox.md) | [Chinese Packers](tencent-legu.md) |
 |---------|----------|--------|----------------|
 | String encryption | AES/XOR with method-level keys | VM-based, part of virtualization | Basic XOR in native layer |
 | Class encryption | Custom class loader | Full DEX virtualization | DEX-in-assets encryption |

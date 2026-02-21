@@ -4,7 +4,13 @@ The companies and organizations involved in Android security, from threat intell
 
 | Page | Content |
 |------|---------|
-| [Security Companies](security-companies.md) | Threat intel, endpoint security, app testing, AV engines, offensive research, forensics, packer vendors, third-party stores, modding scene |
+| [App Distribution](app-distribution.md) | Third-party stores, APK modding, and cracking scene |
+| [AV Engines](av-engines.md) | VirusTotal detection engines: primary, mobile-specific, EDR, regional |
+| [Digital Forensics](digital-forensics.md) | Mobile forensics tools for device extraction and analysis |
+| [Packer Vendors](packer-vendors.md) | Companies selling Android app protection and obfuscation |
+| [Security Products](security-products.md) | Endpoint security, app security testing (SAST/DAST), offensive research |
+| [Standards & Bug Bounties](standards-bounties.md) | Security standards, regulators, and vulnerability disclosure programs |
+| [Threat Intelligence](threat-intelligence.md) | Research labs that discover and name malware families, vendor comparison matrix |
 
 ## Industry Structure
 

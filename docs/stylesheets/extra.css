@@ -235,3 +235,151 @@
   border-left-color: rgba(211, 47, 47, 0.4);
   background: rgba(211, 47, 47, 0.03);
 }
+
+.awake-hero {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(211, 47, 47, 0.15);
+}
+
+.awake-hero h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.2rem;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  background: linear-gradient(135deg, #ef5350 0%, #ff6d00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.awake-hero .awake-subtitle {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+[data-md-color-scheme="default"] .awake-hero .awake-subtitle {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.awake-hero .awake-tagline {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 40rem;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+[data-md-color-scheme="default"] .awake-hero .awake-tagline {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+[data-md-color-scheme="default"] .awake-hero h1 {
+  background: linear-gradient(135deg, #d32f2f 0%, #e65100 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.awake-section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.awake-card {
+  border: 1px solid rgba(211, 47, 47, 0.15);
+  border-radius: 8px;
+  padding: 1.2rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+[data-md-color-scheme="slate"] .awake-card {
+  background: rgba(26, 26, 46, 0.4);
+}
+
+[data-md-color-scheme="default"] .awake-card {
+  background: rgba(211, 47, 47, 0.02);
+}
+
+.awake-card:hover {
+  border-color: var(--awake-red);
+  box-shadow: 0 4px 24px var(--awake-accent-glow);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.awake-card-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: var(--awake-red);
+  flex-shrink: 0;
+}
+
+.awake-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--awake-red);
+}
+
+.awake-card-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+  margin: 0;
+}
+
+[data-md-color-scheme="default"] .awake-card-desc {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.awake-roles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.awake-role {
+  border: 1px solid rgba(211, 47, 47, 0.1);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+}
+
+[data-md-color-scheme="slate"] .awake-role {
+  background: rgba(26, 26, 46, 0.3);
+}
+
+.awake-role strong {
+  color: var(--awake-orange);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.awake-role p {
+  font-size: 0.8rem;
+  margin: 0.4rem 0 0;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+}
+
+[data-md-color-scheme="default"] .awake-role p {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.awake-role a {
+  font-weight: 600;
+}

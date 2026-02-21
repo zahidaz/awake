@@ -69,7 +69,7 @@ R8 and ProGuard provide zero runtime protection:
 - **No native code protection** -- JNI libraries are untouched
 - **No control flow obfuscation** -- code logic remains structurally intact
 
-This is the fundamental distinction between R8/ProGuard and tools like [DexGuard](dexguard.md), [Virbox](virbox.md), or [Chinese packers](chinese-packers.md). If an APK only uses R8/ProGuard, all strings, API calls, URLs, and logic are visible in static analysis. The only challenge is navigating renamed identifiers.
+This is the fundamental distinction between R8/ProGuard and tools like [DexGuard](dexguard.md), [Virbox](virbox.md), or [Chinese packers](tencent-legu.md). If an APK only uses R8/ProGuard, all strings, API calls, URLs, and logic are visible in static analysis. The only challenge is navigating renamed identifiers.
 
 ## Reverse Engineering R8/ProGuard Output
 

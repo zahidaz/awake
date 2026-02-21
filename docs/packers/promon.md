@@ -277,7 +277,7 @@ When assessing a SHIELD-protected banking app, disable telemetry reporting hooks
 
 ## Comparison with Other Protectors
 
-| Feature | Promon SHIELD | [DexGuard](dexguard.md) | [Virbox](virbox.md) | [Chinese Packers](chinese-packers.md) |
+| Feature | Promon SHIELD | [DexGuard](dexguard.md) | [Virbox](virbox.md) | [Chinese Packers](tencent-legu.md) |
 |---------|---------------|----------|--------|----------------|
 | Primary approach | RASP (runtime checks) | Code transformation | DEX virtualization | DEX encryption |
 | DEX encryption | No | Yes | Yes (VM-based) | Yes |

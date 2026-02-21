@@ -327,11 +327,11 @@ Known marker libraries and what they indicate:
 | Library File | Packer |
 |-------------|--------|
 | `libvdog.so`, `libvirbox*.so` | [Virbox](../packers/virbox.md) |
-| `libshella.so`, `libshellx.so` | [Tencent Legu](../packers/chinese-packers.md#tencent-legu) |
-| `libjiagu*.so` | [Qihoo 360](../packers/chinese-packers.md#qihoo-360-jiagu) |
+| `libshella.so`, `libshellx.so` | [Tencent Legu](../packers/tencent-legu.md) |
+| `libjiagu*.so` | [Qihoo 360](../packers/qihoo-360-jiagu.md) |
 | `libdexguard.so` | [DexGuard](../packers/dexguard.md) |
 | `libdexprotector*.so`, `libdpboot.so` | [DexProtector](../packers/dexprotector.md) |
-| `libsecexe.so`, `libSecShell.so` | [Bangcle](../packers/chinese-packers.md#bangcle-secneo) |
+| `libsecexe.so`, `libSecShell.so` | [Bangcle](../packers/bangcle.md) |
 | `libcovault-appsec.so` | [AppSealing](../packers/appsealing.md) |
 
 !!! tip "What to do when you detect a packer"

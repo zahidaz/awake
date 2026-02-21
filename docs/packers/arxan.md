@@ -237,7 +237,7 @@ For analysts reverse-engineering banking apps protected by Arxan, expect the ful
 
 ## Comparison with Other Protectors
 
-| Feature | Arxan | [DexGuard](dexguard.md) | [Virbox](virbox.md) | [Chinese Packers](chinese-packers.md) |
+| Feature | Arxan | [DexGuard](dexguard.md) | [Virbox](virbox.md) | [Chinese Packers](tencent-legu.md) |
 |---------|-------|---------|--------|----------------|
 | Primary layer | Native (ARM/ELF) | DEX (Dalvik) | DEX + Native VM | DEX-in-assets |
 | Guard network | Mesh of interdependent guards | Independent checks | Not applicable | Not applicable |

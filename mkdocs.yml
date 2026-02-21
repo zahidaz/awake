@@ -62,6 +62,9 @@ markdown_extensions:
   - tables
   - def_list
   - footnotes
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - toc:
       permalink: true
 
@@ -230,19 +233,64 @@ nav:
           - Xenomorph: malware/families/xenomorph.md
           - Zanubis: malware/families/zanubis.md
           - Ztorg: malware/families/ztorg.md
-  - Grayware:
-      - grayware/index.md
-      - Ad Fraud: grayware/ad-fraud.md
-      - Analysis Approach: grayware/analysis.md
-      - Children's App Data Harvesting: grayware/children-data-harvesting.md
-      - Commercial Surveillance Vendors: grayware/commercial-surveillance.md
-      - Data Broker SDKs: grayware/data-broker-sdks.md
-      - Device Fingerprinting: grayware/device-fingerprinting.md
-      - Firmware Grayware: grayware/firmware-grayware.md
-      - Predatory Lending Apps: grayware/predatory-lending.md
-      - Riskware / Dual-Use Apps: grayware/riskware.md
-      - Stalkerware: grayware/stalkerware.md
-      - Surveillance & Data Trade: grayware/surveillance-data-trade.md
+  - Packers:
+      - packers/index.md
+      - Appdome: packers/appdome.md
+      - AppSealing: packers/appsealing.md
+      - Arxan (Digital.ai): packers/arxan.md
+      - APKProtect: packers/apkprotect.md
+      - Baidu Reinforcement: packers/baidu.md
+      - Bangcle (SecNeo): packers/bangcle.md
+      - DexGuard: packers/dexguard.md
+      - DexProtector: packers/dexprotector.md
+      - Hqwar: packers/hqwar.md
+      - iJiami: packers/ijiami.md
+      - LIAPP: packers/liapp.md
+      - NeteaseYiDun: packers/netease-yidun.md
+      - Promon SHIELD: packers/promon.md
+      - Qihoo 360 Jiagu: packers/qihoo-360-jiagu.md
+      - R8 / ProGuard: packers/r8-proguard.md
+      - Tencent Legu: packers/tencent-legu.md
+      - Verimatrix XTD: packers/verimatrix.md
+      - Virbox: packers/virbox.md
+      - zShield (Zimperium): packers/zshield.md
+  - Reversing:
+      - reversing/index.md
+      - Static Analysis: reversing/static-analysis.md
+      - Dynamic Analysis: reversing/dynamic-analysis.md
+      - Hooking: reversing/hooking.md
+      - Patching: reversing/patching.md
+      - Network Analysis: reversing/network-analysis.md
+      - Development Frameworks:
+          - reversing/frameworks/index.md
+          - AppInventor / Kodular: reversing/frameworks/appinventor.md
+          - B4A: reversing/frameworks/b4a.md
+          - Cocos2d-x: reversing/frameworks/cocos2d-x.md
+          - Compose Multiplatform: reversing/frameworks/compose-multiplatform.md
+          - Cordova / Ionic / Capacitor: reversing/frameworks/cordova.md
+          - Corona / Solar2D: reversing/frameworks/corona.md
+          - Defold: reversing/frameworks/defold.md
+          - Delphi / RAD Studio: reversing/frameworks/delphi.md
+          - Felgo: reversing/frameworks/felgo.md
+          - Flutter: reversing/frameworks/flutter.md
+          - GameMaker: reversing/frameworks/gamemaker.md
+          - GDevelop: reversing/frameworks/gdevelop.md
+          - Godot: reversing/frameworks/godot.md
+          - Kivy (Python): reversing/frameworks/kivy.md
+          - Kotlin Multiplatform: reversing/frameworks/kotlin-multiplatform.md
+          - libGDX: reversing/frameworks/libgdx.md
+          - NativeScript: reversing/frameworks/nativescript.md
+          - PWA / TWA: reversing/frameworks/pwa-twa.md
+          - Qt for Android: reversing/frameworks/qt.md
+          - React Native: reversing/frameworks/react-native.md
+          - "Ren'Py": reversing/frameworks/renpy.md
+          - RPG Maker: reversing/frameworks/rpgmaker.md
+          - Sketchware: reversing/frameworks/sketchware.md
+          - Titanium: reversing/frameworks/titanium.md
+          - uni-app: reversing/frameworks/uni-app.md
+          - Unity: reversing/frameworks/unity.md
+          - Unreal Engine: reversing/frameworks/unreal-engine.md
+          - Xamarin / .NET MAUI: reversing/frameworks/xamarin.md
   - Platform Abuse:
       - platform-abuse/index.md
       - App Sandbox: platform-abuse/app-sandbox.md
@@ -350,59 +398,34 @@ nav:
               - REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: permissions/normal/request-ignore-battery-optimizations.md
               - SCHEDULE_EXACT_ALARM: permissions/normal/schedule-exact-alarm.md
               - WAKE_LOCK: permissions/normal/wake-lock.md
-  - Reversing:
-      - reversing/index.md
-      - Static Analysis: reversing/static-analysis.md
-      - Dynamic Analysis: reversing/dynamic-analysis.md
-      - Hooking: reversing/hooking.md
-      - Patching: reversing/patching.md
-      - Network Analysis: reversing/network-analysis.md
-      - Development Frameworks:
-          - reversing/frameworks/index.md
-          - AppInventor / Kodular: reversing/frameworks/appinventor.md
-          - B4A: reversing/frameworks/b4a.md
-          - Cocos2d-x: reversing/frameworks/cocos2d-x.md
-          - Compose Multiplatform: reversing/frameworks/compose-multiplatform.md
-          - Cordova / Ionic / Capacitor: reversing/frameworks/cordova.md
-          - Corona / Solar2D: reversing/frameworks/corona.md
-          - Defold: reversing/frameworks/defold.md
-          - Delphi / RAD Studio: reversing/frameworks/delphi.md
-          - Felgo: reversing/frameworks/felgo.md
-          - Flutter: reversing/frameworks/flutter.md
-          - GameMaker: reversing/frameworks/gamemaker.md
-          - GDevelop: reversing/frameworks/gdevelop.md
-          - Godot: reversing/frameworks/godot.md
-          - Kivy (Python): reversing/frameworks/kivy.md
-          - Kotlin Multiplatform: reversing/frameworks/kotlin-multiplatform.md
-          - libGDX: reversing/frameworks/libgdx.md
-          - NativeScript: reversing/frameworks/nativescript.md
-          - PWA / TWA: reversing/frameworks/pwa-twa.md
-          - Qt for Android: reversing/frameworks/qt.md
-          - React Native: reversing/frameworks/react-native.md
-          - "Ren'Py": reversing/frameworks/renpy.md
-          - RPG Maker: reversing/frameworks/rpgmaker.md
-          - Titanium: reversing/frameworks/titanium.md
-          - uni-app: reversing/frameworks/uni-app.md
-          - Unity: reversing/frameworks/unity.md
-          - Unreal Engine: reversing/frameworks/unreal-engine.md
-          - Xamarin / .NET MAUI: reversing/frameworks/xamarin.md
-  - Packers:
-      - packers/index.md
-      - Appdome: packers/appdome.md
-      - AppSealing: packers/appsealing.md
-      - Arxan (Digital.ai): packers/arxan.md
-      - Chinese Packers: packers/chinese-packers.md
-      - DexGuard: packers/dexguard.md
-      - DexProtector: packers/dexprotector.md
-      - Hqwar: packers/hqwar.md
-      - LIAPP: packers/liapp.md
-      - Promon SHIELD: packers/promon.md
-      - R8 / ProGuard: packers/r8-proguard.md
-      - Verimatrix XTD: packers/verimatrix.md
-      - Virbox: packers/virbox.md
-      - zShield (Zimperium): packers/zshield.md
+  - Grayware:
+      - grayware/index.md
+      - Ad Fraud: grayware/ad-fraud.md
+      - Analysis Approach: grayware/analysis.md
+      - Children's App Data Harvesting: grayware/children-data-harvesting.md
+      - Commercial Surveillance Vendors: grayware/commercial-surveillance.md
+      - Data Broker SDKs: grayware/data-broker-sdks.md
+      - Device Fingerprinting: grayware/device-fingerprinting.md
+      - Firmware Grayware: grayware/firmware-grayware.md
+      - Predatory Lending Apps: grayware/predatory-lending.md
+      - Riskware / Dual-Use Apps: grayware/riskware.md
+      - Stalkerware: grayware/stalkerware.md
+      - Surveillance & Data Trade: grayware/surveillance-data-trade.md
   - Industry:
       - industry/index.md
-      - Security Companies: industry/security-companies.md
+      - App Distribution: industry/app-distribution.md
+      - AV Engines: industry/av-engines.md
+      - Digital Forensics: industry/digital-forensics.md
+      - Packer Vendors: industry/packer-vendors.md
+      - Security Products: industry/security-products.md
+      - Standards & Bug Bounties: industry/standards-bounties.md
+      - Threat Intelligence: industry/threat-intelligence.md
   - Resources:
       - resources/index.md
+      - Blogs & Research: resources/blogs.md
+      - Community: resources/community.md
+      - Conferences & Talks: resources/conferences.md
+      - Frameworks & Standards: resources/frameworks.md
+      - Reports & Research: resources/reports.md
+      - Tools: resources/tools.md
+      - Training & CTFs: resources/training.md

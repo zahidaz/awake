@@ -213,7 +213,7 @@ This multi-framework support is particularly relevant for hybrid applications wh
 
 ## Unpacking Methodology
 
-Public bypass research for Verimatrix XTD is limited. The product has received less attention from the security research community compared to [DexGuard](dexguard.md) or [Chinese packers](chinese-packers.md).
+Public bypass research for Verimatrix XTD is limited. The product has received less attention from the security research community compared to [DexGuard](dexguard.md) or [Chinese packers](tencent-legu.md).
 
 ### General Approach
 
