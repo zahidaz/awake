@@ -181,6 +181,49 @@ run.invoke(instance);
 | [GoldPickaxe](../malware/families/goldpickaxe.md) | InMemoryDexClassLoader | C2 download | 2 |
 | [SpyLoan](../malware/families/spyloan.md) | DexClassLoader | Firebase remote config | 2 |
 
+## XOR + Classloader Injection Packing
+
+A common packing technique where the payload is stored as an encrypted asset file and injected into the running classloader at startup. Unlike multi-stage dropper architectures that download payloads from C2, this approach ships the encrypted payload inside the APK itself.
+
+### Loading Chain
+
+1. `Application.attachBaseContext()` triggers the loader (before `onCreate()`, so the payload is ready before any activity starts)
+2. An asset file (often with a numeric or obfuscated name) is read into memory
+3. The bytes are XOR-decrypted using `java.util.Random` with a hardcoded seed as the PRNG
+4. Decrypted bytes are a ZIP containing one or more `classes*.dex` files
+5. DEX files are loaded via `InMemoryDexClassLoader` (API 26+) or `DexClassLoader` for older devices
+6. The loaded `dexElements` array is merged into the current classloader's `pathList.dexElements` via reflection
+
+```java
+byte[] encrypted = readAsset("payload.bin");
+Random rng = new Random(HARDCODED_SEED);
+byte[] decrypted = new byte[encrypted.length];
+for (int i = 0; i < encrypted.length; i++) {
+    decrypted[i] = (byte) (encrypted[i] ^ rng.nextInt(256));
+}
+
+ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(decrypted));
+ByteBuffer dexBuffer = extractDex(zis);
+InMemoryDexClassLoader loader = new InMemoryDexClassLoader(dexBuffer, getClassLoader());
+
+Object pathList = getField(getClassLoader(), "pathList");
+Object[] existing = (Object[]) getField(pathList, "dexElements");
+Object[] injected = (Object[]) getField(getField(loader, "pathList"), "dexElements");
+Object[] merged = Arrays.copyOf(existing, existing.length + injected.length);
+System.arraycopy(injected, 0, merged, existing.length, injected.length);
+setField(pathList, "dexElements", merged);
+```
+
+The outer shell is typically very small (10-20 classes) and looks innocent: just the Application class, a Runnable, and the decryptor. The real payload can be 2000+ classes. Static scanners that only analyze the outer DEX miss everything.
+
+### Detection
+
+- `attachBaseContext()` calling anything beyond `super.attachBaseContext()`
+- `InMemoryDexClassLoader` or `DexClassLoader` usage in the Application class
+- Reflection on `BaseDexClassLoader.pathList.dexElements`
+- High-entropy asset files with numeric or obfuscated names
+- The XOR seed is always hardcoded: finding it enables offline decryption of the payload
+
 ## Steganographic Payload Delivery
 
 !!! info "Steganography as Anti-Detection"

@@ -354,6 +354,29 @@ boolean isProxied() {
 
 If a proxy is detected, the SDK refuses to initialize, preventing analysts from capturing network traffic. This check is trivial to bypass via Frida (hook `System.getProperty` to return null for proxy keys), but it's effective against automated sandbox environments that route all traffic through a proxy by default.
 
+## Hidden API Bypass
+
+[AndroidHiddenApiBypass](https://github.com/LSPosed/AndroidHiddenApiBypass) (`org.lsposed.hiddenapibypass`) is an open-source library that circumvents Android's hidden API restrictions introduced in Android 9. Normally, apps cannot call `@hide` annotated methods or directly instantiate system service classes. The library has multiple bypass variants: the original uses `Unsafe` memory operations, while the newer LSPass variant uses `Property.of()` to achieve the same result without `Unsafe`.
+
+In malware, it enables:
+
+- Creating `DisplayManager`, `TelecomManager`, or `NotificationManager` instances directly (bypassing `Context.getSystemService()` which would expose the real package name)
+- Accessing private fields on `BaseDexClassLoader` for [classloader injection](dynamic-code-loading.md)
+- Calling hidden methods that the public API does not expose
+
+Legitimate use exists in Xposed/LSPosed modules and root apps. In a non-root app from an unknown developer, it is a strong indicator of API abuse. Look for `HiddenApiBypass.newInstance()` or `HiddenApiBypass.invoke()` calls.
+
+## Security Patch Date Behavioral Branching
+
+Malware checks `Build.VERSION.SECURITY_PATCH` against a threshold date to vary its behavior based on the device's security level. Newer security patches mean stricter OS restrictions (notification channels, background service limits, alarm restrictions), so the malware selects different code paths:
+
+| Device Age | Techniques Used |
+|------------|----------------|
+| Older patches | Direct techniques: visible notifications, simple `AlarmManager`, standard service starts |
+| Newer patches | Evasion techniques: `TelecomManager` fake calls, `VirtualDisplay` invisible rendering, `HiddenApiBypass` for direct system service instantiation |
+
+This is adaptive malware that detects the security posture of the device and chooses the most effective attack path. The threshold date roughly corresponds to when specific Android security restrictions were enforced. Combined with `Build.VERSION.SDK_INT` checks, it creates multi-layered execution guardrails that maximize compatibility across device populations.
+
 ## APK and Manifest Corruption
 
 ### Malformed ZIP Headers
@@ -460,6 +483,12 @@ Java.perform(function() {
 ```
 
 Adapt the class name to match the target's specific obfuscator.
+
+#### Visual Confusion Obfuscation
+
+An obfuscation technique that renames classes, methods, and packages using visually similar characters: uppercase `O`, lowercase `o`, and zero `0` (e.g., `OooO0O0`, `o0000Ooo`, `Oooo0OO`). Unlike standard R8/ProGuard which uses short alphabetic names (`a`, `b`, `a0`), this pattern is deliberately adversarial, designed to make manual analysis painful because all identifiers look identical at a glance.
+
+When this obfuscation style appears, it indicates deliberate anti-analyst intent rather than standard build-time optimization. R8/ProGuard obfuscation is functional (reduce APK size); visual confusion obfuscation is hostile.
 
 ### Domain Generation Algorithms
 
