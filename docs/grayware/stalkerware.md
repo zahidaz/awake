@@ -9,6 +9,12 @@ Commercial surveillance apps marketed for "parental monitoring" or "employee tra
 | mSpy | $30-70/month | Active, one of the largest operators |
 | FlexiSpy | $70-200/month | Active, premium tier with call interception |
 | Cocospy / Spyic | $40-50/month | Active, same parent company (1TopSpy) |
+| Hoverwatch | $25-50/month | Active, markets as "invisible phone tracker" |
+| eyeZy | $10-40/month | Active, AI-powered monitoring features |
+| uMobix | $30-60/month | Active, real-time phone tracker with dashboard |
+| Spyzie | $30-40/month | Active, sold as parental monitoring tool |
+| iKeyMonitor | $30-50/month | Active, keylogger-focused with screenshot capture |
+| XNSpy | $30-36/month | Active, remote microphone and camera activation |
 | TheTruthSpy | $20-30/month | Breached in 2022, 60GB of victim photos/data exposed |
 | pcTattletale | $100/year | Hacked and shut down in 2024 |
 | LetMeSpy | Free-$6/month | Breached and shut down in 2023 |
@@ -47,6 +53,48 @@ Requires physical access to the target device. Installers guide the abuser throu
 - Coalition Against Stalkerware maintains detection signatures shared with AV vendors
 - Check `Settings > Accessibility > Installed Services` for unknown entries
 - Check `Settings > Security > Device admin apps` for apps not installed by user
+
+## Legal Landscape
+
+Enforcement against stalkerware has intensified, though the industry remains largely unregulated:
+
+| Action | Year | Details |
+|--------|------|---------|
+| FTC vs SpyFone | 2021 | FTC banned SpyFone from the surveillance industry and ordered deletion of all collected data |
+| FTC vs Support King (SpyFone parent) | 2022 | Company and CEO personally prohibited from offering surveillance products |
+| FTC vs InvisiMon | 2023 | Fined for selling stalkerware marketed as "parental monitoring" |
+| EU Digital Services Act | 2024 | Platforms required to remove stalkerware distribution channels; enforcement varies by member state |
+| Coalition Against Stalkerware | 2019-present | Industry coalition (Kaspersky, EFF, NNEDV, others) standardizing detection and providing victim resources |
+
+The Coalition Against Stalkerware maintains shared detection definitions and IOCs that participating AV vendors incorporate into their products. Their [detection criteria](https://stopstalkerware.org/) focus on apps that operate covertly, transmit PII without prominent notification, and resist uninstallation.
+
+## Android Platform Defenses
+
+Google has progressively restricted the capabilities stalkerware relies on:
+
+| Year | Change | Impact |
+|------|--------|--------|
+| 2019 | Play Store policy bans apps marketed for surveillance | Forces distribution through sideloading |
+| 2020 | Background location access restrictions (Android 11) | Stalkerware must justify background location or use foreground service |
+| 2021 | Play Protect stalkerware detection | Warns users when known stalkerware is detected on device |
+| 2022 | Privacy dashboard (Android 12) | Users can see which apps accessed camera, microphone, location in last 24 hours |
+| 2023 | Notification listener restrictions (Android 13) | Limits which apps can read notifications |
+| 2024 | Play Protect live threat detection | On-device ML scanning detects stalkerware behavior patterns |
+
+These restrictions have not eliminated stalkerware but have forced it off the Play Store and into manual sideloading with ADB or developer mode. Installation guides provided by stalkerware vendors now require disabling Play Protect as a mandatory step.
+
+## Dual-Use Apps
+
+Legitimate apps repurposed for stalkerware-like surveillance without the target's meaningful consent:
+
+| App | Legitimate Purpose | Abuse Scenario |
+|-----|-------------------|----------------|
+| Google Find My Device | Locate lost/stolen device | Covert location tracking of partner's phone |
+| Life360 | Family location sharing | Coercive location monitoring in intimate partner abuse |
+| AirDroid | Remote device management | Remote screen viewing and file access without target awareness |
+| Cerberus Anti-Theft | Anti-theft protection | Full surveillance suite (audio, camera, location, SMS) deployed covertly |
+
+These apps occupy a different legal space than purpose-built stalkerware because they have legitimate use cases and operate with visible notifications. However, in coercive relationships where one partner controls the other's device, the distinction between "family safety" and surveillance breaks down.
 
 ## Data Breaches
 
