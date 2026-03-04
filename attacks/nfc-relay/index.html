@@ -2984,6 +2984,8 @@
       
         
       
+        
+      
     
     
     
@@ -5623,6 +5625,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../malware/families/supercard-x/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SuperCard X
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../malware/families/spyagent/" class="md-nav__link">
         
   
@@ -6102,6 +6132,8 @@
       
         
       
+        
+      
     
     
     
@@ -6156,6 +6188,34 @@
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../packers/allatori/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Allatori
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -10293,6 +10353,8 @@
       
         
       
+        
+      
     
     
     
@@ -10504,6 +10566,34 @@
     
   
     BIND_VPN_SERVICE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../permissions/special/interact-across-users-full/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INTERACT_ACROSS_USERS_FULL
   
 
     
@@ -12716,7 +12806,7 @@
 </table>
 <p>The key insight: Android's HCE API allows any app to respond to NFC readers as if it were a contactless card. By relaying the real card's responses through a mule device, the ATM or POS terminal cannot distinguish the relay from a genuine tap.</p>
 <h3 id="nfcgate">NFCGate<a class="headerlink" href="#nfcgate" title="Permanent link">&para;</a></h3>
-<p><a href="https://github.com/nfcgate/nfcgate">NFCGate</a> is an open-source academic NFC relay tool developed at TU Darmstadt for security research. It provides the relay infrastructure that <a href="../../malware/families/ngate/">NGate</a> repurposed for malicious use. NFCGate itself is a legitimate research tool; the malware weaponizes its relay capability.</p>
+<p><a href="https://github.com/nfcgate/nfcgate">NFCGate</a> is an open-source academic NFC relay tool developed at TU Darmstadt for security research. It provides the relay infrastructure that <a href="../../malware/families/ngate/">NGate</a> repurposed for malicious use. NFCGate itself is a legitimate research tool; the malware weaponizes its relay capability. <a href="https://cert.pl/en/posts/2024/11/analysis-of-ngate-malware/">CERT.PL published a detailed analysis of NGate's APDU handling</a> that documents the specific NFCGate modifications used in the malware variant.</p>
 <h2 id="families-using-this-technique">Families Using This Technique<a class="headerlink" href="#families-using-this-technique" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -12741,22 +12831,29 @@
 <td>Czech/Slovak banks, POS fraud</td>
 </tr>
 <tr>
+<td><a href="../../malware/families/supercard-x/">SuperCard X</a></td>
+<td>2025</td>
+<td>Reader/Tapper MaaS, mTLS C2, TOAD delivery</td>
+<td>Italian/European banks</td>
+</tr>
+<tr>
 <td>GhostTap</td>
 <td>2025</td>
 <td>Scanner/tapper pairs, Telegram-based data exfiltration</td>
 <td>Multi-region, POS fraud</td>
 </tr>
 <tr>
-<td>SuperCard</td>
+<td>RelayNFC</td>
 <td>2025</td>
-<td>NFC relay with expanded card type support</td>
-<td>European banks</td>
+<td>NFC relay targeting Brazilian financial institutions</td>
+<td>Brazil</td>
 </tr>
 </tbody>
 </table>
 <p><a href="https://zimperium.com/blog/tap-and-steal-the-rise-of-nfc-relay-malware-on-mobile-devices">Zimperium identified 760+ malicious apps</a> exploiting NFC and HCE by late 2025, with 70+ C2 servers targeting Russia, Poland, Czech Republic, Slovakia, and other European countries.</p>
 <h3 id="evolution">Evolution<a class="headerlink" href="#evolution" title="Permanent link">&para;</a></h3>
-<p>NGate pioneered the approach in 2024 with a straightforward NFC relay for ATM withdrawal. <a href="../../malware/families/raton/">RatOn</a> evolved the technique in 2025 by combining NFC relay with ATS (Automated Transfer System) capabilities, enabling both physical card cloning and automated bank transfers from a single trojan. <a href="https://www.welivesecurity.com/en/eset-research/eset-threat-report-h2-2025/">ESET's H2 2025 threat report</a> documented an 87% increase in NFC threats on Android and a 35x increase in NFC-based fraud.</p>
+<p>NGate pioneered the approach in 2024 with a straightforward NFC relay for ATM withdrawal. <a href="../../malware/families/supercard-x/">SuperCard X</a> commercialized it as a MaaS platform with Chinese-speaking operators providing Reader/Tapper tooling to affiliates running TOAD campaigns across Europe. <a href="../../malware/families/raton/">RatOn</a> evolved the technique further by combining NFC relay with ATS (Automated Transfer System) capabilities, enabling both physical card cloning and automated bank transfers from a single trojan. <a href="https://cyble.com/blog/relaynfc-nfc-relay-attacks-target-brazil/">Cyble documented RelayNFC</a> as a separate family targeting Brazilian financial institutions, confirming the technique's global spread.</p>
+<p><a href="https://www.welivesecurity.com/en/eset-research/eset-threat-report-h2-2025/">ESET's H2 2025 threat report</a> documented an 87% increase in NFC threats on Android and a <a href="https://www.welivesecurity.com/en/eset-research/eset-threat-report-h2-2025/">35x year-over-year increase</a> in NFC-based fraud. <a href="https://zimperium.com/blog/tap-and-steal-the-rise-of-nfc-relay-malware-on-mobile-devices">Zimperium identified 760+ malicious apps</a> exploiting NFC and HCE by late 2025.</p>
 <h2 id="practical-limitations">Practical Limitations<a class="headerlink" href="#practical-limitations" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
