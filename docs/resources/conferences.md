@@ -26,8 +26,6 @@ Notable Android security presentations and YouTube channels covering mobile secu
 |---------|-------|-----------------|
 | [LaurieWired](https://www.youtube.com/@lauriewired) | Android malware analysis, reverse engineering | Malware deep-dives, assembly analysis, practical RE walkthroughs |
 | [8kSec](https://www.youtube.com/@8ksec) | Mobile security research | Android kernel exploitation, app security testing |
-| [Maddie Stone](https://www.youtube.com/@maddiestone) | 0-day research, Android exploitation | Google Project Zero research presentations |
 | [stacksmashing](https://www.youtube.com/@stacksmashing) | Hardware hacking, reverse engineering | Hardware-adjacent Android security, Flipper Zero integration |
 | [John Hammond](https://www.youtube.com/@_JohnHammond) | General security, CTF walkthroughs | Occasional mobile security and malware analysis content |
 | [IppSec](https://www.youtube.com/@ippsec) | HTB walkthroughs | Android challenge walkthroughs and mobile exploitation |
-| [Corellium](https://www.youtube.com/@corellium) | Mobile security platform | Android reverse engineering tutorials, virtualization-based analysis |
