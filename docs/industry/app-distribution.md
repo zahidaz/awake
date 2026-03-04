@@ -55,7 +55,7 @@ These are not app stores. They host APK files for download without providing a s
 
 | Platform | Type | Notes |
 |----------|------|-------|
-| [Appland](https://www.appland.se/) | White-label app store platform | B2B infrastructure provider, not a consumer-facing store. Acquired by OnMobile in 2018. Provides cloud-based app store infrastructure for mobile operators and OEMs. Solutions installed on 10M+ devices across 200+ countries. |
+| [Appland](https://www.appland.se/) | White-label pre-loaded app store | Swedish company (founded 2011), [acquired by OnMobile Global in 2018](https://pitchbook.com/profiles/company/56488-06) for ~$15M. B2B infrastructure for mobile operators and OEMs. App stores are pre-installed as system apps on smartphones before shipping, granting `INSTALL_PACKAGES` for silent APK installation. Installed on 10M+ devices across 200+ countries. [TIMWE partnership](https://www.businesswire.com/news/home/20140826005959/en/Appland-Announces-Global-Reseller-Agreement-with-TIMWE-to-Offer-Localized-App-Stores-to-Emerging-Markets-via-Mobile-Network-Operators) rolled out across mobile operators in Latin America, Southeast Asia, and CIS/Russia. Revenue via carrier billing (charged to phone bill). Pre-loaded stores have been observed bundling carrier billing SDKs ([Fortumo](https://fortumo.com/), now part of [Boku](https://www.boku.com/)) and server-pushed install lists that silently install apps without user interaction. The line between "alternative store" and malware distribution platform depends on what gets silently installed. |
 
 ## APK Modding & Cracking
 
