@@ -39,7 +39,7 @@ The key insight: Android's HCE API allows any app to respond to NFC readers as i
 
 ### NFCGate
 
-[NFCGate](https://github.com/nfcgate/nfcgate) is an open-source academic NFC relay tool developed at TU Darmstadt for security research. It provides the relay infrastructure that [NGate](../malware/families/ngate.md) repurposed for malicious use. NFCGate itself is a legitimate research tool; the malware weaponizes its relay capability.
+[NFCGate](https://github.com/nfcgate/nfcgate) is an open-source academic NFC relay tool developed at TU Darmstadt for security research. It provides the relay infrastructure that [NGate](../malware/families/ngate.md) repurposed for malicious use. NFCGate itself is a legitimate research tool; the malware weaponizes its relay capability. [CERT.PL published a detailed analysis of NGate's APDU handling](https://cert.pl/en/posts/2024/11/analysis-of-ngate-malware/) that documents the specific NFCGate modifications used in the malware variant.
 
 ## Families Using This Technique
 
@@ -47,14 +47,17 @@ The key insight: Android's HCE API allows any app to respond to NFC readers as i
 |--------|------|----------|--------|
 | [NGate](../malware/families/ngate.md) | 2024 | NFCGate-based relay, credential phishing via WebView | Czech banks, ATM withdrawal |
 | [RatOn](../malware/families/raton.md) | 2025 | NFC relay + ATS combination, crypto wallet seed extraction | Czech/Slovak banks, POS fraud |
+| [SuperCard X](../malware/families/supercard-x.md) | 2025 | Reader/Tapper MaaS, mTLS C2, TOAD delivery | Italian/European banks |
 | GhostTap | 2025 | Scanner/tapper pairs, Telegram-based data exfiltration | Multi-region, POS fraud |
-| SuperCard | 2025 | NFC relay with expanded card type support | European banks |
+| RelayNFC | 2025 | NFC relay targeting Brazilian financial institutions | Brazil |
 
 [Zimperium identified 760+ malicious apps](https://zimperium.com/blog/tap-and-steal-the-rise-of-nfc-relay-malware-on-mobile-devices) exploiting NFC and HCE by late 2025, with 70+ C2 servers targeting Russia, Poland, Czech Republic, Slovakia, and other European countries.
 
 ### Evolution
 
-NGate pioneered the approach in 2024 with a straightforward NFC relay for ATM withdrawal. [RatOn](../malware/families/raton.md) evolved the technique in 2025 by combining NFC relay with ATS (Automated Transfer System) capabilities, enabling both physical card cloning and automated bank transfers from a single trojan. [ESET's H2 2025 threat report](https://www.welivesecurity.com/en/eset-research/eset-threat-report-h2-2025/) documented an 87% increase in NFC threats on Android and a 35x increase in NFC-based fraud.
+NGate pioneered the approach in 2024 with a straightforward NFC relay for ATM withdrawal. [SuperCard X](../malware/families/supercard-x.md) commercialized it as a MaaS platform with Chinese-speaking operators providing Reader/Tapper tooling to affiliates running TOAD campaigns across Europe. [RatOn](../malware/families/raton.md) evolved the technique further by combining NFC relay with ATS (Automated Transfer System) capabilities, enabling both physical card cloning and automated bank transfers from a single trojan. [Cyble documented RelayNFC](https://cyble.com/blog/relaynfc-nfc-relay-attacks-target-brazil/) as a separate family targeting Brazilian financial institutions, confirming the technique's global spread.
+
+[ESET's H2 2025 threat report](https://www.welivesecurity.com/en/eset-research/eset-threat-report-h2-2025/) documented an 87% increase in NFC threats on Android and a [35x year-over-year increase](https://www.welivesecurity.com/en/eset-research/eset-threat-report-h2-2025/) in NFC-based fraud. [Zimperium identified 760+ malicious apps](https://zimperium.com/blog/tap-and-steal-the-rise-of-nfc-relay-malware-on-mobile-devices) exploiting NFC and HCE by late 2025.
 
 ## Practical Limitations
 

@@ -76,9 +76,9 @@ The primary abuse vector. Malware reads a victim's payment card via NFC and rela
 | Family | Year | Technique | Target |
 |--------|------|-----------|--------|
 | [NGate](../../malware/families/ngate.md) | 2024 | NFCGate-based APDU relay | Czech banks, ATM cash withdrawal |
+| [SuperCard X](../../malware/families/supercard-x.md) | 2025 | Reader/Tapper MaaS, mTLS C2, TOAD delivery | Italian/European banks |
 | [RatOn](../../malware/families/raton.md) | 2025 | NFC relay + ATS, crypto wallet seed theft | Czech/Slovak banks, POS fraud |
 | GhostTap | 2025 | Scanner/tapper pairs via Telegram | Multi-region POS fraud |
-| SuperCard | 2025 | Extended card type support | European banks |
 
 [Zimperium identified 760+ malicious apps](https://zimperium.com/blog/tap-and-steal-the-rise-of-nfc-relay-malware-on-mobile-devices) exploiting NFC and HCE by late 2025.
 
@@ -134,4 +134,5 @@ HCE (API 19) was the turning point. Before HCE, NFC on Android was limited to re
 
 - [NFC Relay Attacks](../../attacks/nfc-relay.md)
 - [NGate](../../malware/families/ngate.md)
+- [SuperCard X](../../malware/families/supercard-x.md)
 - [RatOn](../../malware/families/raton.md)
