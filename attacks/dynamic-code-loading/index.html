@@ -1986,6 +1986,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#xor-classloader-injection-packing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XOR + Classloader Injection Packing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="XOR + Classloader Injection Packing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loading-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading Chain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#steganographic-payload-delivery" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12486,6 +12525,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#xor-classloader-injection-packing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XOR + Classloader Injection Packing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="XOR + Classloader Injection Packing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loading-chain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading Chain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#steganographic-payload-delivery" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12869,6 +12947,44 @@
 </tr>
 </tbody>
 </table>
+<h2 id="xor-classloader-injection-packing">XOR + Classloader Injection Packing<a class="headerlink" href="#xor-classloader-injection-packing" title="Permanent link">&para;</a></h2>
+<p>A common packing technique where the payload is stored as an encrypted asset file and injected into the running classloader at startup. Unlike multi-stage dropper architectures that download payloads from C2, this approach ships the encrypted payload inside the APK itself.</p>
+<h3 id="loading-chain">Loading Chain<a class="headerlink" href="#loading-chain" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>Application.attachBaseContext()</code> triggers the loader (before <code>onCreate()</code>, so the payload is ready before any activity starts)</li>
+<li>An asset file (often with a numeric or obfuscated name) is read into memory</li>
+<li>The bytes are XOR-decrypted using <code>java.util.Random</code> with a hardcoded seed as the PRNG</li>
+<li>Decrypted bytes are a ZIP containing one or more <code>classes*.dex</code> files</li>
+<li>DEX files are loaded via <code>InMemoryDexClassLoader</code> (API 26+) or <code>DexClassLoader</code> for older devices</li>
+<li>The loaded <code>dexElements</code> array is merged into the current classloader's <code>pathList.dexElements</code> via reflection</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">encrypted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readAsset</span><span class="p">(</span><span class="s">&quot;payload.bin&quot;</span><span class="p">);</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">Random</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Random</span><span class="p">(</span><span class="n">HARDCODED_SEED</span><span class="p">);</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">decrypted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">encrypted</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">encrypted</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">decrypted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">encrypted</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">rng</span><span class="p">.</span><span class="na">nextInt</span><span class="p">(</span><span class="mi">256</span><span class="p">));</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="p">}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">ZipInputStream</span><span class="w"> </span><span class="n">zis</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ZipInputStream</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">ByteArrayInputStream</span><span class="p">(</span><span class="n">decrypted</span><span class="p">));</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">ByteBuffer</span><span class="w"> </span><span class="n">dexBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">extractDex</span><span class="p">(</span><span class="n">zis</span><span class="p">);</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="n">InMemoryDexClassLoader</span><span class="w"> </span><span class="n">loader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">InMemoryDexClassLoader</span><span class="p">(</span><span class="n">dexBuffer</span><span class="p">,</span><span class="w"> </span><span class="n">getClassLoader</span><span class="p">());</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="n">Object</span><span class="w"> </span><span class="n">pathList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">getClassLoader</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;pathList&quot;</span><span class="p">);</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">existing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Object</span><span class="o">[]</span><span class="p">)</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">pathList</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dexElements&quot;</span><span class="p">);</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">injected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">Object</span><span class="o">[]</span><span class="p">)</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">getField</span><span class="p">(</span><span class="n">loader</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;pathList&quot;</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;dexElements&quot;</span><span class="p">);</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="n">Object</span><span class="o">[]</span><span class="w"> </span><span class="n">merged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">copyOf</span><span class="p">(</span><span class="n">existing</span><span class="p">,</span><span class="w"> </span><span class="n">existing</span><span class="p">.</span><span class="na">length</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">injected</span><span class="p">.</span><span class="na">length</span><span class="p">);</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="n">System</span><span class="p">.</span><span class="na">arraycopy</span><span class="p">(</span><span class="n">injected</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">merged</span><span class="p">,</span><span class="w"> </span><span class="n">existing</span><span class="p">.</span><span class="na">length</span><span class="p">,</span><span class="w"> </span><span class="n">injected</span><span class="p">.</span><span class="na">length</span><span class="p">);</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="n">setField</span><span class="p">(</span><span class="n">pathList</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;dexElements&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">merged</span><span class="p">);</span>
+</code></pre></div>
+<p>The outer shell is typically very small (10-20 classes) and looks innocent: just the Application class, a Runnable, and the decryptor. The real payload can be 2000+ classes. Static scanners that only analyze the outer DEX miss everything.</p>
+<h3 id="detection">Detection<a class="headerlink" href="#detection" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>attachBaseContext()</code> calling anything beyond <code>super.attachBaseContext()</code></li>
+<li><code>InMemoryDexClassLoader</code> or <code>DexClassLoader</code> usage in the Application class</li>
+<li>Reflection on <code>BaseDexClassLoader.pathList.dexElements</code></li>
+<li>High-entropy asset files with numeric or obfuscated names</li>
+<li>The XOR seed is always hardcoded: finding it enables offline decryption of the payload</li>
+</ul>
 <h2 id="steganographic-payload-delivery">Steganographic Payload Delivery<a class="headerlink" href="#steganographic-payload-delivery" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Steganography as Anti-Detection</p>
@@ -12966,38 +13082,38 @@
 </details>
 <details class="example">
 <summary>Frida Script -- Dump Dynamically Loaded DEX Files</summary>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">DexClassLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;dalvik.system.DexClassLoader&quot;</span><span class="p">);</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nx">DexClassLoader</span><span class="p">.</span><span class="nx">$init</span><span class="p">.</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">dexPath</span><span class="p">,</span><span class="w"> </span><span class="nx">optDir</span><span class="p">,</span><span class="w"> </span><span class="nx">libPath</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[DCL] Loading DEX from: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">dexPath</span><span class="p">);</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;java.io.File&quot;</span><span class="p">).</span><span class="nx">$new</span><span class="p">(</span><span class="nx">dexPath</span><span class="p">);</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[DCL] Size: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">length</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot; bytes&quot;</span><span class="p">);</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">$init</span><span class="p">(</span><span class="nx">dexPath</span><span class="p">,</span><span class="w"> </span><span class="nx">optDir</span><span class="p">,</span><span class="w"> </span><span class="nx">libPath</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">);</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="p">};</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">InMemDCL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;dalvik.system.InMemoryDexClassLoader&quot;</span><span class="p">);</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nx">InMemDCL</span><span class="p">.</span><span class="nx">$init</span><span class="p">.</span><span class="nx">overload</span><span class="p">(</span><span class="s2">&quot;java.nio.ByteBuffer&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;java.lang.ClassLoader&quot;</span><span class="p">)</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">        </span><span class="p">.</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[IMDCL] In-memory DEX loaded, size: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">remaining</span><span class="p">());</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">array</span><span class="p">(</span><span class="s2">&quot;byte&quot;</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">remaining</span><span class="p">()));</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">            </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">bytes</span><span class="p">);</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">            </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">rewind</span><span class="p">();</span>
-<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/data/local/tmp/dumped_&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;.dex&quot;</span><span class="p">;</span>
-<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">fos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;java.io.FileOutputStream&quot;</span><span class="p">).</span><span class="nx">$new</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
-<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">            </span><span class="nx">fos</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">bytes</span><span class="p">);</span>
-<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">            </span><span class="nx">fos</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[IMDCL] Dumped to: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">path</span><span class="p">);</span>
-<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">$init</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">);</span>
-<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">        </span><span class="p">};</span>
-<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a>
-<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">ClassLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;java.lang.ClassLoader&quot;</span><span class="p">);</span>
-<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">    </span><span class="nx">ClassLoader</span><span class="p">.</span><span class="nx">loadClass</span><span class="p">.</span><span class="nx">overload</span><span class="p">(</span><span class="s2">&quot;java.lang.String&quot;</span><span class="p">).</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;com.malware&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;payload&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[CL] loadClass: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">name</span><span class="p">);</span>
-<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">loadClass</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
-<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">    </span><span class="p">};</span>
-<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="p">});</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">DexClassLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;dalvik.system.DexClassLoader&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="nx">DexClassLoader</span><span class="p">.</span><span class="nx">$init</span><span class="p">.</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">dexPath</span><span class="p">,</span><span class="w"> </span><span class="nx">optDir</span><span class="p">,</span><span class="w"> </span><span class="nx">libPath</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[DCL] Loading DEX from: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">dexPath</span><span class="p">);</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;java.io.File&quot;</span><span class="p">).</span><span class="nx">$new</span><span class="p">(</span><span class="nx">dexPath</span><span class="p">);</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[DCL] Size: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">f</span><span class="p">.</span><span class="nx">length</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot; bytes&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">$init</span><span class="p">(</span><span class="nx">dexPath</span><span class="p">,</span><span class="w"> </span><span class="nx">optDir</span><span class="p">,</span><span class="w"> </span><span class="nx">libPath</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">);</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">InMemDCL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;dalvik.system.InMemoryDexClassLoader&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nx">InMemDCL</span><span class="p">.</span><span class="nx">$init</span><span class="p">.</span><span class="nx">overload</span><span class="p">(</span><span class="s2">&quot;java.nio.ByteBuffer&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;java.lang.ClassLoader&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="p">.</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[IMDCL] In-memory DEX loaded, size: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">remaining</span><span class="p">());</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">array</span><span class="p">(</span><span class="s2">&quot;byte&quot;</span><span class="p">,</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Array</span><span class="p">(</span><span class="nx">buffer</span><span class="p">.</span><span class="nx">remaining</span><span class="p">()));</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">            </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">bytes</span><span class="p">);</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">            </span><span class="nx">buffer</span><span class="p">.</span><span class="nx">rewind</span><span class="p">();</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/data/local/tmp/dumped_&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;.dex&quot;</span><span class="p">;</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">fos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;java.io.FileOutputStream&quot;</span><span class="p">).</span><span class="nx">$new</span><span class="p">(</span><span class="nx">path</span><span class="p">);</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">            </span><span class="nx">fos</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">bytes</span><span class="p">);</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">            </span><span class="nx">fos</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[IMDCL] Dumped to: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">path</span><span class="p">);</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">$init</span><span class="p">(</span><span class="nx">buffer</span><span class="p">,</span><span class="w"> </span><span class="nx">parent</span><span class="p">);</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">        </span><span class="p">};</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">ClassLoader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;java.lang.ClassLoader&quot;</span><span class="p">);</span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">    </span><span class="nx">ClassLoader</span><span class="p">.</span><span class="nx">loadClass</span><span class="p">.</span><span class="nx">overload</span><span class="p">(</span><span class="s2">&quot;java.lang.String&quot;</span><span class="p">).</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;com.malware&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">name</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;payload&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[CL] loadClass: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">name</span><span class="p">);</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">loadClass</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a><span class="p">});</span>
 </code></pre></div>
 </details>
 

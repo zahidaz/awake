@@ -11283,6 +11283,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#virtualdisplay-invisible-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VirtualDisplay Invisible Rendering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fake-incoming-calls-as-ad-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fake Incoming Calls as Ad Triggers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#attribution-theft" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12310,6 +12332,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#virtualdisplay-invisible-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VirtualDisplay Invisible Rendering
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fake-incoming-calls-as-ad-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fake Incoming Calls as Ad Triggers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#attribution-theft" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12468,9 +12512,19 @@
 <td>Tiny WebView or ImageView with ad network traffic</td>
 </tr>
 <tr>
+<td>VirtualDisplay rendering</td>
+<td><code>DisplayManager.createVirtualDisplay()</code> creates a 1x1 pixel virtual display; ads render on a <code>Presentation</code> targeting that display, invisible to user</td>
+<td><code>createVirtualDisplay</code> calls, <code>Presentation</code> subclass without corresponding user-visible secondary display</td>
+</tr>
+<tr>
 <td>Background ad rendering</td>
 <td>Hidden <a href="../../attacks/webview-exploitation/">WebView</a> loads and "views" ads with screen off</td>
 <td>WebView activity without corresponding UI, battery drain</td>
+</tr>
+<tr>
+<td>Fake incoming call interstitial</td>
+<td><code>TelecomManager.addNewIncomingCall()</code> with a self-managed <code>PhoneAccount</code> (API 26+) triggers incoming call UI; the <code>Connection.onShowIncomingCallUi()</code> callback launches an ad activity instead</td>
+<td><code>MANAGE_OWN_CALLS</code> permission, <code>ConnectionService</code> subclass, immediate <code>DisconnectCause(LOCAL)</code> after ad launch</td>
 </tr>
 <tr>
 <td>Click flooding</td>
@@ -12494,6 +12548,19 @@
 <p><strong>HiddenAds</strong> (2020-2022): <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/new-hiddenads-malware-that-runs-automatically-and-hides-on-google-play-1m-users-affected/">McAfee tracked multiple HiddenAds campaigns</a> affecting 1M+ users via Google Play cleaner apps. The malware ran malicious ad services automatically on installation without requiring user launch, then <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/hiddenads-spread-via-android-gaming-apps-on-google-play/">changed its icon to the Google Play icon</a> and renamed itself "Google Play" or "Setting" to hide from the user. A separate campaign infected 38 games reaching 35M+ users.</p>
 <p><strong>Clicker</strong> (2022): <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/new-malicious-clicker-found-in-apps-installed-by-20m-users/">McAfee found 16 clicker apps on Google Play with 20M+ combined downloads</a> using the <code>com.click.cas</code> and <code>com.liveposting</code> libraries. The malware delayed activation by over an hour after installation and paused when the user was actively using the device, making detection through manual testing nearly impossible.</p>
 <p><strong>Invisible Adware</strong> (2023): <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/invisible-adware-unveiling-ad-fraud-targeting-android-users/">McAfee uncovered 43 apps on Google Play</a> with 2.5M downloads that loaded ads only when the device screen was off. The apps waited multiple weeks after installation before activating and requested "power saving exclusion" and "draw over other apps" permissions to maintain background execution.</p>
+<h2 id="virtualdisplay-invisible-rendering">VirtualDisplay Invisible Rendering<a class="headerlink" href="#virtualdisplay-invisible-rendering" title="Permanent link">&para;</a></h2>
+<p>A technique where ads render on a virtual display that the user never sees. The app creates a <code>VirtualDisplay</code> with 1x1 pixel dimensions via <code>DisplayManager.createVirtualDisplay()</code>, then renders a <code>Presentation</code> (designed for secondary displays like Chromecast) on that surface. The ad loads, renders, and registers impressions and clicks, but is completely invisible because the display surface is a single pixel.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">DisplayManager</span><span class="w"> </span><span class="n">dm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">DisplayManager</span><span class="p">)</span><span class="w"> </span><span class="n">getSystemService</span><span class="p">(</span><span class="n">DISPLAY_SERVICE</span><span class="p">);</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">VirtualDisplay</span><span class="w"> </span><span class="n">vd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dm</span><span class="p">.</span><span class="na">createVirtualDisplay</span><span class="p">(</span><span class="s">&quot;ad_surface&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">surface</span><span class="p">,</span><span class="w"> </span><span class="n">DisplayManager</span><span class="p">.</span><span class="na">VIRTUAL_DISPLAY_FLAG_PRESENTATION</span><span class="p">);</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">AdPresentation</span><span class="w"> </span><span class="n">presentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">AdPresentation</span><span class="p">(</span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">vd</span><span class="p">.</span><span class="na">getDisplay</span><span class="p">());</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">presentation</span><span class="p">.</span><span class="na">show</span><span class="p">();</span>
+</code></pre></div>
+<p>This is more sophisticated than pixel stuffing because the ad SDK believes it is rendering on a legitimate secondary display at full resolution, generating valid impression metrics. Combined with <a href="../../attacks/anti-analysis-techniques/#hidden-api-bypass">HiddenApiBypass</a> to instantiate <code>DisplayManager</code> directly (avoiding <code>Context.getSystemService()</code> which would expose the real package name), it becomes difficult for ad networks to detect programmatically.</p>
+<h2 id="fake-incoming-calls-as-ad-triggers">Fake Incoming Calls as Ad Triggers<a class="headerlink" href="#fake-incoming-calls-as-ad-triggers" title="Permanent link">&para;</a></h2>
+<p>Adware abusing Android's <code>TelecomManager</code> to simulate incoming phone calls, using the call UI as a trigger to display full-screen ad interstitials. The app registers a self-managed <code>PhoneAccount</code> (capability <code>CAPABILITY_SELF_MANAGED</code> = 2048) and its own <code>ConnectionService</code>, then calls <code>TelecomManager.addNewIncomingCall()</code> to inject fake calls.</p>
+<p>When the system shows the incoming call UI, the malware's <code>Connection.onShowIncomingCallUi()</code> callback fires and launches an ad activity. The call is immediately disconnected with <code>DisconnectCause(LOCAL)</code> so it never appears in call logs.</p>
+<p>Requires only <code>MANAGE_OWN_CALLS</code> (a normal permission, no user prompt). Works on Android 8.0+ (API 26, when <code>CAPABILITY_SELF_MANAGED</code> was introduced). The user sees a brief incoming call animation, then a full-screen ad appears, designed to confuse the user into thinking the ad is related to the "call."</p>
 <h2 id="attribution-theft">Attribution Theft<a class="headerlink" href="#attribution-theft" title="Permanent link">&para;</a></h2>
 <p>A distinct fraud category where a malicious SDK embedded in a legitimate-looking app steals attribution data from co-installed analytics SDKs (AppsFlyer, Adjust, Branch, Kochava) to fraudulently claim credit for app installs and user actions.</p>
 <h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
@@ -12503,13 +12570,13 @@
 <li>It reads attribution data: install source, campaign ID, ad group, creative, tracker tokens</li>
 <li>It exfiltrates this data to its own servers, claiming the install attribution</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">Object</span><span class="w"> </span><span class="n">attribution</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Adjust</span><span class="p">.</span><span class="na">getAttribution</span><span class="p">();</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">JSONObject</span><span class="w"> </span><span class="n">stolen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JSONObject</span><span class="p">();</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;campaign&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;campaign&quot;</span><span class="p">));</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;adgroup&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;adgroup&quot;</span><span class="p">));</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;network&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;network&quot;</span><span class="p">));</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;tracker_token&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;trackerToken&quot;</span><span class="p">));</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">exfiltrate</span><span class="p">(</span><span class="n">stolen</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">Object</span><span class="w"> </span><span class="n">attribution</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Adjust</span><span class="p">.</span><span class="na">getAttribution</span><span class="p">();</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">JSONObject</span><span class="w"> </span><span class="n">stolen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JSONObject</span><span class="p">();</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;campaign&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;campaign&quot;</span><span class="p">));</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;adgroup&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;adgroup&quot;</span><span class="p">));</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;network&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;network&quot;</span><span class="p">));</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">stolen</span><span class="p">.</span><span class="na">put</span><span class="p">(</span><span class="s">&quot;tracker_token&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">getField</span><span class="p">(</span><span class="n">attribution</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;trackerToken&quot;</span><span class="p">));</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">exfiltrate</span><span class="p">(</span><span class="n">stolen</span><span class="p">);</span>
 </code></pre></div>
 <p>For AppsFlyer, the SDK reads from SharedPreferences (<code>appsflyer-data</code> key) to extract the <code>attributionId</code> without calling any AppsFlyer API.</p>
 <h3 id="grey-market-ad-sdks">Grey-Market Ad SDKs<a class="headerlink" href="#grey-market-ad-sdks" title="Permanent link">&para;</a></h3>

@@ -983,6 +983,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#crypto-wallet-draining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crypto Wallet Draining
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#encrypted-messaging-interception" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12459,6 +12470,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#crypto-wallet-draining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crypto Wallet Draining
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#encrypted-messaging-interception" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12745,6 +12767,21 @@
 </tr>
 </tbody>
 </table>
+<h3 id="crypto-wallet-draining">Crypto Wallet Draining<a class="headerlink" href="#crypto-wallet-draining" title="Permanent link">&para;</a></h3>
+<p>Accessibility-based crypto wallet drainers robotically operate the victim's wallet app to transfer funds to the attacker. The accessibility service config declares <code>packageNames</code> targeting specific wallet apps (MetaMask, imToken, Trust Wallet, TokenPocket) with <code>typeAllMask</code> events, <code>canRetrieveWindowContent=true</code>, and <code>canPerformGestures=true</code>.</p>
+<p>The attack operates as a state machine where each state corresponds to a screen in the wallet app:</p>
+<ol>
+<li>Detect UI language (Chinese/English/Vietnamese) by searching for known UI strings</li>
+<li>Read USDT balance from accessibility nodes, verify &gt; 0</li>
+<li>Check gas balance is sufficient for the transfer (e.g., &gt;= 0.0035 ETH)</li>
+<li>Navigate to USDT token transfer screen</li>
+<li>Inject attacker's wallet address into the recipient field via <code>ACTION_ARGUMENT_SET_TEXT</code> (action code 2097152)</li>
+<li>Input the full token balance as the transfer amount</li>
+<li>Click through Next, Confirm, and Send buttons via <code>performAction(ACTION_CLICK)</code></li>
+</ol>
+<p>Each wallet app requires its own operator implementation because the UI layouts differ. The operator classes handle wallet-specific navigation, button labels, and node hierarchies.</p>
+<p>A variant targets mnemonic/seed phrase theft: the malware navigates to the seed phrase backup screen, walks the UI node tree looking for a parent container with 12+ children (the word grid), reads each word, builds a JSON payload, and exfiltrates it to a C2 endpoint.</p>
+<p>These drainers are distributed as utility apps (calling helpers, phone cleaners) to trick users into enabling the accessibility service. A custom URI scheme (e.g., <code>usdt://</code>) is commonly used as a callback mechanism between the main app process and the accessibility service process.</p>
 <h3 id="encrypted-messaging-interception">Encrypted Messaging Interception<a class="headerlink" href="#encrypted-messaging-interception" title="Permanent link">&para;</a></h3>
 <p>A technique <a href="../../malware/families/sturnus/">introduced by Sturnus</a> in 2025 that exploits a fundamental weakness in encrypted messaging apps: messages must be decrypted for display. The accessibility service reads message content after the messaging app has already decrypted it for the user's screen.</p>
 <div class="admonition info">

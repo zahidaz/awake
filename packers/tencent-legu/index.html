@@ -6384,6 +6384,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Identification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -6394,6 +6411,45 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Protection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runtime-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Loading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getpackagename-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        getPackageName() Override
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -12268,6 +12324,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Identification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -12278,6 +12351,45 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Protection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runtime-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Loading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getpackagename-override" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        getPackageName() Override
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anti-Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -12396,31 +12508,68 @@
 <thead>
 <tr>
 <th>Artifact</th>
+<th>Location</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Native library</td>
-<td><code>libshell-super.2019.so</code>, <code>libshella-*.so</code>, or <code>libtxoprot.so</code></td>
+<td>Application class</td>
+<td><code>AndroidManifest.xml</code></td>
+<td><code>com.tencent.StubShell.TxAppEntry</code> replaces the real Application class</td>
 </tr>
 <tr>
-<td>DEX stub</td>
-<td>Minimal <code>classes.dex</code> with shell loader class</td>
+<td>Meta-data</td>
+<td><code>AndroidManifest.xml</code></td>
+<td><code>&lt;meta-data android:name="TxAppEntry" android:value="&lt;real_application_class&gt;"/&gt;</code> stores the original Application class name</td>
 </tr>
 <tr>
-<td>Asset files</td>
-<td>Encrypted DEX in <code>assets/</code> (e.g., <code>classes.dex.dat</code>)</td>
+<td>Native libraries</td>
+<td><code>lib/armeabi/</code></td>
+<td><code>libshella-&lt;version&gt;.so</code> + <code>libshellx-&lt;version&gt;.so</code> (versioned by Legu release)</td>
 </tr>
 <tr>
-<td>Metadata</td>
-<td><code>tencent_stub</code> in APK metadata</td>
+<td>DEX stubs</td>
+<td><code>lib/armeabi/</code></td>
+<td><code>mix.dex</code> + <code>mixz.dex</code> containing a single empty <code>com.mixClass{}</code></td>
+</tr>
+<tr>
+<td>Older native names</td>
+<td><code>lib/</code></td>
+<td><code>libshell-super.2019.so</code>, <code>libtxoprot.so</code> in earlier versions</td>
+</tr>
+<tr>
+<td>Runtime directory</td>
+<td><code>/data/data/&lt;pkg&gt;/</code></td>
+<td><code>tx_shell/</code> directory created at runtime containing <code>libshella.so</code>, <code>libshellb.so</code>, <code>libshellc.so</code></td>
+</tr>
+<tr>
+<td>Crash reporting</td>
+<td>DEX</td>
+<td><code>com.tencent.bugly.legu.crashreport.CrashReport</code> with app ID <code>900015015</code></td>
+</tr>
+<tr>
+<td>Version string</td>
+<td>DEX</td>
+<td>Static method <code>c()</code> on the shell class returns version (e.g., <code>"2.10.7.1"</code>); static field <code>version</code> holds a hash</td>
 </tr>
 </tbody>
 </table>
+<h3 id="version-detection">Version Detection<a class="headerlink" href="#version-detection" title="Permanent link">&para;</a></h3>
+<p>The Legu version can be determined from the native library filename suffix (<code>libshella-2.10.7.1.so</code>) or by calling the version method at runtime:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">TxAppEntry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;com.tencent.StubShell.TxAppEntry&quot;</span><span class="p">);</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Legu version: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">TxAppEntry</span><span class="p">.</span><span class="nx">c</span><span class="p">());</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">});</span>
+</code></pre></div>
 <h2 id="protection">Protection<a class="headerlink" href="#protection" title="Permanent link">&para;</a></h2>
+<h3 id="runtime-loading">Runtime Loading<a class="headerlink" href="#runtime-loading" title="Permanent link">&para;</a></h3>
+<p><code>TxAppEntry.attachBaseContext()</code> loads the native shell library, which decrypts the real DEX from within the outer <code>classes.dex</code> using <code>mmap</code>/<code>mprotect</code>, then calls <code>load()</code> to inject the decrypted classes into the running process. <code>runCreate()</code> delegates to the real Application's <code>onCreate()</code>. The original code exists only in memory and is not extractable statically.</p>
+<h3 id="getpackagename-override"><code>getPackageName()</code> Override<a class="headerlink" href="#getpackagename-override" title="Permanent link">&para;</a></h3>
+<p>Legu overrides <code>getPackageName()</code> with stack trace inspection to manipulate the ContentProvider installation order. This ensures the shell's providers initialize before the real app's providers, which is required for the decryption chain to complete before any app component tries to access protected classes.</p>
+<h3 id="anti-analysis">Anti-Analysis<a class="headerlink" href="#anti-analysis" title="Permanent link">&para;</a></h3>
 <ul>
-<li>DEX encryption with AES</li>
+<li>DEX encryption with AES (decrypted via native library at runtime)</li>
 <li>Native library anti-debugging (ptrace self-attach)</li>
 <li>Emulator detection via hardware properties</li>
 <li>Anti-Frida checks (port scanning, <code>/proc/maps</code> inspection, named pipe detection)</li>
@@ -12428,50 +12577,52 @@
 <li>Code segment checksumming</li>
 </ul>
 <h2 id="unpacking">Unpacking<a class="headerlink" href="#unpacking" title="Permanent link">&para;</a></h2>
+<p>Static unpacking is not feasible since the DEX is decrypted in memory by native code. Dynamic analysis is required.</p>
 <h3 id="standard-approach">Standard Approach<a class="headerlink" href="#standard-approach" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Hook <code>DexClassLoader</code> or <code>InMemoryDexClassLoader</code> to intercept DEX loading</li>
 <li>Dump DEX bytes from memory after native loader decrypts</li>
 <li>Alternative: use <a href="https://github.com/hluwa/frida-dexdump">frida-dexdump</a> which scans process memory for DEX headers</li>
+<li>Memory dump from <code>/proc/&lt;pid&gt;/maps</code> to locate decrypted DEX regions</li>
 </ol>
 <h3 id="anti-frida-bypass">Anti-Frida Bypass<a class="headerlink" href="#anti-frida-bypass" title="Permanent link">&para;</a></h3>
 <p>Tencent Legu checks for Frida by scanning <code>/proc/self/maps</code> for <code>frida-agent</code> strings, probing port 27042, and checking named pipes in <code>/proc/self/fd/</code>. A combined bypass hooks these checks at the native level:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">openPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s2">&quot;libc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="p">);</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">openPtr</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nx">onEnter</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">args</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">readUtf8String</span><span class="p">();</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">},</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nx">onLeave</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;/proc&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="w"> </span><span class="o">&amp;&amp;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;/maps&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">isMaps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">});</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="kd">var</span><span class="w"> </span><span class="nx">readPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s2">&quot;libc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;read&quot;</span><span class="p">);</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">readPtr</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nx">onLeave</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isMaps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">x1</span><span class="p">;</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">buf</span><span class="p">.</span><span class="nx">readUtf8String</span><span class="p">();</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">content</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;frida&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">                </span><span class="nx">buf</span><span class="p">.</span><span class="nx">writeUtf8String</span><span class="p">(</span><span class="nx">content</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/frida/g</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;aaaaa&quot;</span><span class="p">));</span>
-<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">            </span><span class="p">}</span>
-<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="p">});</span>
-<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
-<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="kd">var</span><span class="w"> </span><span class="nx">connectPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s2">&quot;libc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;connect&quot;</span><span class="p">);</span>
-<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">connectPtr</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="nx">onEnter</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">sockaddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">args</span><span class="p">[</span><span class="mf">1</span><span class="p">];</span>
-<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">sockaddr</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mf">2</span><span class="p">).</span><span class="nx">readU8</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">8</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">sockaddr</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mf">3</span><span class="p">).</span><span class="nx">readU8</span><span class="p">();</span>
-<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">port</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">27042</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">            </span><span class="nx">args</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ptr</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
-<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="p">});</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">var</span><span class="w"> </span><span class="nx">openPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s2">&quot;libc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;open&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">openPtr</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nx">onEnter</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">args</span><span class="p">[</span><span class="mf">0</span><span class="p">].</span><span class="nx">readUtf8String</span><span class="p">();</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nx">onLeave</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;/proc&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;/maps&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">            </span><span class="k">this</span><span class="p">.</span><span class="nx">isMaps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">});</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="kd">var</span><span class="w"> </span><span class="nx">readPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s2">&quot;libc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;read&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">readPtr</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nx">onLeave</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">retval</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isMaps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">context</span><span class="p">.</span><span class="nx">x1</span><span class="p">;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">            </span><span class="kd">var</span><span class="w"> </span><span class="nx">content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">buf</span><span class="p">.</span><span class="nx">readUtf8String</span><span class="p">();</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">content</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">content</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;frida&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">!==</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">                </span><span class="nx">buf</span><span class="p">.</span><span class="nx">writeUtf8String</span><span class="p">(</span><span class="nx">content</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/frida/g</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;aaaaa&quot;</span><span class="p">));</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">            </span><span class="p">}</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="p">});</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="kd">var</span><span class="w"> </span><span class="nx">connectPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Module</span><span class="p">.</span><span class="nx">findExportByName</span><span class="p">(</span><span class="s2">&quot;libc.so&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;connect&quot;</span><span class="p">);</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="nx">Interceptor</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">connectPtr</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">    </span><span class="nx">onEnter</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">sockaddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">args</span><span class="p">[</span><span class="mf">1</span><span class="p">];</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">sockaddr</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mf">2</span><span class="p">).</span><span class="nx">readU8</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mf">8</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">sockaddr</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="mf">3</span><span class="p">).</span><span class="nx">readU8</span><span class="p">();</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">port</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">27042</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">            </span><span class="nx">args</span><span class="p">[</span><span class="mf">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">ptr</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="p">});</span>
 </code></pre></div>
 <p>For Legu versions after 2023, the packer also scans for <code>frida-gadget</code> in loaded modules. The <a href="https://frida.re/docs/gadget/">Frida naming convention</a> for renamed gadgets can bypass the string-based check. Using <code>frida-server</code> with <code>--listen 0.0.0.0:1337</code> on a non-standard port avoids port scanning detection.</p>
 <h2 id="malware-usage">Malware Usage<a class="headerlink" href="#malware-usage" title="Permanent link">&para;</a></h2>

@@ -1867,6 +1867,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hidden-api-bypass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hidden API Bypass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-patch-date-behavioral-branching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Patch Date Behavioral Branching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#apk-and-manifest-corruption" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1989,6 +2011,17 @@
     <span class="md-ellipsis">
       
         Frida-Based Batch Decryption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-confusion-obfuscation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visual Confusion Obfuscation
       
     </span>
   </a>
@@ -13003,6 +13036,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#hidden-api-bypass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hidden API Bypass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-patch-date-behavioral-branching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Security Patch Date Behavioral Branching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#apk-and-manifest-corruption" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -13125,6 +13180,17 @@
     <span class="md-ellipsis">
       
         Frida-Based Batch Decryption
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-confusion-obfuscation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Visual Confusion Obfuscation
       
     </span>
   </a>
@@ -13822,6 +13888,36 @@
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
 </code></pre></div>
 <p>If a proxy is detected, the SDK refuses to initialize, preventing analysts from capturing network traffic. This check is trivial to bypass via Frida (hook <code>System.getProperty</code> to return null for proxy keys), but it's effective against automated sandbox environments that route all traffic through a proxy by default.</p>
+<h2 id="hidden-api-bypass">Hidden API Bypass<a class="headerlink" href="#hidden-api-bypass" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/LSPosed/AndroidHiddenApiBypass">AndroidHiddenApiBypass</a> (<code>org.lsposed.hiddenapibypass</code>) is an open-source library that circumvents Android's hidden API restrictions introduced in Android 9. Normally, apps cannot call <code>@hide</code> annotated methods or directly instantiate system service classes. The library has multiple bypass variants: the original uses <code>Unsafe</code> memory operations, while the newer LSPass variant uses <code>Property.of()</code> to achieve the same result without <code>Unsafe</code>.</p>
+<p>In malware, it enables:</p>
+<ul>
+<li>Creating <code>DisplayManager</code>, <code>TelecomManager</code>, or <code>NotificationManager</code> instances directly (bypassing <code>Context.getSystemService()</code> which would expose the real package name)</li>
+<li>Accessing private fields on <code>BaseDexClassLoader</code> for <a href="../dynamic-code-loading/">classloader injection</a></li>
+<li>Calling hidden methods that the public API does not expose</li>
+</ul>
+<p>Legitimate use exists in Xposed/LSPosed modules and root apps. In a non-root app from an unknown developer, it is a strong indicator of API abuse. Look for <code>HiddenApiBypass.newInstance()</code> or <code>HiddenApiBypass.invoke()</code> calls.</p>
+<h2 id="security-patch-date-behavioral-branching">Security Patch Date Behavioral Branching<a class="headerlink" href="#security-patch-date-behavioral-branching" title="Permanent link">&para;</a></h2>
+<p>Malware checks <code>Build.VERSION.SECURITY_PATCH</code> against a threshold date to vary its behavior based on the device's security level. Newer security patches mean stricter OS restrictions (notification channels, background service limits, alarm restrictions), so the malware selects different code paths:</p>
+<table>
+<thead>
+<tr>
+<th>Device Age</th>
+<th>Techniques Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Older patches</td>
+<td>Direct techniques: visible notifications, simple <code>AlarmManager</code>, standard service starts</td>
+</tr>
+<tr>
+<td>Newer patches</td>
+<td>Evasion techniques: <code>TelecomManager</code> fake calls, <code>VirtualDisplay</code> invisible rendering, <code>HiddenApiBypass</code> for direct system service instantiation</td>
+</tr>
+</tbody>
+</table>
+<p>This is adaptive malware that detects the security posture of the device and chooses the most effective attack path. The threshold date roughly corresponds to when specific Android security restrictions were enforced. Combined with <code>Build.VERSION.SDK_INT</code> checks, it creates multi-layered execution guardrails that maximize compatibility across device populations.</p>
 <h2 id="apk-and-manifest-corruption">APK and Manifest Corruption<a class="headerlink" href="#apk-and-manifest-corruption" title="Permanent link">&para;</a></h2>
 <h3 id="malformed-zip-headers">Malformed ZIP Headers<a class="headerlink" href="#malformed-zip-headers" title="Permanent link">&para;</a></h3>
 <p><a href="../../malware/families/trickmo/">TrickMo</a> uses malformed ZIP files combined with JSONPacker. The corrupted ZIP structure causes analysis tools (apktool, JADX, unzip) to fail or produce incomplete output, while the Android runtime tolerates the malformations and installs the APK normally. <a href="https://www.cleafy.com/cleafy-labs/a-new-trickmo-saga-from-banking-trojan-to-victims-data-leak">Cleafy documented</a> this as a deliberate anti-analysis layer across 40+ variants.</p>
@@ -13956,6 +14052,9 @@
 <a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="p">});</span>
 </code></pre></div>
 <p>Adapt the class name to match the target's specific obfuscator.</p>
+<h4 id="visual-confusion-obfuscation">Visual Confusion Obfuscation<a class="headerlink" href="#visual-confusion-obfuscation" title="Permanent link">&para;</a></h4>
+<p>An obfuscation technique that renames classes, methods, and packages using visually similar characters: uppercase <code>O</code>, lowercase <code>o</code>, and zero <code>0</code> (e.g., <code>OooO0O0</code>, <code>o0000Ooo</code>, <code>Oooo0OO</code>). Unlike standard R8/ProGuard which uses short alphabetic names (<code>a</code>, <code>b</code>, <code>a0</code>), this pattern is deliberately adversarial, designed to make manual analysis painful because all identifiers look identical at a glance.</p>
+<p>When this obfuscation style appears, it indicates deliberate anti-analyst intent rather than standard build-time optimization. R8/ProGuard obfuscation is functional (reduce APK size); visual confusion obfuscation is hostile.</p>
 <h3 id="domain-generation-algorithms">Domain Generation Algorithms<a class="headerlink" href="#domain-generation-algorithms" title="Permanent link">&para;</a></h3>
 <p><a href="../../malware/families/octo/">Octo2</a> introduced DGA-based C2 resolution, generating domain names algorithmically so that blocking individual domains is ineffective. The DGA seed and algorithm are embedded in a dynamically loaded native library, adding another analysis layer.</p>
 <h2 id="families-by-anti-analysis-depth">Families by Anti-Analysis Depth<a class="headerlink" href="#families-by-anti-analysis-depth" title="Permanent link">&para;</a></h2>
