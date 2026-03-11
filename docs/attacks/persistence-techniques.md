@@ -142,11 +142,50 @@ Each execution enqueues the next run with a short delay (typically 15-60 seconds
 
 The pattern is difficult to detect at the manifest level because WorkManager registration is purely programmatic. Look for `Worker` subclasses that call `WorkManager.enqueue()` from within `doWork()`.
 
-### AccountManager Sync Adapter
+### SyncAdapter Persistence
 
-An underused but effective persistence method. The malware registers as a sync adapter for a custom account type. Android's sync framework periodically triggers the adapter, providing reliable execution without visible notifications.
+The app registers as a sync adapter for a custom account type. Android's sync framework periodically triggers the adapter, providing reliable background execution without visible notifications or foreground services. The sync adapter runs in its own process and benefits from the system's built-in retry, backoff, and scheduling logic.
 
-The sync adapter runs in its own process and benefits from the system's built-in retry and scheduling logic. [Mandrake](../malware/families/mandrake.md) used this technique to maintain periodic C2 communication.
+The setup requires four manifest components:
+
+1. An `AccountAuthenticator` service that creates the fake account type
+2. An `authenticator.xml` resource defining the account type
+3. A `SyncAdapter` service that performs the actual work
+4. A `syncadapter.xml` resource linking the adapter to the account type and a content authority
+
+```xml
+<service android:name=".auth.AuthService" android:exported="true">
+    <intent-filter>
+        <action android:name="android.accounts.AccountAuthenticator" />
+    </intent-filter>
+    <meta-data android:name="android.accounts.AccountAuthenticator"
+        android:resource="@xml/authenticator" />
+</service>
+
+<service android:name=".sync.SyncService" android:exported="true">
+    <intent-filter>
+        <action android:name="android.content.SyncAdapter" />
+    </intent-filter>
+    <meta-data android:name="android.content.SyncAdapter"
+        android:resource="@xml/syncadapter" />
+</service>
+```
+
+At runtime, the app creates the account and enables periodic sync:
+
+```java
+Account account = new Account("SyncAccount", "com.app.account.type");
+AccountManager.get(context).addAccountExplicitly(account, null, null);
+ContentResolver.setIsSyncable(account, authority, 1);
+ContentResolver.setSyncAutomatically(account, authority, true);
+ContentResolver.addPeriodicSync(account, authority, Bundle.EMPTY, 3600);
+```
+
+The `onPerformSync()` callback fires periodically. The app uses this to sync data to C2, refresh configuration, or trigger any background work. The sync framework is exempt from most background execution restrictions because it's a core Android platform feature.
+
+Aggressive implementations register multiple account types with separate SyncAdapter pairs (e.g., a "regular" account and a "guest" account), doubling the execution surface. Requires `GET_ACCOUNTS`, `AUTHENTICATE_ACCOUNTS`, `WRITE_SYNC_SETTINGS`, and `MANAGE_ACCOUNTS` permissions, all of which are normal (auto-granted) on older API levels.
+
+[Mandrake](../malware/families/mandrake.md) used this technique to maintain periodic C2 communication.
 
 ## Multi-Process Keep-Alive
 
@@ -306,6 +345,14 @@ Looper.myQueue().addIdleHandler(() -> {
 ```
 
 Returning `true` keeps the handler registered permanently. This provides continuous opportunistic execution without timers, alarms, or services. The execution is invisible in process dumps and doesn't appear as a running service or scheduled job.
+
+## Hellodaemon Keep-Alive
+
+[HelloDaemon](https://github.com/xingda920813/HelloDaemon) (`com.xdandroid.hellodaemon`) is an open-source Chinese keep-alive library designed to prevent Android from killing background processes. It combines multiple persistence mechanisms into a single SDK: `JobScheduler` with `setPersisted(true)`, repeating `AlarmManager` alarms, `BOOT_COMPLETED` receivers, and cross-process daemon binding. If one mechanism is killed, the others detect it and restart.
+
+The library uses a custom broadcast action (`com.xdandroid.hellodaemon.CANCEL_JOB_ALARM_SUB`) for internal coordination between its components.
+
+HelloDaemon appears in aggressive adware, data collection SDKs, and push notification frameworks targeting Chinese OEM devices (Xiaomi, Huawei, Oppo, Vivo), which kill background apps more aggressively than stock Android. Detection: `hellodaemon` in class names, the custom broadcast action, or `xdandroid` package references.
 
 ## OEM-Specific Persistence
 
