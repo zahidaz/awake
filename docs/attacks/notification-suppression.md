@@ -48,6 +48,20 @@ public void onNotificationPosted(StatusBarNotification sbn) {
 
 The same `NotificationListenerService` that steals OTP codes also suppresses the transaction alert that follows. This is the standard pattern in modern banking trojans: intercept the 2FA code, suppress the confirmation notification, and the victim never knows a transaction occurred.
 
+### Runtime Listener Hijacking
+
+A more sophisticated approach than registering a new `NotificationListenerService`. Instead of declaring a separate listener component (which is visible in the manifest and suspicious), the malware hijacks an already-connected listener at runtime by swapping its internal fields via reflection:
+
+1. Reflect into `ActivityThread.mServices` (a private `ArrayMap<IBinder, Service>`) to find the registered `NotificationListenerService` instance
+2. Create a malicious replacement `NotificationListenerService` subclass
+3. Copy `mWrapper` (the IPC binder) from the real service to the malicious one
+4. Set `isConnected = true` on the malicious service
+5. Replace `mHandler` on the real service with the malicious one's handler
+
+All notification callbacks now route through the attacker's handler. The replacement listener reads `android.text` from every notification's extras (capturing OTP codes, banking alerts, 2FA tokens), broadcasts the content internally, then calls `cancelAllNotifications()` so the user never sees them.
+
+This avoids registering a new suspicious component in the manifest. The only manifest entry is the original (legitimate-looking) `NotificationListenerService` that the user already granted access to. The hijack happens entirely at runtime via reflection, requiring [Hidden API Bypass](anti-analysis-techniques.md#hidden-api-bypass) to access the private `ActivityThread` fields.
+
 ## Play Protect Suppression
 
 Google Play Protect displays warnings when it detects potentially harmful apps. Malware suppresses these warnings to prevent the user from uninstalling it.
