@@ -1379,6 +1379,8 @@
       
         
       
+        
+      
     
     
     
@@ -1637,6 +1639,34 @@
     
   
     Camera & Microphone Surveillance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../attacks/carrier-billing-fraud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier Billing Fraud
   
 
     
@@ -12268,6 +12298,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#double-packing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Double Packing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Double Packing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analysis-impact" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis Impact
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unpacking-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unpacking Approach
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#detection-evasion-effectiveness" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -13019,8 +13099,8 @@
 <td>Malware authors increasingly use commercial packers (Virbox, DexGuard) rather than custom solutions. Reduces development cost at the expense of identifiable signatures.</td>
 </tr>
 <tr>
-<td>Multi-layer protection</td>
-<td>Modern samples combine a commercial packer with custom obfuscation layers. <a href="../malware/families/klopatra/">Klopatra</a> uses Virbox + custom string encryption.</td>
+<td>Multi-layer / double packing</td>
+<td>Modern samples combine two commercial packers or a commercial packer with custom obfuscation. See <a href="#double-packing">Double Packing</a>.</td>
 </tr>
 <tr>
 <td>Packer-as-a-Service</td>
@@ -13052,6 +13132,55 @@
 </tr>
 </tbody>
 </table>
+<h2 id="double-packing">Double Packing<a class="headerlink" href="#double-packing" title="Permanent link">&para;</a></h2>
+<p>Using two distinct packers on the same APK, layering their protections so that an analyst must defeat both to reach the original code. The outer packer's Application class loads first, decrypts and initializes its runtime, then hands off to the inner packer's Application class, which performs its own decryption before finally loading the real app code.</p>
+<p>A typical combination pairs a Chinese packer (<a href="virbox/">Virbox</a>, <a href="qihoo-360-jiagu/">360 Jiagu</a>) as the outer layer with a second packer or custom protection as the inner layer. The outer packer encrypts the inner packer's stub along with the real payload, so static analysis sees only the outermost stub classes.</p>
+<h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>APK
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a> └─ Outer packer Application (e.g., Virbox l637078ca)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>     ├─ Decrypts native library from assets
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>     ├─ Loads real Application class from SAPP_NAME metadata
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>     └─ Inner packer Application (e.g., 360 Jiagu GZckWAeyProtected)
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>         ├─ Initializes its own protection runtime
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>         └─ Loads the actual app code
+</code></pre></div>
+<p>The outer packer handles DEX encryption and native library protection. The inner packer adds its own anti-analysis layer (anti-debugging, integrity checks, additional code hiding). Each packer's anti-tampering mechanisms independently verify their own integrity, so bypassing one does not disable the other.</p>
+<h3 id="analysis-impact">Analysis Impact<a class="headerlink" href="#analysis-impact" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Why It's Harder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Two unpacking stages</td>
+<td>Must dump DEX after each packer initializes, not just once</td>
+</tr>
+<tr>
+<td>Nested native libraries</td>
+<td>Two sets of <code>.so</code> files to reverse, each with different protection</td>
+</tr>
+<tr>
+<td>Combined anti-analysis</td>
+<td>Root/emulator/hooking checks from both packers fire independently</td>
+</tr>
+<tr>
+<td>Ordering dependency</td>
+<td>Inner packer only initializes after outer packer completes, so timing hooks is critical</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unpacking-approach">Unpacking Approach<a class="headerlink" href="#unpacking-approach" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Identify both packers via APKiD and native library inspection (e.g., Virbox assets + <code>libjiagu.so</code> presence)</li>
+<li>Dump DEX after the outer packer loads using <code>frida-dexdump</code> or <code>DexClassLoader</code> hooks</li>
+<li>The dumped DEX will still be protected by the inner packer</li>
+<li>Re-analyze the dumped output, then dump again after the inner packer initializes</li>
+<li>The second dump contains the real app code</li>
+</ol>
+<p>Alternatively, wait for both packers to fully initialize before dumping. A late-stage memory dump (after <code>Application.onCreate()</code> completes) often captures the fully unpacked DEX, skipping the intermediate stage.</p>
 <h2 id="detection-evasion-effectiveness">Detection Evasion Effectiveness<a class="headerlink" href="#detection-evasion-effectiveness" title="Permanent link">&para;</a></h2>
 <p>How much each protection layer reduces detection rates across multi-engine scanning:</p>
 <table>

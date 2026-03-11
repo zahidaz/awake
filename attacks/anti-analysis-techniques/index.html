@@ -1402,6 +1402,8 @@
       
         
       
+        
+      
     
     
     
@@ -1867,6 +1869,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install-referrer-gating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install Referrer Gating
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-activity-launch-bypass-mediasession" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background Activity Launch Bypass (MediaSession)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hidden-api-bypass" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1882,6 +1906,17 @@
     <span class="md-ellipsis">
       
         Security Patch Date Behavioral Branching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instrumentation-hijack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instrumentation Hijack
       
     </span>
   </a>
@@ -2030,6 +2065,17 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dex-bloat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEX Bloat
+      
+    </span>
+  </a>
   
 </li>
         
@@ -2246,6 +2292,34 @@
     
   
     Camera & Microphone Surveillance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier-billing-fraud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier Billing Fraud
   
 
     
@@ -13036,6 +13110,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install-referrer-gating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install Referrer Gating
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-activity-launch-bypass-mediasession" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background Activity Launch Bypass (MediaSession)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#hidden-api-bypass" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -13051,6 +13147,17 @@
     <span class="md-ellipsis">
       
         Security Patch Date Behavioral Branching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instrumentation-hijack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instrumentation Hijack
       
     </span>
   </a>
@@ -13199,6 +13306,17 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dex-bloat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DEX Bloat
+      
+    </span>
+  </a>
   
 </li>
         
@@ -13581,6 +13699,12 @@
 <td>ByteDance apps internally, open-source adoption growing</td>
 </tr>
 <tr>
+<td><a href="https://github.com/iqiyi/xHook">xHook</a></td>
+<td>PLT/GOT hooking (iQIYI)</td>
+<td>Minimal</td>
+<td>Stable PLT hooking, widely adopted in Chinese app ecosystem. Predecessor to ByteHook.</td>
+</tr>
+<tr>
 <td><a href="https://github.com/bytedance/bhook">ByteHook</a></td>
 <td>PLT/GOT hooking (ByteDance)</td>
 <td>Minimal</td>
@@ -13888,6 +14012,37 @@
 <a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="p">}</span>
 </code></pre></div>
 <p>If a proxy is detected, the SDK refuses to initialize, preventing analysts from capturing network traffic. This check is trivial to bypass via Frida (hook <code>System.getProperty</code> to return null for proxy keys), but it's effective against automated sandbox environments that route all traffic through a proxy by default.</p>
+<h2 id="install-referrer-gating">Install Referrer Gating<a class="headerlink" href="#install-referrer-gating" title="Permanent link">&para;</a></h2>
+<p>Malware that connects to the <a href="https://developer.android.com/google/play/installreferrer">Google Play Install Referrer API</a> before executing any malicious code. The payload only activates if the referrer connection succeeds and the referrer data contains valid attribution timestamps (e.g., click timestamp exceeds a threshold). This means sideloaded APKs never trigger the payload: when an analyst downloads the APK from VirusTotal and installs it on an emulator, there is no referrer data, so the malicious chain never fires.</p>
+<p>This is highly effective against dynamic analysis because most sandboxes install APKs via <code>adb install</code>, which provides no referrer context. Only installs through a real ad campaign or the Play Store with attribution data activate the malware.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">InstallReferrerClient</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InstallReferrerClient</span><span class="p">.</span><span class="na">newBuilder</span><span class="p">(</span><span class="n">context</span><span class="p">).</span><span class="na">build</span><span class="p">();</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">client</span><span class="p">.</span><span class="na">startConnection</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">InstallReferrerStateListener</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="nd">@Override</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onInstallReferrerSetupFinished</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">responseCode</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">responseCode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">InstallReferrerClient</span><span class="p">.</span><span class="na">InstallReferrerResponse</span><span class="p">.</span><span class="na">OK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">            </span><span class="n">ReferrerDetails</span><span class="w"> </span><span class="n">details</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="na">getInstallReferrer</span><span class="p">();</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">details</span><span class="p">.</span><span class="na">getReferrerClickTimestampSeconds</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">THRESHOLD</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">                </span><span class="n">activatePayload</span><span class="p">();</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">            </span><span class="p">}</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="p">});</span>
+</code></pre></div>
+<p>Bypass: use Frida to hook <code>InstallReferrerClient</code> and return synthetic referrer data with valid timestamps.</p>
+<h2 id="background-activity-launch-bypass-mediasession">Background Activity Launch Bypass (MediaSession)<a class="headerlink" href="#background-activity-launch-bypass-mediasession" title="Permanent link">&para;</a></h2>
+<p>Android 10 (API 29) introduced <a href="https://developer.android.com/guide/components/activities/background-starts">restrictions on launching activities from the background</a>. Malware bypasses this by abusing the media key event handling system:</p>
+<ol>
+<li>Create a <code>VirtualDisplay</code> with tiny dimensions (5-15 pixels) via <code>DisplayManager.createVirtualDisplay()</code></li>
+<li>Render a <code>Presentation</code> on the virtual display to keep it alive</li>
+<li>Create an <code>AudioTrack</code> and play random noise to acquire audio focus</li>
+<li>Create a <code>MediaSession</code> with a <code>PendingIntent</code> as the media button receiver</li>
+<li>The <code>PendingIntent</code> wraps a broadcast carrying the target activity <code>Intent</code> as an extra</li>
+<li>Dispatch <code>MEDIA_PLAY</code> key events via <code>AudioManager.dispatchMediaKeyEvent()</code></li>
+<li>The system delivers the key event to the active <code>MediaSession</code>, which fires the <code>PendingIntent</code></li>
+<li>The broadcast receiver extracts the <code>Intent</code> and calls <code>context.startActivity()</code></li>
+</ol>
+<p>The system allows this because media button handling is considered a legitimate foreground interaction. The <code>VirtualDisplay</code> keeps a "display" active, and the <code>AudioTrack</code> gives the <code>MediaSession</code> audio focus. The entire chain is invisible: the virtual display is a few pixels and the "audio" is random noise.</p>
+<p>This technique was patched in Android 15 (API 35). On Android 10-14, it remains effective for popping up permission request screens, phishing overlays, or notification access settings from the background without user interaction.</p>
 <h2 id="hidden-api-bypass">Hidden API Bypass<a class="headerlink" href="#hidden-api-bypass" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/LSPosed/AndroidHiddenApiBypass">AndroidHiddenApiBypass</a> (<code>org.lsposed.hiddenapibypass</code>) is an open-source library that circumvents Android's hidden API restrictions introduced in Android 9. Normally, apps cannot call <code>@hide</code> annotated methods or directly instantiate system service classes. The library has multiple bypass variants: the original uses <code>Unsafe</code> memory operations, while the newer LSPass variant uses <code>Property.of()</code> to achieve the same result without <code>Unsafe</code>.</p>
 <p>In malware, it enables:</p>
@@ -13918,6 +14073,25 @@
 </tbody>
 </table>
 <p>This is adaptive malware that detects the security posture of the device and chooses the most effective attack path. The threshold date roughly corresponds to when specific Android security restrictions were enforced. Combined with <code>Build.VERSION.SDK_INT</code> checks, it creates multi-layered execution guardrails that maximize compatibility across device populations.</p>
+<h2 id="instrumentation-hijack">Instrumentation Hijack<a class="headerlink" href="#instrumentation-hijack" title="Permanent link">&para;</a></h2>
+<p>Android's <code>Instrumentation</code> class is a testing framework hook that intercepts Activity lifecycle callbacks before they reach the Activity itself. Malware abuses this by declaring an <code>&lt;instrumentation&gt;</code> element in the manifest targeting its own package, then implementing the Instrumentation subclass with all lifecycle methods as native JNI calls.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">&lt;instrumentation</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="na">android:name=</span><span class="s">&quot;com.example.MyInstrumentation&quot;</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="na">android:targetPackage=</span><span class="s">&quot;com.example.myapp&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyInstrumentation</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Instrumentation</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="kd">static</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="na">loadLibrary</span><span class="p">(</span><span class="s">&quot;payload&quot;</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="nd">@Override</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">native</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">(</span><span class="n">Bundle</span><span class="w"> </span><span class="n">arguments</span><span class="p">);</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="nd">@Override</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">native</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onStart</span><span class="p">();</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="p">}</span>
+</code></pre></div>
+<p>When the system creates the app process, it instantiates the Instrumentation class before any Activity runs. The <code>onCreate()</code> and <code>onStart()</code> callbacks fire before the app's own lifecycle, giving the malware first-mover control over the entire process. Because the methods are <code>native</code>, the actual logic is hidden in a <code>.so</code> library, invisible to DEX-level static analysis.</p>
+<p>Combined with <a href="../../packers/">packing</a>, this creates a two-layer hiding strategy: the packer encrypts the DEX, and the Instrumentation class pushes critical logic into native code. Even after unpacking, the decompiled Java shows only <code>native</code> method stubs with no implementation.</p>
+<p>Detection: <code>&lt;instrumentation&gt;</code> elements in the manifest where <code>targetPackage</code> matches the app's own package. Legitimate Instrumentation usage (testing frameworks like AndroidJUnitRunner) targets a <em>different</em> package (the app under test) and is not shipped in production APKs.</p>
 <h2 id="apk-and-manifest-corruption">APK and Manifest Corruption<a class="headerlink" href="#apk-and-manifest-corruption" title="Permanent link">&para;</a></h2>
 <h3 id="malformed-zip-headers">Malformed ZIP Headers<a class="headerlink" href="#malformed-zip-headers" title="Permanent link">&para;</a></h3>
 <p><a href="../../malware/families/trickmo/">TrickMo</a> uses malformed ZIP files combined with JSONPacker. The corrupted ZIP structure causes analysis tools (apktool, JADX, unzip) to fail or produce incomplete output, while the Android runtime tolerates the malformations and installs the APK normally. <a href="https://www.cleafy.com/cleafy-labs/a-new-trickmo-saga-from-banking-trojan-to-victims-data-leak">Cleafy documented</a> this as a deliberate anti-analysis layer across 40+ variants.</p>
@@ -13956,8 +14130,8 @@
 <td>Commercial packers, <a href="../../packers/dexguard/">DexGuard</a></td>
 </tr>
 <tr>
-<td>Dead code injection</td>
-<td>Junk methods/classes inflate the codebase</td>
+<td>Dead code injection / DEX bloat</td>
+<td>Junk methods/classes inflate the codebase, waste analyst time</td>
 <td><a href="../../malware/families/joker/">Joker</a>, crypter outputs</td>
 </tr>
 <tr>
@@ -14010,14 +14184,14 @@
 <h4 id="stringfog">StringFog<a class="headerlink" href="#stringfog" title="Permanent link">&para;</a></h4>
 <p><a href="https://github.com/MegatronKing/StringFog">StringFog</a> is an open-source Gradle plugin that automatically encrypts all string literals in DEX bytecode at build time. A <code>ClassVisitor</code> replaces every string constant load with an encrypted byte array and an injected call to a static decrypt method.</p>
 <p>The default algorithm is cyclic XOR:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">decrypt</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">DEFAULT</span><span class="p">);</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">keyBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">decode</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">DEFAULT</span><span class="p">);</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">        </span><span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">keyBytes</span><span class="o">[</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">keyBytes</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">);</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">decrypt</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">decode</span><span class="p">(</span><span class="n">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">DEFAULT</span><span class="p">);</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">keyBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">decode</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">DEFAULT</span><span class="p">);</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">keyBytes</span><span class="o">[</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">keyBytes</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">);</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">}</span>
 </code></pre></div>
 <p>The key is compiled into the app. Reversal: extract the key from the <code>StringFogImpl</code> class (or hook it with Frida), then batch-decrypt all constants. <a href="https://github.com/nickcano/katalina">Katalina</a> (Dalvik bytecode emulator) can deobfuscate StringFog automatically via emulation.</p>
 <p>StringFog appears in both legitimate apps (protecting API keys) and malware (hiding C2 URLs, permission strings, SharedPreferences keys). Artifact: <code>com.github.megatronking.stringfog</code> in build dependencies, <code>com.github.megatronking.stringfog.xor.StringFogImpl</code> in DEX.</p>
@@ -14027,34 +14201,45 @@
 <p>Observed in the wild in banking trojans and NFC relay malware targeting Turkish and Korean users.</p>
 <h4 id="native-library-decryption">Native Library Decryption<a class="headerlink" href="#native-library-decryption" title="Permanent link">&para;</a></h4>
 <p>The most resistant pattern delegates string decryption to a native <code>.so</code> library. The DEX code calls a JNI method with encrypted byte arrays; the native code decrypts and returns plaintext. A Java-level XOR fallback handles cases where the native library fails to load.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">decrypt</span><span class="p">(</span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">nativeDecrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">UnsatisfiedLinkError</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">        </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">data</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">;</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">            </span><span class="n">result</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">key</span><span class="o">[</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">key</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">);</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="p">}</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kd">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="nf">decrypt</span><span class="p">(</span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">nativeDecrypt</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">UnsatisfiedLinkError</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">        </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">byte</span><span class="o">[</span><span class="n">data</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">;</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">            </span><span class="n">result</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">key</span><span class="o">[</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">key</span><span class="p">.</span><span class="na">length</span><span class="o">]</span><span class="p">);</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="p">}</span>
 </code></pre></div>
 <p>This pattern forces analysts to reverse both Java and native code. The native implementation may use AES, custom ciphers, or hardware-bound keys. Reversing requires IDA/Ghidra on the <code>.so</code> or Frida hooks on the JNI call boundary.</p>
 <h4 id="frida-based-batch-decryption">Frida-Based Batch Decryption<a class="headerlink" href="#frida-based-batch-decryption" title="Permanent link">&para;</a></h4>
 <p>For any XOR-based scheme, hooking the decrypt method at runtime recovers all strings in a single run:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">StringFog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;com.github.megatronking.stringfog.xor.StringFogImpl&quot;</span><span class="p">);</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nx">StringFog</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">.</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">);</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[StringFog] &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">result</span><span class="p">);</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span>
-<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="p">};</span>
-<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="p">});</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">StringFog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;com.github.megatronking.stringfog.xor.StringFogImpl&quot;</span><span class="p">);</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="nx">StringFog</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">.</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">);</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[StringFog] &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">result</span><span class="p">);</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="p">});</span>
 </code></pre></div>
 <p>Adapt the class name to match the target's specific obfuscator.</p>
 <h4 id="visual-confusion-obfuscation">Visual Confusion Obfuscation<a class="headerlink" href="#visual-confusion-obfuscation" title="Permanent link">&para;</a></h4>
 <p>An obfuscation technique that renames classes, methods, and packages using visually similar characters: uppercase <code>O</code>, lowercase <code>o</code>, and zero <code>0</code> (e.g., <code>OooO0O0</code>, <code>o0000Ooo</code>, <code>Oooo0OO</code>). Unlike standard R8/ProGuard which uses short alphabetic names (<code>a</code>, <code>b</code>, <code>a0</code>), this pattern is deliberately adversarial, designed to make manual analysis painful because all identifiers look identical at a glance.</p>
 <p>When this obfuscation style appears, it indicates deliberate anti-analyst intent rather than standard build-time optimization. R8/ProGuard obfuscation is functional (reduce APK size); visual confusion obfuscation is hostile.</p>
+<h3 id="dex-bloat">DEX Bloat<a class="headerlink" href="#dex-bloat" title="Permanent link">&para;</a></h3>
+<p>A deliberate anti-analysis technique where the APK is inflated with thousands of junk classes and methods that serve no functional purpose. The goal is to overwhelm analysts and automated tools: decompilers slow down, class lists become unnavigable, and pattern matching produces excessive false positives.</p>
+<p>A typical implementation generates hundreds of identical classes, each containing 100-150 empty or trivially returning methods. For example, 741 junk classes with 144 methods each produces 106,704 junk methods. The junk code may be invoked once at startup (e.g., a single <code>callEntry()</code> call in <code>Application.onCreate()</code>) to prevent dead code elimination by R8, but the methods themselves do nothing meaningful.</p>
+<p>The technique is effective because:</p>
+<ul>
+<li>Decompilers like JADX take significantly longer to process bloated APKs</li>
+<li>Class/method lists in analysis tools become unusable (thousands of identically structured entries)</li>
+<li>Automated string extraction and pattern matching returns noise from junk classes</li>
+<li>Analysts cannot quickly distinguish real code from padding without runtime analysis</li>
+</ul>
+<p>Unlike legitimate code expansion from library bundling, DEX bloat classes follow uniform patterns: identical method signatures, no cross-references to real app code, and trivial method bodies. Detection: look for large clusters of classes with identical structure, uniform method counts, and no meaningful call graph connections to the app's real functionality.</p>
 <h3 id="domain-generation-algorithms">Domain Generation Algorithms<a class="headerlink" href="#domain-generation-algorithms" title="Permanent link">&para;</a></h3>
 <p><a href="../../malware/families/octo/">Octo2</a> introduced DGA-based C2 resolution, generating domain names algorithmically so that blocking individual domains is ineffective. The DGA seed and algorithm are embedded in a dynamically loaded native library, adding another analysis layer.</p>
 <h2 id="families-by-anti-analysis-depth">Families by Anti-Analysis Depth<a class="headerlink" href="#families-by-anti-analysis-depth" title="Permanent link">&para;</a></h2>

@@ -1402,6 +1402,8 @@
       
         
       
+        
+      
     
     
     
@@ -1661,6 +1663,34 @@
     
   
     Camera & Microphone Surveillance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier-billing-fraud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier Billing Fraud
   
 
     
@@ -2353,6 +2383,17 @@
     <span class="md-ellipsis">
       
         Session-Based Installer Bypass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#server-controlled-cloaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server-Controlled Cloaking
       
     </span>
   </a>
@@ -12652,6 +12693,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#server-controlled-cloaking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server-Controlled Cloaking
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#platform-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12998,6 +13050,53 @@
 <a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">    </span><span class="n">PendingIntent</span><span class="p">.</span><span class="na">FLAG_MUTABLE</span><span class="p">).</span><span class="na">getIntentSender</span><span class="p">());</span>
 </code></pre></div>
 <p><a href="../../malware/families/spynote/">SpyNote</a> and <a href="../../malware/families/anatsa/">Anatsa</a> droppers adopted this technique within weeks of Restricted Settings launching, as <a href="https://cryptax.medium.com/android-spynote-bypasses-restricted-settings-breaks-many-re-tools-8791b3e6bf38">documented by cryptax</a>.</p>
+<h2 id="server-controlled-cloaking">Server-Controlled Cloaking<a class="headerlink" href="#server-controlled-cloaking" title="Permanent link">&para;</a></h2>
+<p>Apps that pass Play Store review by presenting a fully functional decoy, then switch to completely different content (gambling, adult, unlicensed streaming) based on a server-side decision at runtime. The server acts as a kill switch: during review or in non-target regions, the app shows legitimate content. For real users in target markets, the server triggers the redirect.</p>
+<p>The typical flow:</p>
+<ol>
+<li>App launches and spawns a background thread that fingerprints the device (model, brand, CPU ABI, battery state, ADB/developer mode status)</li>
+<li>The fingerprint is sent to a C2 server via WebSocket (not HTTP, making traffic harder to intercept with standard proxies)</li>
+<li>The server responds with a JSON config: either a redirect URL or an empty/missing key</li>
+<li>If the config contains a URL, a fullscreen WebView loads the remote content (gambling site, casino, etc.) overlaid on the activity</li>
+<li>If the config is empty, the app shows its decoy (a simple game, utility, or placeholder)</li>
+</ol>
+<p>Anti-analysis measures layered into the cloaking flow:</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADB enabled detection</td>
+<td>Avoid activating on developer/analyst devices</td>
+</tr>
+<tr>
+<td>Install referrer collection</td>
+<td>Verify the install came through a legitimate ad campaign</td>
+</tr>
+<tr>
+<td>Device fingerprint hashing (FNV-1a or similar)</td>
+<td>Consistent device ID without requiring permissions</td>
+</tr>
+<tr>
+<td>Substitution cipher on C2 payload</td>
+<td>Obfuscate fingerprint data in transit</td>
+</tr>
+<tr>
+<td>Encrypted SharedPreferences for config caching</td>
+<td>C2 response persists locally, reducing repeat connections</td>
+</tr>
+<tr>
+<td>Push notification re-engagement (OneSignal, FCM)</td>
+<td>Server can push users back to the gambling content after initial redirect</td>
+</tr>
+</tbody>
+</table>
+<p>The decoy app is minimal (often a single <code>setContentView()</code> call) but sufficient to pass visual review. The WebView configuration enables JavaScript, DOM storage, cookies, and mixed content (<code>MIXED_CONTENT_ALWAYS_ALLOW</code>), and strips identifying substrings from the User-Agent to disguise the WebView as a regular browser.</p>
+<p>This pattern is distinct from <a href="#versioning-attacks">versioning attacks</a> (which push malicious updates) and <a href="#delayed-activation">delayed activation</a> (which waits before enabling local payload). Server-controlled cloaking never contains the real content locally; the server decides per-session what the user sees.</p>
 <h2 id="platform-lifecycle">Platform Lifecycle<a class="headerlink" href="#platform-lifecycle" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

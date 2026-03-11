@@ -1402,6 +1402,8 @@
       
         
       
+        
+      
     
     
     
@@ -1661,6 +1663,34 @@
     
   
     Camera & Microphone Surveillance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier-billing-fraud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier Billing Fraud
   
 
     
@@ -2076,6 +2106,17 @@
     <span class="md-ellipsis">
       
         Dual Purpose: Theft + Suppression
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-listener-hijacking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Listener Hijacking
       
     </span>
   </a>
@@ -12420,6 +12461,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#runtime-listener-hijacking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime Listener Hijacking
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -12691,6 +12743,17 @@
 </code></pre></div>
 <h3 id="dual-purpose-theft-suppression">Dual Purpose: Theft + Suppression<a class="headerlink" href="#dual-purpose-theft-suppression" title="Permanent link">&para;</a></h3>
 <p>The same <code>NotificationListenerService</code> that steals OTP codes also suppresses the transaction alert that follows. This is the standard pattern in modern banking trojans: intercept the 2FA code, suppress the confirmation notification, and the victim never knows a transaction occurred.</p>
+<h3 id="runtime-listener-hijacking">Runtime Listener Hijacking<a class="headerlink" href="#runtime-listener-hijacking" title="Permanent link">&para;</a></h3>
+<p>A more sophisticated approach than registering a new <code>NotificationListenerService</code>. Instead of declaring a separate listener component (which is visible in the manifest and suspicious), the malware hijacks an already-connected listener at runtime by swapping its internal fields via reflection:</p>
+<ol>
+<li>Reflect into <code>ActivityThread.mServices</code> (a private <code>ArrayMap&lt;IBinder, Service&gt;</code>) to find the registered <code>NotificationListenerService</code> instance</li>
+<li>Create a malicious replacement <code>NotificationListenerService</code> subclass</li>
+<li>Copy <code>mWrapper</code> (the IPC binder) from the real service to the malicious one</li>
+<li>Set <code>isConnected = true</code> on the malicious service</li>
+<li>Replace <code>mHandler</code> on the real service with the malicious one's handler</li>
+</ol>
+<p>All notification callbacks now route through the attacker's handler. The replacement listener reads <code>android.text</code> from every notification's extras (capturing OTP codes, banking alerts, 2FA tokens), broadcasts the content internally, then calls <code>cancelAllNotifications()</code> so the user never sees them.</p>
+<p>This avoids registering a new suspicious component in the manifest. The only manifest entry is the original (legitimate-looking) <code>NotificationListenerService</code> that the user already granted access to. The hijack happens entirely at runtime via reflection, requiring <a href="../anti-analysis-techniques/#hidden-api-bypass">Hidden API Bypass</a> to access the private <code>ActivityThread</code> fields.</p>
 <h2 id="play-protect-suppression">Play Protect Suppression<a class="headerlink" href="#play-protect-suppression" title="Permanent link">&para;</a></h2>
 <p>Google Play Protect displays warnings when it detects potentially harmful apps. Malware suppresses these warnings to prevent the user from uninstalling it.</p>
 <h3 id="accessibility-based-dismissal">Accessibility-Based Dismissal<a class="headerlink" href="#accessibility-based-dismissal" title="Permanent link">&para;</a></h3>

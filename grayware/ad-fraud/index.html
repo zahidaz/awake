@@ -1379,6 +1379,8 @@
       
         
       
+        
+      
     
     
     
@@ -1637,6 +1639,34 @@
     
   
     Camera & Microphone Surveillance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attacks/carrier-billing-fraud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier Billing Fraud
   
 
     
@@ -11305,6 +11335,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#webview-package-name-spoofing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WebView Package Name Spoofing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#attribution-theft" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -11344,6 +11385,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#lockscreen-ad-bypass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lockscreen Ad Bypass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fake-notification-impersonation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fake Notification Impersonation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#programmatic-click-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programmatic Click Simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#technical-indicators" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -11359,6 +11433,28 @@
     <span class="md-ellipsis">
       
         Notification &amp; Ad Injection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#out-of-app-push-advertising-opa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Out-of-App Push Advertising (OPA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-interstitials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit Interstitials
       
     </span>
   </a>
@@ -12354,6 +12450,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#webview-package-name-spoofing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WebView Package Name Spoofing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#attribution-theft" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12393,6 +12500,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#lockscreen-ad-bypass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lockscreen Ad Bypass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fake-notification-impersonation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fake Notification Impersonation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#programmatic-click-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programmatic Click Simulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#technical-indicators" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12408,6 +12548,28 @@
     <span class="md-ellipsis">
       
         Notification &amp; Ad Injection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#out-of-app-push-advertising-opa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Out-of-App Push Advertising (OPA)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-interstitials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exit Interstitials
       
     </span>
   </a>
@@ -12561,6 +12723,19 @@
 <p>Adware abusing Android's <code>TelecomManager</code> to simulate incoming phone calls, using the call UI as a trigger to display full-screen ad interstitials. The app registers a self-managed <code>PhoneAccount</code> (capability <code>CAPABILITY_SELF_MANAGED</code> = 2048) and its own <code>ConnectionService</code>, then calls <code>TelecomManager.addNewIncomingCall()</code> to inject fake calls.</p>
 <p>When the system shows the incoming call UI, the malware's <code>Connection.onShowIncomingCallUi()</code> callback fires and launches an ad activity. The call is immediately disconnected with <code>DisconnectCause(LOCAL)</code> so it never appears in call logs.</p>
 <p>Requires only <code>MANAGE_OWN_CALLS</code> (a normal permission, no user prompt). Works on Android 8.0+ (API 26, when <code>CAPABILITY_SELF_MANAGED</code> was introduced). The user sees a brief incoming call animation, then a full-screen ad appears, designed to confuse the user into thinking the ad is related to the "call."</p>
+<h2 id="webview-package-name-spoofing">WebView Package Name Spoofing<a class="headerlink" href="#webview-package-name-spoofing" title="Permanent link">&para;</a></h2>
+<p>Ad fraud technique where the malware spoofs its identity to the WebView/Chromium engine so that all ad requests appear to come from a different, presumably legitimate app. The attacker controls the ad account for the spoofed package name and collects the revenue.</p>
+<p>The spoofing chain:</p>
+<ol>
+<li>Create a <code>Proxy</code> for <code>android.content.pm.IPackageManager</code></li>
+<li>The proxy intercepts <code>getInstallerPackageName()</code> (returns null for the spoofed package) and <code>getPackageInfo()</code> (swaps the query package name to make validation succeed)</li>
+<li>Inject the proxy into <code>ActivityThread.sPackageManager</code> (static field) and <code>PackageManager.mPM</code> (instance field)</li>
+<li>Replace the Application's base <code>Context</code> with a <code>ContextWrapper</code> that overrides <code>getPackageName()</code>: when called from <code>org.chromium.base</code> frames (detected via stack trace inspection), it returns the fake package name; otherwise returns the real one</li>
+<li>Create and immediately destroy a WebView to force Chromium to initialize with the spoofed identity</li>
+<li>Restore the original <code>IPackageManager</code> (spoofing only needs to last through WebView init)</li>
+</ol>
+<p>After initialization, all ad requests from the WebView claim to come from the spoofed app. Google partially addressed this by <a href="https://developer.chrome.com/blog/ppc-deprecating-xrw-header/">deprecating the X-Requested-With header</a> in WebView, which previously exposed the host app's package name to ad networks.</p>
+<p>Requires <a href="../../attacks/anti-analysis-techniques/#hidden-api-bypass">Hidden API Bypass</a> to access <code>ActivityThread.sPackageManager</code> and other private framework fields.</p>
 <h2 id="attribution-theft">Attribution Theft<a class="headerlink" href="#attribution-theft" title="Permanent link">&para;</a></h2>
 <p>A distinct fraud category where a malicious SDK embedded in a legitimate-looking app steals attribution data from co-installed analytics SDKs (AppsFlyer, Adjust, Branch, Kochava) to fraudulently claim credit for app installs and user actions.</p>
 <h3 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
@@ -12621,6 +12796,49 @@
 </tbody>
 </table>
 <p>Detection: look for undocumented ContentProviders at high <code>initOrder</code>, reflection calls targeting AppsFlyer or Adjust classes, and SharedPreferences files belonging to unknown SDK namespaces.</p>
+<h2 id="lockscreen-ad-bypass">Lockscreen Ad Bypass<a class="headerlink" href="#lockscreen-ad-bypass" title="Permanent link">&para;</a></h2>
+<p>Adware that wakes the screen and dismisses the lock screen to show fullscreen ads, even when the device is idle. The activity calls three APIs in sequence:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">setShowWhenLocked</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">setTurnScreenOn</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">keyguardManager</span><span class="p">.</span><span class="na">requestDismissKeyguard</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+</code></pre></div>
+<p><code>setShowWhenLocked(true)</code> (API 27+) renders the activity on top of the lock screen. <code>setTurnScreenOn(true)</code> powers on the display. <code>requestDismissKeyguard()</code> dismisses the keyguard entirely, so the user wakes up to a fullscreen ad with no indication of what triggered it. Combined with <code>SCREEN_ON</code>/<code>SCREEN_OFF</code> broadcast receivers and exact alarm persistence (e.g., <code>setExactAndAllowWhileIdle</code> every 15 minutes), the adware can pop ads at arbitrary intervals around the clock.</p>
+<p>The older approach used <code>WindowManager.LayoutParams</code> flags (<code>FLAG_SHOW_WHEN_LOCKED</code>, <code>FLAG_DISMISS_KEYGUARD</code>, <code>FLAG_TURN_SCREEN_ON</code>), deprecated in API 27 but still functional on older devices. Modern adware uses both code paths, selecting based on <code>Build.VERSION.SDK_INT</code>.</p>
+<h2 id="fake-notification-impersonation">Fake Notification Impersonation<a class="headerlink" href="#fake-notification-impersonation" title="Permanent link">&para;</a></h2>
+<p>Adware that creates notification channels mimicking popular apps to lure users into tapping ad-laden overlays. The notification channel uses the impersonated app's branding: channel name, description, and accent color matching the target app's identity.</p>
+<p>For example, a channel named <code>"whatsapp_channel"</code> with color <code>#2cb742</code> (WhatsApp's signature green) and description <code>"WhatsApp notifications"</code> makes the notification appear to come from WhatsApp. Tapping the notification opens an ad overlay activity instead. The user sees what looks like a WhatsApp message, taps it, and lands on a fullscreen ad.</p>
+<p>This works because Android's notification shade shows the channel name and color set by the posting app, not the actual source app name in a prominent position. Combined with <a href="../../attacks/persistence-techniques/">launcher hiding</a> (using <code>category.INFO</code> instead of <code>category.LAUNCHER</code>) and system name impersonation (labeling activities as "Google Play Protect"), the adware becomes difficult for users to identify and uninstall.</p>
+<h2 id="programmatic-click-simulation">Programmatic Click Simulation<a class="headerlink" href="#programmatic-click-simulation" title="Permanent link">&para;</a></h2>
+<p>Ad fraud SDKs that programmatically simulate clicks on ads displayed within the app, generating fraudulent click revenue. Unlike <a href="#fraud-types">click injection</a> (which targets attribution for other apps), this technique clicks on the SDK's own ads.</p>
+<p>The fraud logic is controlled by configuration fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isSimulateClick</code></td>
+<td>Master toggle for click simulation</td>
+</tr>
+<tr>
+<td><code>secondsOfShowToClick</code></td>
+<td>Delay between ad display and simulated click (avoids instant-click detection)</td>
+</tr>
+<tr>
+<td><code>clickPositionSelector</code></td>
+<td>Selects which ad position to click</td>
+</tr>
+<tr>
+<td><code>retryClickWhenProgress100</code></td>
+<td>Retry click when page finishes loading</td>
+</tr>
+</tbody>
+</table>
+<p>A mask overlay view (<code>FrameLayout</code> subclass) covers the ad during the simulated click, hiding any visual feedback (ripple effects, page transitions) from the user. Touch events on the mask are intercepted in native code (JNI), keeping the click simulation logic out of the DEX where it would be visible to static analysis.</p>
+<p>Position tracking (<code>positionShowedList</code>, <code>positionClickedList</code>) ensures the SDK doesn't click the same ad twice and can report clicked/unclicked ratios back to the server, mimicking natural click-through rates.</p>
 <h2 id="technical-indicators">Technical Indicators<a class="headerlink" href="#technical-indicators" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>PACKAGE_ADDED</code> broadcast receiver (click injection vector)</li>
@@ -12667,6 +12885,74 @@
 </tbody>
 </table>
 <p><a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/new-hiddenads-malware-that-runs-automatically-and-hides-on-google-play-1m-users-affected/">HiddenAds</a> campaigns changed their app icon to the Google Play icon and renamed themselves "Google Play" or "Setting" to hide from users while delivering persistent ads. <a href="https://www.mcafee.com/blogs/other-blogs/mcafee-labs/invisible-adware-unveiling-ad-fraud-targeting-android-users/">Invisible Adware</a> (2023, 43 apps, 2.5M downloads) loaded ads only when the device screen was off, waiting multiple weeks after installation before activating.</p>
+<h2 id="out-of-app-push-advertising-opa">Out-of-App Push Advertising (OPA)<a class="headerlink" href="#out-of-app-push-advertising-opa" title="Permanent link">&para;</a></h2>
+<p>Server-driven push notification ads delivered via proprietary protocols (often protobuf-based). The server sends structured messages containing notification content and typed action payloads that control what happens when the user taps the notification.</p>
+<table>
+<thead>
+<tr>
+<th>Action Type</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CUSTOM_TAB</td>
+<td>Opens URL in Chrome Custom Tab</td>
+</tr>
+<tr>
+<td>WEBVIEW</td>
+<td>Opens URL in embedded WebView</td>
+</tr>
+<tr>
+<td>BROWSER</td>
+<td>Opens URL in default browser</td>
+</tr>
+<tr>
+<td>DEEPLINK</td>
+<td>Handles deep link URI</td>
+</tr>
+<tr>
+<td>STORE_LINK</td>
+<td>Opens Play Store listing</td>
+</tr>
+<tr>
+<td>PKG_NAME</td>
+<td>Launches any installed app by package name</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>PKG_NAME</code> action is particularly notable: the server can silently trigger the launch of any app on the device. Combined with <a href="../../permissions/special/request-install-packages/"><code>REQUEST_INSTALL_PACKAGES</code></a>, this creates a full sideloading pipeline: server pushes a notification with an APK download link, user clicks, APK downloads, install prompt appears. <a href="../../permissions/special/system-alert-window/"><code>SYSTEM_ALERT_WINDOW</code></a> can overlay UI on top of the install prompt to social-engineer the user into tapping "Install."</p>
+<p>OPA systems are typically locale-aware, selecting notification text matching the device's language and country. A <code>notShowAlive</code> flag controls whether to display push ads when the app is in the foreground (avoiding annoying active users, saving ads for when they leave the app).</p>
+<h2 id="exit-interstitials">Exit Interstitials<a class="headerlink" href="#exit-interstitials" title="Permanent link">&para;</a></h2>
+<p>A fullscreen ad displayed when the user tries to leave the app. The activity overrides <code>onBackPressed()</code> to block the back button while the ad is showing, trapping the user until the ad finishes or a countdown timer expires.</p>
+<p>The "backable" state is controlled by a server-configurable flag, allowing the ad network to decide per-impression whether the user can skip. Some implementations inject ads at multiple lifecycle points via a configurable "material" system:</p>
+<table>
+<thead>
+<tr>
+<th>Injection Point</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enter</td>
+<td>App launch (splash interstitial)</td>
+</tr>
+<tr>
+<td>EnterSkip</td>
+<td>Splash with skip counter</td>
+</tr>
+<tr>
+<td>Resume</td>
+<td>Returning to app from background</td>
+</tr>
+<tr>
+<td>Exit</td>
+<td>Leaving the app (back button trapped)</td>
+</tr>
+</tbody>
+</table>
+<p>Each injection point has server-configurable payloads with local JSON fallback defaults in assets, allowing the server to update ad behavior remotely without app updates.</p>
 <h2 id="fleeceware">Fleeceware<a class="headerlink" href="#fleeceware" title="Permanent link">&para;</a></h2>
 <p>Apps that exploit free trial mechanics and subscription billing to charge excessive fees for minimal functionality.</p>
 <h3 id="pattern">Pattern<a class="headerlink" href="#pattern" title="Permanent link">&para;</a></h3>

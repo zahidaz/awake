@@ -1402,6 +1402,8 @@
       
         
       
+        
+      
     
     
     
@@ -1661,6 +1663,34 @@
     
   
     Camera & Microphone Surveillance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../carrier-billing-fraud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Carrier Billing Fraud
   
 
     
@@ -12734,6 +12764,18 @@
 <td>Low (payload in APK, just encrypted)</td>
 <td>High (survives without network)</td>
 <td>Harly, most packers</td>
+</tr>
+<tr>
+<td>Resource file disguise (<code>res/raw/</code>)</td>
+<td>High (DEX hidden as JSON/animation file, name mimics Lottie or config)</td>
+<td>High (survives without network)</td>
+<td>Ad fraud droppers</td>
+</tr>
+<tr>
+<td>Fake library namespace</td>
+<td>High (loader classes placed in legitimate library package like <code>coil.fetch.*</code>)</td>
+<td>High</td>
+<td>Ad fraud droppers</td>
 </tr>
 <tr>
 <td>Network download from C2</td>
