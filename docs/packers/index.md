@@ -224,7 +224,7 @@ Start
 | Trend | Details |
 |-------|---------|
 | Commercial packer adoption | Malware authors increasingly use commercial packers (Virbox, DexGuard) rather than custom solutions. Reduces development cost at the expense of identifiable signatures. |
-| Multi-layer protection | Modern samples combine a commercial packer with custom obfuscation layers. [Klopatra](../malware/families/klopatra.md) uses Virbox + custom string encryption. |
+| Multi-layer / double packing | Modern samples combine two commercial packers or a commercial packer with custom obfuscation. See [Double Packing](#double-packing). |
 | Packer-as-a-Service | Underground forums offer packing services where customers submit APKs and receive protected versions. No need to license the packer directly. |
 | Custom packers declining | Only sophisticated groups like [Mandrake](../malware/families/mandrake.md) developers invest in custom OLLVM-based protection. Most operators use off-the-shelf solutions. |
 | RASP integration | Banking trojans increasingly encounter RASP-protected target apps ([Promon](promon.md), [Arxan](arxan.md), [LIAPP](liapp.md), [Appdome](appdome.md)), requiring malware to bypass runtime checks to perform overlay injection or accessibility manipulation. |
@@ -232,6 +232,45 @@ Start
 | Korean market protectors | [LIAPP](liapp.md) and [AppSealing](appsealing.md) dominate the Korean banking and gaming markets. LIAPP's server-side token verification introduces a new dimension that purely client-side protectors lack. |
 | No-code SaaS protection | [Appdome](appdome.md) and [AppSealing](appsealing.md) offer cloud-based protection without build pipeline changes. Appeals to organizations without mobile security engineering teams. |
 | Manifest-level evasion | [SoumniBot](../malware/families/soumnibot.md) demonstrated that packing the code is not the only option. Malforming the APK structure itself can defeat analysis tools without any packer. |
+
+## Double Packing
+
+Using two distinct packers on the same APK, layering their protections so that an analyst must defeat both to reach the original code. The outer packer's Application class loads first, decrypts and initializes its runtime, then hands off to the inner packer's Application class, which performs its own decryption before finally loading the real app code.
+
+A typical combination pairs a Chinese packer ([Virbox](virbox.md), [360 Jiagu](qihoo-360-jiagu.md)) as the outer layer with a second packer or custom protection as the inner layer. The outer packer encrypts the inner packer's stub along with the real payload, so static analysis sees only the outermost stub classes.
+
+### How It Works
+
+```
+APK
+ └─ Outer packer Application (e.g., Virbox l637078ca)
+     ├─ Decrypts native library from assets
+     ├─ Loads real Application class from SAPP_NAME metadata
+     └─ Inner packer Application (e.g., 360 Jiagu GZckWAeyProtected)
+         ├─ Initializes its own protection runtime
+         └─ Loads the actual app code
+```
+
+The outer packer handles DEX encryption and native library protection. The inner packer adds its own anti-analysis layer (anti-debugging, integrity checks, additional code hiding). Each packer's anti-tampering mechanisms independently verify their own integrity, so bypassing one does not disable the other.
+
+### Analysis Impact
+
+| Challenge | Why It's Harder |
+|-----------|----------------|
+| Two unpacking stages | Must dump DEX after each packer initializes, not just once |
+| Nested native libraries | Two sets of `.so` files to reverse, each with different protection |
+| Combined anti-analysis | Root/emulator/hooking checks from both packers fire independently |
+| Ordering dependency | Inner packer only initializes after outer packer completes, so timing hooks is critical |
+
+### Unpacking Approach
+
+1. Identify both packers via APKiD and native library inspection (e.g., Virbox assets + `libjiagu.so` presence)
+2. Dump DEX after the outer packer loads using `frida-dexdump` or `DexClassLoader` hooks
+3. The dumped DEX will still be protected by the inner packer
+4. Re-analyze the dumped output, then dump again after the inner packer initializes
+5. The second dump contains the real app code
+
+Alternatively, wait for both packers to fully initialize before dumping. A late-stage memory dump (after `Application.onCreate()` completes) often captures the fully unpacked DEX, skipping the intermediate stage.
 
 ## Detection Evasion Effectiveness
 
