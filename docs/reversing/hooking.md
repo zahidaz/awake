@@ -69,6 +69,82 @@ Interceptor.attach(Module.findExportByName("libnative.so", "decrypt"), {
 });
 ```
 
+## PLT/GOT Hooking
+
+PLT (Procedure Linkage Table) / GOT (Global Offset Table) hooking intercepts function calls at the ELF linking level by swapping pointers rather than patching instructions. Libraries like [xHook](https://github.com/iqiyi/xHook) and [ByteHook](https://github.com/bytedance/bhook) use this approach.
+
+### How It Works
+
+When an ELF binary calls an external function (e.g., `gettimeofday`), the call goes through the PLT, which reads a target address from the GOT. The hooking process:
+
+1. Parse `/proc/self/maps` to find loaded ELF modules and their base addresses
+2. Walk ELF section headers: `.rela.plt`, `.rel.plt`, `.rela.dyn`, `.rel.dyn`
+3. Resolve the target symbol via `GNU_HASH` or `ELF_HASH` tables
+4. `mprotect()` the GOT page to writable
+5. Replace the GOT entry with the hook function's address
+6. Restore page protection
+
+After the swap, every call to the target function in that module goes through the hook instead.
+
+### PLT vs Inline Hooking
+
+| Aspect | PLT/GOT | Inline |
+|--------|---------|--------|
+| Mechanism | Pointer swap in data section | Instruction patch in code section |
+| Architecture dependence | None (pointer swap works on all ABIs) | Yes (must generate arch-specific branch instructions) |
+| Code cache | No flush needed (only data pages modified) | Requires cache flush on ARM |
+| Granularity | Per-module (can hook `gettimeofday` in one `.so` but not another) | Global (patches the function itself) |
+| Crash safety | `sigsetjmp`/`siglongjmp` catches malformed ELF | Malformed prologue can crash |
+| Limitation | Can only hook imported functions (calls through PLT), not intra-module calls | Can hook any function |
+| Frameworks | [xHook](https://github.com/iqiyi/xHook), [ByteHook](https://github.com/bytedance/bhook) | [Dobby](https://github.com/jmpews/Dobby), [ShadowHook](https://github.com/bytedance/android-inline-hook), Frida Interceptor |
+
+### Offensive Use: Timing Function Hooks
+
+A common application of PLT hooking in game mods and adware is hooking libc timing functions to manipulate perceived time:
+
+```c
+static double speed_multiplier = 2.0;
+static struct timeval last_real, last_scaled;
+
+int my_gettimeofday(struct timeval *tv, struct timezone *tz) {
+    int ret = original_gettimeofday(tv, tz);
+    long delta_us = (tv->tv_sec - last_real.tv_sec) * 1000000
+                  + (tv->tv_usec - last_real.tv_usec);
+    long scaled_us = (long)(delta_us * speed_multiplier);
+    last_scaled.tv_usec += scaled_us;
+    last_scaled.tv_sec += last_scaled.tv_usec / 1000000;
+    last_scaled.tv_usec %= 1000000;
+    last_real = *tv;
+    *tv = last_scaled;
+    return ret;
+}
+```
+
+By hooking `gettimeofday()`, `clock_gettime()`, and `time()` simultaneously, all time queries return scaled values, making animations and timers run faster or slower. The hook regex `^/data/app/.*\.so$` limits hooking to the app's own libraries, avoiding system-wide side effects.
+
+## ActivityLifecycleCallbacks Interception
+
+`Application.registerActivityLifecycleCallbacks()` provides a global hook into every Activity's lifecycle without modifying individual Activities. The callback fires for every `onCreate`, `onResume`, `onPause`, `onDestroy` across the entire app.
+
+Malware and modded apps abuse this for runtime Activity manipulation:
+
+```java
+registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+    @Override
+    public void onActivityCreated(Activity activity, Bundle saved) {
+        if (killList.contains(activity.getClass().getName())) {
+            activity.finish();
+        }
+    }
+});
+```
+
+The `killList` is typically loaded from an encrypted asset file at startup, containing class names of Activities to suppress (usually ad screens from the app's own ad SDKs). The callback calls `finish()` immediately in `onActivityCreated`, killing the Activity before it renders.
+
+This pattern appears in pirated/modded APKs where a third-party SDK is injected into a legitimate app. The injected SDK's `Application` subclass (which extends the original) registers the callback to kill ad Activities, giving the user an "ad-free" experience while the mod distributor's own monetization (overlay ads, push notifications, affiliate links) takes over.
+
+Detection: look for `registerActivityLifecycleCallbacks` in the `Application` class, especially when the callback body references a list of class names loaded from assets or decrypted at runtime. Legitimate uses exist (analytics, crash reporting) but typically log or observe rather than call `finish()`.
+
 ## Common Hooking Tasks
 
 ### SSL Pinning Bypass
