@@ -98,6 +98,7 @@ nav:
           - C2 Communication: attacks/c2-techniques.md
           - Call Interception: attacks/call-interception.md
           - Camera & Microphone Surveillance: attacks/camera-mic-surveillance.md
+          - Carrier Billing Fraud: attacks/carrier-billing-fraud.md
           - Clipboard Hijacking: attacks/clipboard-hijacking.md
           - Data Exfiltration: attacks/data-exfiltration.md
           - Device Admin Abuse: attacks/device-admin-abuse.md
