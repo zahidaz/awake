@@ -180,6 +180,37 @@ frida-dexdump -FU
 
 After the app initializes and `AppSealingZygote` decrypts the sealed DEX into memory, frida-dexdump scans for DEX magic bytes and dumps all loaded DEX files. Filter the output by size to separate application DEX from framework and AppSealing wrapper DEX.
 
+### Filesystem Race Condition
+
+AppSealing v2.19.14 (and similar versions) writes the decrypted DEX to disk before loading it via `DexClassLoader`, then deletes it. The file exists for a few hundred milliseconds between `write()` and `unlink()`. A polling loop with root access can copy the file during this window.
+
+```bash
+DEST=/data/local/tmp/appsealing_dump
+mkdir -p $DEST
+(
+  while true; do
+    for f in /data/data/<package>/app_payload_lib/com_<pkg>/*.dex; do
+      if [ -f "$f" ]; then
+        SIZE=$(stat -c%s "$f" 2>/dev/null)
+        BN=$(basename "$f")
+        if [ "$SIZE" -gt 300000 ] && [ ! -f $DEST/$BN ]; then
+          cp "$f" $DEST/$BN
+        fi
+      fi
+    done
+    usleep 5000
+  done
+) &
+
+am start -n <package>/<activity>
+```
+
+The watcher polls `app_payload_lib/` every 5ms and copies any DEX larger than 300KB. The captured file is a valid decrypted DEX.
+
+**Why it works**: `DexClassLoader` requires a file path, so AppSealing must write the decrypted DEX to disk. Between `write()` and `unlink()` there's a window where the file is readable. Detection child processes (root, emulator checks) run in parallel but take longer to complete than the filesystem copy.
+
+**Limitations**: requires root, not 100% reliable (may need multiple attempts), and newer AppSealing versions may use `memfd_create` or `InMemoryDexClassLoader` to avoid touching the filesystem entirely.
+
 ### Combined Frida Bypass
 
 A combined approach using Frida to neutralize all protection layers simultaneously:
