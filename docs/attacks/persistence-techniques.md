@@ -148,6 +148,24 @@ An underused but effective persistence method. The malware registers as a sync a
 
 The sync adapter runs in its own process and benefits from the system's built-in retry and scheduling logic. [Mandrake](../malware/families/mandrake.md) used this technique to maintain periodic C2 communication.
 
+## Multi-Process Keep-Alive
+
+A persistence pattern where the app runs multiple processes that monitor and resurrect each other. The manifest declares separate processes (e.g., `:dpro1`, `:dpro2`) for different service components. Each process binds to services in the other processes via AIDL IPC and polls them on a short interval (every 3-5 seconds). If any process dies, the surviving processes detect the broken binding and restart it.
+
+```
+Main process ←──AIDL bind──→ :dpro1 (polling service)
+     ↑                           ↑
+     └────AIDL bind────→ :dpro2 (watchdog)
+                              ↑
+              :dpro1 ←─bind──┘
+```
+
+The polling service in `:dpro1` calls a `pollingAction()` method on the main process's bound service via IPC. If the call fails (process dead), a resurrection service re-launches it. The main process does the same for `:dpro1`. The `:dpro2` process exists as a third watchdog monitoring both.
+
+This mutual binding pattern makes the app very difficult to kill without force-stopping all processes simultaneously. Killing one process causes the others to immediately respawn it. The pattern appears in aggressive ad SDKs that need continuous background execution for push notification ads and scheduled ad displays.
+
+Force-stop from Settings > Apps is the only reliable way to kill all processes at once, as it terminates all of an app's processes atomically.
+
 ## Accessibility Service Persistence
 
 An active [accessibility service](accessibility-abuse.md) is managed by the system and automatically restarted if it crashes. As long as the user doesn't manually revoke the toggle in Settings, the service persists indefinitely across reboots.
@@ -332,6 +350,7 @@ Each restriction pushed malware toward more creative solutions. The overall tren
 | AlarmManager | No | No | High | Medium | All |
 | Sync adapter | Yes | No | High | Medium | All |
 | MessageQueue.IdleHandler | No | No | Very high | Low | All |
+| Multi-process keep-alive | No | No (but self-resurrects) | High | High | All |
 | Accessibility service | Yes | Yes (if enabled) | Medium | Very high | 4.1+ |
 | Device admin | N/A (anti-uninstall) | N/A | Low | High | All |
 | Device protected storage | Yes (pre-unlock) | N/A (data survival) | High | High | 7+ |
