@@ -2174,10 +2174,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#accountmanager-sync-adapter" class="md-nav__link">
+  <a href="#syncadapter-persistence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AccountManager Sync Adapter
+        SyncAdapter Persistence
       
     </span>
   </a>
@@ -2355,6 +2355,17 @@
     <span class="md-ellipsis">
       
         MessageQueue.IdleHandler
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hellodaemon-keep-alive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hellodaemon Keep-Alive
       
     </span>
   </a>
@@ -12583,10 +12594,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#accountmanager-sync-adapter" class="md-nav__link">
+  <a href="#syncadapter-persistence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        AccountManager Sync Adapter
+        SyncAdapter Persistence
       
     </span>
   </a>
@@ -12764,6 +12775,17 @@
     <span class="md-ellipsis">
       
         MessageQueue.IdleHandler
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hellodaemon-keep-alive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hellodaemon Keep-Alive
       
     </span>
   </a>
@@ -13008,16 +13030,48 @@
 </code></pre></div>
 <p>Each execution enqueues the next run with a short delay (typically 15-60 seconds). WorkManager persists its work queue in a SQLite database (<code>app_data/databases/androidx.work.workdb</code>), so pending work survives process death and reboots. Unlike <code>JobScheduler</code> (minimum 15-minute periodicity), WorkManager's <code>OneTimeWorkRequest</code> chaining has no minimum interval, enabling near-continuous execution.</p>
 <p>The pattern is difficult to detect at the manifest level because WorkManager registration is purely programmatic. Look for <code>Worker</code> subclasses that call <code>WorkManager.enqueue()</code> from within <code>doWork()</code>.</p>
-<h3 id="accountmanager-sync-adapter">AccountManager Sync Adapter<a class="headerlink" href="#accountmanager-sync-adapter" title="Permanent link">&para;</a></h3>
-<p>An underused but effective persistence method. The malware registers as a sync adapter for a custom account type. Android's sync framework periodically triggers the adapter, providing reliable execution without visible notifications.</p>
-<p>The sync adapter runs in its own process and benefits from the system's built-in retry and scheduling logic. <a href="../../malware/families/mandrake/">Mandrake</a> used this technique to maintain periodic C2 communication.</p>
+<h3 id="syncadapter-persistence">SyncAdapter Persistence<a class="headerlink" href="#syncadapter-persistence" title="Permanent link">&para;</a></h3>
+<p>The app registers as a sync adapter for a custom account type. Android's sync framework periodically triggers the adapter, providing reliable background execution without visible notifications or foreground services. The sync adapter runs in its own process and benefits from the system's built-in retry, backoff, and scheduling logic.</p>
+<p>The setup requires four manifest components:</p>
+<ol>
+<li>An <code>AccountAuthenticator</code> service that creates the fake account type</li>
+<li>An <code>authenticator.xml</code> resource defining the account type</li>
+<li>A <code>SyncAdapter</code> service that performs the actual work</li>
+<li>A <code>syncadapter.xml</code> resource linking the adapter to the account type and a content authority</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">&lt;service</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;.auth.AuthService&quot;</span><span class="w"> </span><span class="na">android:exported=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.accounts.AccountAuthenticator&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="nt">&lt;meta-data</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.accounts.AccountAuthenticator&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">        </span><span class="na">android:resource=</span><span class="s">&quot;@xml/authenticator&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nt">&lt;/service&gt;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nt">&lt;service</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;.sync.SyncService&quot;</span><span class="w"> </span><span class="na">android:exported=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.content.SyncAdapter&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="nt">&lt;meta-data</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.content.SyncAdapter&quot;</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="na">android:resource=</span><span class="s">&quot;@xml/syncadapter&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="nt">&lt;/service&gt;</span>
+</code></pre></div>
+<p>At runtime, the app creates the account and enables periodic sync:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">Account</span><span class="w"> </span><span class="n">account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Account</span><span class="p">(</span><span class="s">&quot;SyncAccount&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;com.app.account.type&quot;</span><span class="p">);</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">AccountManager</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">context</span><span class="p">).</span><span class="na">addAccountExplicitly</span><span class="p">(</span><span class="n">account</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">ContentResolver</span><span class="p">.</span><span class="na">setIsSyncable</span><span class="p">(</span><span class="n">account</span><span class="p">,</span><span class="w"> </span><span class="n">authority</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">ContentResolver</span><span class="p">.</span><span class="na">setSyncAutomatically</span><span class="p">(</span><span class="n">account</span><span class="p">,</span><span class="w"> </span><span class="n">authority</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">ContentResolver</span><span class="p">.</span><span class="na">addPeriodicSync</span><span class="p">(</span><span class="n">account</span><span class="p">,</span><span class="w"> </span><span class="n">authority</span><span class="p">,</span><span class="w"> </span><span class="n">Bundle</span><span class="p">.</span><span class="na">EMPTY</span><span class="p">,</span><span class="w"> </span><span class="mi">3600</span><span class="p">);</span>
+</code></pre></div>
+<p>The <code>onPerformSync()</code> callback fires periodically. The app uses this to sync data to C2, refresh configuration, or trigger any background work. The sync framework is exempt from most background execution restrictions because it's a core Android platform feature.</p>
+<p>Aggressive implementations register multiple account types with separate SyncAdapter pairs (e.g., a "regular" account and a "guest" account), doubling the execution surface. Requires <code>GET_ACCOUNTS</code>, <code>AUTHENTICATE_ACCOUNTS</code>, <code>WRITE_SYNC_SETTINGS</code>, and <code>MANAGE_ACCOUNTS</code> permissions, all of which are normal (auto-granted) on older API levels.</p>
+<p><a href="../../malware/families/mandrake/">Mandrake</a> used this technique to maintain periodic C2 communication.</p>
 <h2 id="multi-process-keep-alive">Multi-Process Keep-Alive<a class="headerlink" href="#multi-process-keep-alive" title="Permanent link">&para;</a></h2>
 <p>A persistence pattern where the app runs multiple processes that monitor and resurrect each other. The manifest declares separate processes (e.g., <code>:dpro1</code>, <code>:dpro2</code>) for different service components. Each process binds to services in the other processes via AIDL IPC and polls them on a short interval (every 3-5 seconds). If any process dies, the surviving processes detect the broken binding and restart it.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Main process ←──AIDL bind──→ :dpro1 (polling service)
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>     ↑                           ↑
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>     └────AIDL bind────→ :dpro2 (watchdog)
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>                              ↑
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>              :dpro1 ←─bind──┘
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Main process ←──AIDL bind──→ :dpro1 (polling service)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>     ↑                           ↑
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>     └────AIDL bind────→ :dpro2 (watchdog)
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>                              ↑
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>              :dpro1 ←─bind──┘
 </code></pre></div>
 <p>The polling service in <code>:dpro1</code> calls a <code>pollingAction()</code> method on the main process's bound service via IPC. If the call fails (process dead), a resurrection service re-launches it. The main process does the same for <code>:dpro1</code>. The <code>:dpro2</code> process exists as a third watchdog monitoring both.</p>
 <p>This mutual binding pattern makes the app very difficult to kill without force-stopping all processes simultaneously. Killing one process causes the others to immediately respawn it. The pattern appears in aggressive ad SDKs that need continuous background execution for push notification ads and scheduled ad displays.</p>
@@ -13031,11 +13085,11 @@
 <p><a href="../../malware/families/cerberus/">Cerberus</a> combined device admin with accessibility: any attempt to open device admin settings triggers the accessibility service to press Home, making deactivation nearly impossible without ADB or safe mode.</p>
 <h3 id="hiding-from-launcher">Hiding from Launcher<a class="headerlink" href="#hiding-from-launcher" title="Permanent link">&para;</a></h3>
 <p>Removing the launcher <code>Activity</code> from the manifest (or disabling the component at runtime) hides the app from the app drawer. The user can still find it in Settings &gt; Apps, but most users won't think to look there.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">PackageManager</span><span class="w"> </span><span class="n">pm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getPackageManager</span><span class="p">();</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">pm</span><span class="p">.</span><span class="na">setComponentEnabledSetting</span><span class="p">(</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">ComponentName</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">LauncherActivity</span><span class="p">.</span><span class="na">class</span><span class="p">),</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">COMPONENT_ENABLED_STATE_DISABLED</span><span class="p">,</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">DONT_KILL_APP</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">PackageManager</span><span class="w"> </span><span class="n">pm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getPackageManager</span><span class="p">();</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">pm</span><span class="p">.</span><span class="na">setComponentEnabledSetting</span><span class="p">(</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">ComponentName</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">LauncherActivity</span><span class="p">.</span><span class="na">class</span><span class="p">),</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">COMPONENT_ENABLED_STATE_DISABLED</span><span class="p">,</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">DONT_KILL_APP</span><span class="p">);</span>
 </code></pre></div>
 <p><a href="../../malware/families/joker/">Joker</a>, <a href="../../malware/families/flubot/">FluBot</a>, and many RATs use this immediately after initial execution.</p>
 <h2 id="firmware-level-persistence">Firmware-Level Persistence<a class="headerlink" href="#firmware-level-persistence" title="Permanent link">&para;</a></h2>
@@ -13046,49 +13100,49 @@
 <p><a href="../../malware/families/pegasus/">Pegasus</a> and other state-sponsored malware use exploit chains to gain root, then install themselves as a system app in <code>/system/app/</code> or <code>/system/priv-app/</code>. System apps persist across factory resets and receive elevated privileges. Short of reflashing the firmware, the malware is permanent.</p>
 <h2 id="battery-optimization-exemption">Battery Optimization Exemption<a class="headerlink" href="#battery-optimization-exemption" title="Permanent link">&para;</a></h2>
 <p>Android's Doze mode and App Standby buckets restrict background execution. Malware requests exemption:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Intent</span><span class="p">(</span><span class="n">Settings</span><span class="p">.</span><span class="na">ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</span><span class="p">);</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">intent</span><span class="p">.</span><span class="na">setData</span><span class="p">(</span><span class="n">Uri</span><span class="p">.</span><span class="na">parse</span><span class="p">(</span><span class="s">&quot;package:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">getPackageName</span><span class="p">()));</span>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">startActivity</span><span class="p">(</span><span class="n">intent</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Intent</span><span class="p">(</span><span class="n">Settings</span><span class="p">.</span><span class="na">ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS</span><span class="p">);</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">intent</span><span class="p">.</span><span class="na">setData</span><span class="p">(</span><span class="n">Uri</span><span class="p">.</span><span class="na">parse</span><span class="p">(</span><span class="s">&quot;package:&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">getPackageName</span><span class="p">()));</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">startActivity</span><span class="p">(</span><span class="n">intent</span><span class="p">);</span>
 </code></pre></div>
 <p>This shows a system dialog. Some families use accessibility to auto-tap "Allow" on this dialog. Others disguise the request behind a fake loading screen so the user doesn't realize what they're approving.</p>
 <h2 id="device-protected-storage">Device Protected Storage<a class="headerlink" href="#device-protected-storage" title="Permanent link">&para;</a></h2>
 <p>Android 7.0 introduced Direct Boot and <a href="https://developer.android.com/training/articles/direct-boot">device protected storage</a> -- a storage area accessible before the user unlocks the device for the first time after a reboot. By declaring <code>android:directBootAware="true"</code> and <code>android:defaultToDeviceProtectedStorage="true"</code> in the manifest, an app's SharedPreferences and files are stored in a credential-protected context that survives the locked state.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">&lt;application</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="na">android:directBootAware=</span><span class="s">&quot;true&quot;</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="na">android:defaultToDeviceProtectedStorage=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">&lt;application</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="na">android:directBootAware=</span><span class="s">&quot;true&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="na">android:defaultToDeviceProtectedStorage=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
 </code></pre></div>
 <p>Malware uses this to ensure its configuration, C2 URLs, and operational state persist and are accessible immediately at boot, before the user enters their PIN/password. Combined with a <code>BOOT_COMPLETED</code> receiver (which fires during Direct Boot for direct-boot-aware apps), this enables malicious activity before the device is fully unlocked.</p>
 <p>Detection: check for <code>directBootAware="true"</code> in the manifest, especially on components that don't have a legitimate reason for pre-unlock execution.</p>
 <h2 id="launcher-icon-toggle">Launcher Icon Toggle<a class="headerlink" href="#launcher-icon-toggle" title="Permanent link">&para;</a></h2>
 <h3 id="activity-alias-switching">Activity-Alias Switching<a class="headerlink" href="#activity-alias-switching" title="Permanent link">&para;</a></h3>
 <p>Instead of disabling the launcher activity entirely (which can be reversed via <code>pm enable</code>), malware uses multiple <code>activity-alias</code> declarations pointing to the same target activity. One alias is the visible launcher entry; the other is a hidden replacement.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">&lt;activity-alias</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="na">android:name=</span><span class="s">&quot;.VisibleLauncher&quot;</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="na">android:targetActivity=</span><span class="s">&quot;.MainActivity&quot;</span>
-<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="na">android:enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
-<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">        </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="nt">&lt;/activity-alias&gt;</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
-<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="nt">&lt;activity-alias</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="w">    </span><span class="na">android:name=</span><span class="s">&quot;.HiddenLauncher&quot;</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">    </span><span class="na">android:targetActivity=</span><span class="s">&quot;.MainActivity&quot;</span>
-<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="w">    </span><span class="na">android:enabled=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">        </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.INFO&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
-<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="nt">&lt;/activity-alias&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;activity-alias</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="na">android:name=</span><span class="s">&quot;.VisibleLauncher&quot;</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="na">android:targetActivity=</span><span class="s">&quot;.MainActivity&quot;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="na">android:enabled=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">        </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.LAUNCHER&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="nt">&lt;/activity-alias&gt;</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="nt">&lt;activity-alias</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">    </span><span class="na">android:name=</span><span class="s">&quot;.HiddenLauncher&quot;</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">    </span><span class="na">android:targetActivity=</span><span class="s">&quot;.MainActivity&quot;</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="w">    </span><span class="na">android:enabled=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a><span class="w">        </span><span class="nt">&lt;category</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.category.INFO&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a><span class="nt">&lt;/activity-alias&gt;</span>
 </code></pre></div>
 <p>At runtime, the app enables the hidden alias (which uses <code>INFO</code> category instead of <code>LAUNCHER</code>, so it won't appear in the app drawer) and disables the visible one:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">pm</span><span class="p">.</span><span class="na">setComponentEnabledSetting</span><span class="p">(</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">ComponentName</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;com.app.VisibleLauncher&quot;</span><span class="p">),</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">COMPONENT_ENABLED_STATE_DISABLED</span><span class="p">,</span><span class="w"> </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">DONT_KILL_APP</span><span class="p">);</span>
-<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">pm</span><span class="p">.</span><span class="na">setComponentEnabledSetting</span><span class="p">(</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">ComponentName</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;com.app.HiddenLauncher&quot;</span><span class="p">),</span>
-<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">COMPONENT_ENABLED_STATE_ENABLED</span><span class="p">,</span><span class="w"> </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">DONT_KILL_APP</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">pm</span><span class="p">.</span><span class="na">setComponentEnabledSetting</span><span class="p">(</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">ComponentName</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;com.app.VisibleLauncher&quot;</span><span class="p">),</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">COMPONENT_ENABLED_STATE_DISABLED</span><span class="p">,</span><span class="w"> </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">DONT_KILL_APP</span><span class="p">);</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">pm</span><span class="p">.</span><span class="na">setComponentEnabledSetting</span><span class="p">(</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">ComponentName</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;com.app.HiddenLauncher&quot;</span><span class="p">),</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">COMPONENT_ENABLED_STATE_ENABLED</span><span class="p">,</span><span class="w"> </span><span class="n">PackageManager</span><span class="p">.</span><span class="na">DONT_KILL_APP</span><span class="p">);</span>
 </code></pre></div>
 <p>The app disappears from the launcher but remains findable in Settings &gt; Apps. The <code>INFO</code> category alias keeps the app discoverable by the system for deep links and intents, maintaining functionality while being invisible to the user.</p>
 <h2 id="max_int-priority-receivers">MAX_INT Priority Receivers<a class="headerlink" href="#max_int-priority-receivers" title="Permanent link">&para;</a></h2>
@@ -13098,24 +13152,28 @@
 <li><strong>Monitor all app lifecycle events</strong>: register for <code>PACKAGE_ADDED</code>, <code>PACKAGE_REMOVED</code>, <code>PACKAGE_REPLACED</code> at maximum priority to track every app install/uninstall on the device</li>
 <li><strong>React to device state changes</strong>: monitor battery, storage, locale, wallpaper, and Bluetooth state changes to trigger context-aware behavior (e.g., show ads when the device is charging)</li>
 </ol>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">&lt;receiver</span><span class="w"> </span><span class="na">android:exported=</span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="na">android:priority=</span><span class="s">&quot;2147483647&quot;</span><span class="nt">&gt;</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.PACKAGE_ADDED&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.PACKAGE_REMOVED&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="nt">&lt;data</span><span class="w"> </span><span class="na">android:scheme=</span><span class="s">&quot;package&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
-<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
-<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="nt">&lt;/receiver&gt;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">&lt;receiver</span><span class="w"> </span><span class="na">android:exported=</span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="na">android:priority=</span><span class="s">&quot;2147483647&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.PACKAGE_ADDED&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.PACKAGE_REMOVED&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">        </span><span class="nt">&lt;data</span><span class="w"> </span><span class="na">android:scheme=</span><span class="s">&quot;package&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="nt">&lt;/receiver&gt;</span>
 </code></pre></div>
 <p>Ad fraud SDKs use these to detect competing app installs and trigger ad displays. The receiver bodies are often empty stubs at build time, populated dynamically via remote configuration at runtime.</p>
 <h2 id="messagequeueidlehandler">MessageQueue.IdleHandler<a class="headerlink" href="#messagequeueidlehandler" title="Permanent link">&para;</a></h2>
 <p>A low-visibility persistence technique. <code>MessageQueue.IdleHandler</code> callbacks execute whenever the main thread's message queue becomes idle (i.e., between UI events). Malware registers an IdleHandler to run code during these gaps:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">Looper</span><span class="p">.</span><span class="na">myQueue</span><span class="p">().</span><span class="na">addIdleHandler</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">loadRemoteConfig</span><span class="p">();</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="n">startExfiltration</span><span class="p">();</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">});</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">Looper</span><span class="p">.</span><span class="na">myQueue</span><span class="p">().</span><span class="na">addIdleHandler</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="n">loadRemoteConfig</span><span class="p">();</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="n">startExfiltration</span><span class="p">();</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">});</span>
 </code></pre></div>
 <p>Returning <code>true</code> keeps the handler registered permanently. This provides continuous opportunistic execution without timers, alarms, or services. The execution is invisible in process dumps and doesn't appear as a running service or scheduled job.</p>
+<h2 id="hellodaemon-keep-alive">Hellodaemon Keep-Alive<a class="headerlink" href="#hellodaemon-keep-alive" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/xingda920813/HelloDaemon">HelloDaemon</a> (<code>com.xdandroid.hellodaemon</code>) is an open-source Chinese keep-alive library designed to prevent Android from killing background processes. It combines multiple persistence mechanisms into a single SDK: <code>JobScheduler</code> with <code>setPersisted(true)</code>, repeating <code>AlarmManager</code> alarms, <code>BOOT_COMPLETED</code> receivers, and cross-process daemon binding. If one mechanism is killed, the others detect it and restart.</p>
+<p>The library uses a custom broadcast action (<code>com.xdandroid.hellodaemon.CANCEL_JOB_ALARM_SUB</code>) for internal coordination between its components.</p>
+<p>HelloDaemon appears in aggressive adware, data collection SDKs, and push notification frameworks targeting Chinese OEM devices (Xiaomi, Huawei, Oppo, Vivo), which kill background apps more aggressively than stock Android. Detection: <code>hellodaemon</code> in class names, the custom broadcast action, or <code>xdandroid</code> package references.</p>
 <h2 id="oem-specific-persistence">OEM-Specific Persistence<a class="headerlink" href="#oem-specific-persistence" title="Permanent link">&para;</a></h2>
 <p>Chinese OEMs (Xiaomi, Huawei, Oppo, Vivo) maintain their own autostart managers that independently restrict background apps. Even with <code>RECEIVE_BOOT_COMPLETED</code> and battery optimization disabled, these OEMs may kill the app unless it is whitelisted in their proprietary autostart list.</p>
 <p>Malware targeting these regions often includes OEM-specific code that detects the manufacturer and launches the appropriate settings intent to guide (or force via accessibility) the user into whitelisting the app.</p>
