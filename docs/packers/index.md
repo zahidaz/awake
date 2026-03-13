@@ -15,6 +15,7 @@ Obfuscators are a lighter category: they transform code to make it harder to rea
 | [Arxan (Digital.ai)](arxan.md) | Digital.ai | USA | Documented |
 | [Baidu Reinforcement](tencent-legu.md) | Baidu | China | Documented |
 | [Bangcle (SecNeo)](bangcle.md) | Bangcle | China | Documented |
+| [SecShell](secshell.md) | Bangcle / SecNeo (梆梆安全) | China | Documented |
 | [DexGuard](dexguard.md) | Guardsquare | Belgium | Documented |
 | [DexProtector](dexprotector.md) | Licel | Netherlands | Documented |
 | [iJiami](tencent-legu.md) | iJiami | China | Documented |
@@ -64,7 +65,8 @@ Commercial packers are increasingly adopted by malware authors. The packer provi
 | [DexGuard](dexguard.md) | [Anatsa](../malware/families/anatsa.md), [Xenomorph](../malware/families/xenomorph.md) | Higher-tier MaaS families use DexGuard's commercial protection. |
 | [Tencent Legu](tencent-legu.md) | [Triada](../malware/families/triada.md), various Chinese malware | Common in Chinese market. `libshella.so` / `libshellx.so` marker. |
 | [360 Jiagu](qihoo-360-jiagu.md) | Chinese banking trojans, stalkerware | `libjiagu.so` marker. Multi-DEX support. |
-| [Bangcle](bangcle.md) | Regional malware, adware | `libsecexe.so` / `libSecShell.so` marker. |
+| [Bangcle](bangcle.md) | Regional malware, adware | `libsecexe.so` / `libsecmain.so` marker. |
+| [SecShell](secshell.md) | [Joker](../malware/families/joker.md), Chinese malware | `libSecShell.so` marker. Bangcle second-gen. Dual RC4/SM4 cipher, self-packed native code. |
 | Custom packers | [Mandrake](../malware/families/mandrake.md), [SoumniBot](../malware/families/soumnibot.md) | OLLVM-obfuscated native loaders ([Mandrake](../malware/families/mandrake.md)), manifest parsing exploits ([SoumniBot](../malware/families/soumnibot.md)) |
 | [AppSealing](appsealing.md) | Korean banking apps, Unity games | `libcovault-appsec.so` marker. Bypass: AppPealing Xposed module. |
 | [LIAPP](liapp.md) | Korean banking apps (KBPay, NH Bank) | Hardest Korean protector. Server-side token verification. No public bypass tool. |

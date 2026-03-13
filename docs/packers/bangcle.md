@@ -1,6 +1,6 @@
 # Bangcle (SecNeo)
 
-One of the earliest Chinese packers. While the vendor has evolved into SecNeo, older Bangcle versions are still encountered in legacy malware samples. The protection is basic by modern standards and straightforward to unpack.
+One of the earliest Chinese packers. The vendor evolved into SecNeo, and the technology later evolved into [SecShell (Kiwisec)](secshell.md), a significantly more sophisticated packer that retains the Bangcle anti-tamper marker. Older Bangcle versions are still encountered in legacy malware samples. The protection is basic by modern standards and straightforward to unpack.
 
 ## Overview
 

@@ -331,7 +331,8 @@ Known marker libraries and what they indicate:
 | `libjiagu*.so` | [Qihoo 360](../packers/qihoo-360-jiagu.md) |
 | `libdexguard.so` | [DexGuard](../packers/dexguard.md) |
 | `libdexprotector*.so`, `libdpboot.so` | [DexProtector](../packers/dexprotector.md) |
-| `libsecexe.so`, `libSecShell.so` | [Bangcle](../packers/bangcle.md) |
+| `libsecexe.so`, `libsecmain.so` | [Bangcle](../packers/bangcle.md) |
+| `libSecShell.so` | [SecShell (Kiwisec)](../packers/secshell.md) |
 | `libcovault-appsec.so` | [AppSealing](../packers/appsealing.md) |
 
 !!! tip "What to do when you detect a packer"
