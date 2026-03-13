@@ -15,6 +15,7 @@ Obfuscators are a lighter category: they transform code to make it harder to rea
 | [Arxan (Digital.ai)](arxan.md) | Digital.ai | USA | Documented |
 | [Baidu Reinforcement](tencent-legu.md) | Baidu | China | Documented |
 | [Bangcle (SecNeo)](bangcle.md) | Bangcle | China | Documented |
+| [Kiwisec (几维安全)](kiwisec.md) | Kiwisec | China | Documented |
 | [SecShell](secshell.md) | Bangcle / SecNeo (梆梆安全) | China | Documented |
 | [DexGuard](dexguard.md) | Guardsquare | Belgium | Documented |
 | [DexProtector](dexprotector.md) | Licel | Netherlands | Documented |
