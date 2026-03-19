@@ -1404,6 +1404,8 @@
       
         
       
+        
+      
     
     
     
@@ -1907,6 +1909,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../launcher-hijacking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Launcher Hijacking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../location-tracking/" class="md-nav__link">
         
   
@@ -2125,6 +2155,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Foreground Service">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#invisible-via-post_notifications-denial-android-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Invisible via POST_NOTIFICATIONS Denial (Android 13+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2366,6 +2413,17 @@
     <span class="md-ellipsis">
       
         Hellodaemon Keep-Alive
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fcm-silent-push-wake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FCM Silent Push Wake
       
     </span>
   </a>
@@ -12606,6 +12664,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Foreground Service">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#invisible-via-post_notifications-denial-android-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Invisible via POST_NOTIFICATIONS Denial (Android 13+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -12853,6 +12928,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#fcm-silent-push-wake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FCM Silent Push Wake
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#oem-specific-persistence" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -13049,6 +13135,11 @@
 </code></pre></div>
 </details>
 <p>The notification channel uses <code>IMPORTANCE_MIN</code> and a blank name to make the notification as invisible as possible. <code>START_STICKY</code> tells Android to restart the service if the system kills it. <a href="../../malware/families/spynote/">SpyNote</a> and <a href="../../malware/families/anubis/">Anubis</a> both rely on this pattern.</p>
+<h3 id="invisible-via-post_notifications-denial-android-13">Invisible via POST_NOTIFICATIONS Denial (Android 13+)<a class="headerlink" href="#invisible-via-post_notifications-denial-android-13" title="Permanent link">&para;</a></h3>
+<p>Android 13 introduced <a href="../../permissions/normal/post-notifications/"><code>POST_NOTIFICATIONS</code></a> as a runtime permission. When this permission is denied (either the user declines the prompt or the app never requests it), the mandatory foreground service notification is suppressed from the notification drawer. The service continues running indefinitely -- protected from the system's background process killer -- with no notification icon or shade entry visible to the user.</p>
+<p>The app starts the foreground service while it has a visible Activity (one of several <a href="https://developer.android.com/develop/background-work/services/fgs/restrictions-bg-start">exemptions</a> allowing foreground service starts on Android 12+), then the user closes the app. The service persists as a foreground service process, protected from the system's process killer, with its notification invisible because the permission was never granted.</p>
+<p>The service is not completely undetectable: Android 13 introduced the <a href="https://developer.android.com/about/versions/13/changes/fgs-manager">FGS Task Manager</a>, accessible via a button at the bottom of the notification shade that shows the number of apps running in the background. Tapping it opens an "Active apps" dialog listing each app with a "Stop" button. However, most users are unaware of this feature, making it a weak remediation. If a foreground service runs for 20+ hours in a 24-hour window, the system pushes a separate notification (though <code>mediaPlayback</code> and <code>location</code> service types are exempt).</p>
+<p>This is simpler and more effective than <code>IMPORTANCE_MIN</code> tricks. Adware families exploit it at scale: every app in a fleet starts its foreground service while <code>TOP</code>, then relies on the denied notification permission to run with no drawer notification.</p>
 <h2 id="scheduled-execution">Scheduled Execution<a class="headerlink" href="#scheduled-execution" title="Permanent link">&para;</a></h2>
 <h3 id="jobscheduler">JobScheduler<a class="headerlink" href="#jobscheduler" title="Permanent link">&para;</a></h3>
 <p>Schedules work that survives process death. The system manages when the job runs based on constraints (network, charging, idle).</p>
@@ -13234,6 +13325,10 @@
 <p><a href="https://github.com/xingda920813/HelloDaemon">HelloDaemon</a> (<code>com.xdandroid.hellodaemon</code>) is an open-source Chinese keep-alive library designed to prevent Android from killing background processes. It combines multiple persistence mechanisms into a single SDK: <code>JobScheduler</code> with <code>setPersisted(true)</code>, repeating <code>AlarmManager</code> alarms, <code>BOOT_COMPLETED</code> receivers, and cross-process daemon binding. If one mechanism is killed, the others detect it and restart.</p>
 <p>The library uses a custom broadcast action (<code>com.xdandroid.hellodaemon.CANCEL_JOB_ALARM_SUB</code>) for internal coordination between its components.</p>
 <p>HelloDaemon appears in aggressive adware, data collection SDKs, and push notification frameworks targeting Chinese OEM devices (Xiaomi, Huawei, Oppo, Vivo), which kill background apps more aggressively than stock Android. Detection: <code>hellodaemon</code> in class names, the custom broadcast action, or <code>xdandroid</code> package references.</p>
+<h2 id="fcm-silent-push-wake">FCM Silent Push Wake<a class="headerlink" href="#fcm-silent-push-wake" title="Permanent link">&para;</a></h2>
+<p>Firebase Cloud Messaging provides a remote wake mechanism for apps killed by the system or swiped from recents. When an app registers for FCM, Google Play Services (not the app itself) maintains the push channel. A silent data message sent from the server causes GMS to deliver the message to the app, restarting its process if necessary.</p>
+<p>FCM wake survives the system killing the process for memory pressure, swiping from recents, and app standby buckets. However, it does <strong>not</strong> survive force-stop: when a user explicitly force-stops an app via Settings &gt; Apps, Android sets <code>FLAG_STOPPED</code> on the package, and <a href="https://firebase.blog/posts/2024/07/understand-fcm-delivery-rates/">FCM messages are dropped</a>, not queued. The only way to resume delivery is for the user to manually launch the app again.</p>
+<p>Despite the force-stop limitation, FCM is a reliable backup wake channel because most users close apps by swiping from recents (which does not set <code>FLAG_STOPPED</code>), not by navigating to Settings to force-stop. Adware families register for FCM from multiple apps, so a server push to any one app can trigger cross-app wake via broadcast or bound service connections.</p>
 <h2 id="oem-specific-persistence">OEM-Specific Persistence<a class="headerlink" href="#oem-specific-persistence" title="Permanent link">&para;</a></h2>
 <p>Chinese OEMs (Xiaomi, Huawei, Oppo, Vivo) maintain their own autostart managers that independently restrict background apps. Even with <code>RECEIVE_BOOT_COMPLETED</code> and battery optimization disabled, these OEMs may kill the app unless it is whitelisted in their proprietary autostart list.</p>
 <p>Malware targeting these regions often includes OEM-specific code that detects the manufacturer and launches the appropriate settings intent to guide (or force via accessibility) the user into whitelisting the app.</p>
@@ -13385,6 +13480,14 @@
 <td>High</td>
 <td>Medium</td>
 <td style="text-align: center;">All</td>
+</tr>
+<tr>
+<td>FCM silent push</td>
+<td style="text-align: center;">Yes</td>
+<td style="text-align: center;">No (FLAG_STOPPED blocks)</td>
+<td>Very high</td>
+<td>High</td>
+<td style="text-align: center;">All (requires GMS)</td>
 </tr>
 <tr>
 <td>MessageQueue.IdleHandler</td>

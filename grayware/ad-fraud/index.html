@@ -1381,6 +1381,8 @@
       
         
       
+        
+      
     
     
     
@@ -1863,6 +1865,34 @@
     
   
     Keylogging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../attacks/launcher-hijacking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Launcher Hijacking
   
 
     
@@ -11478,6 +11508,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#multi-app-background-ad-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-App Background Ad Fleet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notification-based-ad-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notification-Based Ad Triggers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#technical-indicators" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12593,6 +12645,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#multi-app-background-ad-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-App Background Ad Fleet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notification-based-ad-triggers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notification-Based Ad Triggers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#technical-indicators" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12899,6 +12973,40 @@
 </table>
 <p>A mask overlay view (<code>FrameLayout</code> subclass) covers the ad during the simulated click, hiding any visual feedback (ripple effects, page transitions) from the user. Touch events on the mask are intercepted in native code (JNI), keeping the click simulation logic out of the DEX where it would be visible to static analysis.</p>
 <p>Position tracking (<code>positionShowedList</code>, <code>positionClickedList</code>) ensures the SDK doesn't click the same ad twice and can report clicked/unclicked ratios back to the server, mimicking natural click-through rates.</p>
+<h2 id="multi-app-background-ad-fleet">Multi-App Background Ad Fleet<a class="headerlink" href="#multi-app-background-ad-fleet" title="Permanent link">&para;</a></h2>
+<p>A distribution model where the same operator publishes many apps (10+) built from the same codebase with different skins (cleaner, WiFi analyzer, PDF reader, file manager). Each app independently runs an <a href="../../attacks/persistence-techniques/#invisible-via-post_notifications-denial-android-13">invisible foreground service</a> that periodically attempts to launch fullscreen ad activities from the background.</p>
+<p>The apps are not explicitly coordinating with each other. Each independently runs a timer loop that periodically calls <code>startActivity()</code> targeting a trampoline activity. The trampoline launches an ad SDK activity (reward video, fullscreen interstitial, companion ad). When many apps from the same operator are installed on one device, their independent timers produce overlapping ad bursts -- multiple fullscreen ads within seconds of each other.</p>
+<p>Apps that lack a <a href="../../attacks/anti-analysis-techniques/#background-activity-launch-bypass-companiondevicemanager">BAL bypass</a> get blocked on Android 10+ but retry on the next interval. The operator relies on volume: if some apps are blocked, others succeed. Each app is a disposable ad launcher in a fleet.</p>
+<h2 id="notification-based-ad-triggers">Notification-Based Ad Triggers<a class="headerlink" href="#notification-based-ad-triggers" title="Permanent link">&para;</a></h2>
+<p>Adware that uses fake system notifications as pretexts to launch fullscreen ad activities. The foreground service creates notifications mimicking system alerts (low battery, WiFi connected, storage full, app update available), and tapping the notification opens a fullscreen ad activity instead of any real settings or system screen.</p>
+<p>The notifications use legitimate-sounding channel names (<code>BatteryStatus</code>, <code>WiFiAssistant</code>, <code>AppManager</code>) and system-style icons. Combined with <a href="#fake-notification-impersonation">fake notification impersonation</a>, the user cannot distinguish them from real system notifications.</p>
+<p>The ad vector is selected randomly at each timer interval to avoid pattern detection:</p>
+<table>
+<thead>
+<tr>
+<th>Vector</th>
+<th>Notification Pretext</th>
+<th>Actual Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Battery alert</td>
+<td>"Battery optimization available"</td>
+<td>Opens fullscreen ad</td>
+</tr>
+<tr>
+<td>WiFi alert</td>
+<td>"WiFi connection secured"</td>
+<td>Opens fullscreen ad</td>
+</tr>
+<tr>
+<td>App status</td>
+<td>"Apps need updating"</td>
+<td>Opens fullscreen ad</td>
+</tr>
+</tbody>
+</table>
 <h2 id="technical-indicators">Technical Indicators<a class="headerlink" href="#technical-indicators" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>PACKAGE_ADDED</code> broadcast receiver (click injection vector)</li>
