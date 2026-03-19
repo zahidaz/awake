@@ -395,6 +395,57 @@ The system allows this because media button handling is considered a legitimate 
 
 This technique was patched in Android 15 (API 35). On Android 10-14, it remains effective for popping up permission request screens, phishing overlays, or notification access settings from the background without user interaction.
 
+## Background Activity Launch Bypass (CompanionDeviceManager)
+
+A technique that works on Android 15 (API 35) with zero dangerous permissions. The app abuses `CompanionDeviceManager` to gain a BAL allowlist exemption, enabling background activity launches that Android's restrictions would otherwise block.
+
+### Prerequisites
+
+A single `<uses-feature>` declaration in the manifest:
+
+```xml
+<uses-feature android:name="android.software.companion_device_setup"/>
+```
+
+This is not a permission. It does not require user approval at install, does not appear in Settings > App Permissions, and Google Play does not flag it. No `BLUETOOTH_SCAN`, no `REQUEST_COMPANION_RUN_IN_BACKGROUND`, no dangerous permissions of any kind.
+
+### Attack Chain
+
+1. App declares `companion_device_setup` feature in manifest
+2. At runtime, scans for any nearby Bluetooth LE device (random beacon, headphones, smartwatch)
+3. Calls `CompanionDeviceManager.associate()` with a filter matching that device
+4. System shows a dialog: "Allow [app] to connect to [BLE MAC address]?"
+5. User taps "Allow" (the MAC address is meaningless to most users)
+6. App is registered as a companion device manager, added to `BAL_ALLOW_ALLOWLISTED_COMPONENT` allowlist
+7. App can now call `startActivity()` from background services on Android 15
+
+The association has no expiry and persists across reboots. The dialog gives no indication that accepting grants background activity launch privileges. Combined with [invisible foreground services](persistence-techniques.md#invisible-via-post_notifications-denial-android-13) (denied `POST_NOTIFICATIONS`), the user has zero awareness that the app is launching activities from background.
+
+### Two-Step Trampoline Launch
+
+With the BAL exemption, the ad or phishing launch uses a two-step trampoline to display arbitrary UI from a background service:
+
+**Step 1 -- Background to trampoline** (via `BAL_ALLOW_ALLOWLISTED_COMPONENT`): The foreground service calls `startActivity()` targeting an obfuscated trampoline activity. This is allowed because the app is on the companion device allowlist.
+
+**Step 2 -- Trampoline to payload** (via `BAL_ALLOW_VISIBLE_WINDOW`): The trampoline activity is now visible, so it launches the real payload activity (ad SDK, phishing overlay, etc.). This is allowed because the calling app has a visible window.
+
+The two-step pattern is necessary because the BAL exemption applies to the app's own activities, but the real payload is often an ad SDK activity in a different package namespace within the same APK. The trampoline bridges the permission gap.
+
+### Brute-Force Fallback
+
+Apps without a companion association spam `startActivity()` every 30 seconds, relying on volume to overcome probabilistic blocking. With multiple apps in a coordinated fleet (e.g., 14 apps at 30-second intervals), the device generates hundreds of blocked attempts per hour. These apps simultaneously request `CompanionDeviceManager.associate()` dialogs -- if the user accepts any of them, that app joins the allowlist and starts showing fullscreen ads.
+
+### Social Engineering the Dialog
+
+The CompanionDevice dialog shows an opaque Bluetooth MAC address with no context about what permissions are being granted. Adware presents multiple dialogs in rapid succession (3 dialogs in under 90 seconds observed in the wild), training the user to tap "Allow" reflexively.
+
+### Detection
+
+- `companion_device_setup` in `<uses-feature>` without legitimate companion device functionality (no Bluetooth UI, no wearable integration)
+- `CompanionDeviceManager.associate()` calls in utility apps (cleaners, PDF readers, WiFi analyzers)
+- Active companion associations visible via `adb shell dumpsys companiondevice`
+- Revoke associations via `adb shell cmd companiondevice disassociate <userId> <packageName> <macAddress>`
+
 ## Hidden API Bypass
 
 [AndroidHiddenApiBypass](https://github.com/LSPosed/AndroidHiddenApiBypass) (`org.lsposed.hiddenapibypass`) is an open-source library that circumvents Android's hidden API restrictions introduced in Android 9. Normally, apps cannot call `@hide` annotated methods or directly instantiate system service classes. The library has multiple bypass variants: the original uses `Unsafe` memory operations, while the newer LSPass variant uses `Property.of()` to achieve the same result without `Unsafe`.
