@@ -106,6 +106,7 @@ nav:
           - Dynamic Code Loading: attacks/dynamic-code-loading.md
           - Fake Biometric Prompts: attacks/fake-biometric-prompts.md
           - Keylogging: attacks/keylogging.md
+          - Launcher Hijacking: attacks/launcher-hijacking.md
           - Location Tracking & Geofencing: attacks/location-tracking.md
           - Mass Malware Generation: attacks/mass-malware-generation.md
           - Network Traffic Interception: attacks/network-traffic-interception.md
