@@ -154,6 +154,28 @@ A mask overlay view (`FrameLayout` subclass) covers the ad during the simulated 
 
 Position tracking (`positionShowedList`, `positionClickedList`) ensures the SDK doesn't click the same ad twice and can report clicked/unclicked ratios back to the server, mimicking natural click-through rates.
 
+## Multi-App Background Ad Fleet
+
+A distribution model where the same operator publishes many apps (10+) built from the same codebase with different skins (cleaner, WiFi analyzer, PDF reader, file manager). Each app independently runs an [invisible foreground service](../attacks/persistence-techniques.md#invisible-via-post_notifications-denial-android-13) that periodically attempts to launch fullscreen ad activities from the background.
+
+The apps are not explicitly coordinating with each other. Each independently runs a timer loop that periodically calls `startActivity()` targeting a trampoline activity. The trampoline launches an ad SDK activity (reward video, fullscreen interstitial, companion ad). When many apps from the same operator are installed on one device, their independent timers produce overlapping ad bursts -- multiple fullscreen ads within seconds of each other.
+
+Apps that lack a [BAL bypass](../attacks/anti-analysis-techniques.md#background-activity-launch-bypass-companiondevicemanager) get blocked on Android 10+ but retry on the next interval. The operator relies on volume: if some apps are blocked, others succeed. Each app is a disposable ad launcher in a fleet.
+
+## Notification-Based Ad Triggers
+
+Adware that uses fake system notifications as pretexts to launch fullscreen ad activities. The foreground service creates notifications mimicking system alerts (low battery, WiFi connected, storage full, app update available), and tapping the notification opens a fullscreen ad activity instead of any real settings or system screen.
+
+The notifications use legitimate-sounding channel names (`BatteryStatus`, `WiFiAssistant`, `AppManager`) and system-style icons. Combined with [fake notification impersonation](#fake-notification-impersonation), the user cannot distinguish them from real system notifications.
+
+The ad vector is selected randomly at each timer interval to avoid pattern detection:
+
+| Vector | Notification Pretext | Actual Behavior |
+|--------|---------------------|-----------------|
+| Battery alert | "Battery optimization available" | Opens fullscreen ad |
+| WiFi alert | "WiFi connection secured" | Opens fullscreen ad |
+| App status | "Apps need updating" | Opens fullscreen ad |
+
 ## Technical Indicators
 
 - `PACKAGE_ADDED` broadcast receiver (click injection vector)
