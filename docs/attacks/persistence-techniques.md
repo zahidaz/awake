@@ -85,6 +85,16 @@ Android 8+ kills background services within minutes. The standard workaround is 
 
 The notification channel uses `IMPORTANCE_MIN` and a blank name to make the notification as invisible as possible. `START_STICKY` tells Android to restart the service if the system kills it. [SpyNote](../malware/families/spynote.md) and [Anubis](../malware/families/anubis.md) both rely on this pattern.
 
+### Invisible via POST_NOTIFICATIONS Denial (Android 13+)
+
+Android 13 introduced [`POST_NOTIFICATIONS`](../permissions/normal/post-notifications.md) as a runtime permission. When this permission is denied (either the user declines the prompt or the app never requests it), the mandatory foreground service notification is suppressed from the notification drawer. The service continues running indefinitely -- protected from the system's background process killer -- with no notification icon or shade entry visible to the user.
+
+The app starts the foreground service while it has a visible Activity (one of several [exemptions](https://developer.android.com/develop/background-work/services/fgs/restrictions-bg-start) allowing foreground service starts on Android 12+), then the user closes the app. The service persists as a foreground service process, protected from the system's process killer, with its notification invisible because the permission was never granted.
+
+The service is not completely undetectable: Android 13 introduced the [FGS Task Manager](https://developer.android.com/about/versions/13/changes/fgs-manager), accessible via a button at the bottom of the notification shade that shows the number of apps running in the background. Tapping it opens an "Active apps" dialog listing each app with a "Stop" button. However, most users are unaware of this feature, making it a weak remediation. If a foreground service runs for 20+ hours in a 24-hour window, the system pushes a separate notification (though `mediaPlayback` and `location` service types are exempt).
+
+This is simpler and more effective than `IMPORTANCE_MIN` tricks. Adware families exploit it at scale: every app in a fleet starts its foreground service while `TOP`, then relies on the denied notification permission to run with no drawer notification.
+
 ## Scheduled Execution
 
 ### JobScheduler
@@ -354,6 +364,14 @@ The library uses a custom broadcast action (`com.xdandroid.hellodaemon.CANCEL_JO
 
 HelloDaemon appears in aggressive adware, data collection SDKs, and push notification frameworks targeting Chinese OEM devices (Xiaomi, Huawei, Oppo, Vivo), which kill background apps more aggressively than stock Android. Detection: `hellodaemon` in class names, the custom broadcast action, or `xdandroid` package references.
 
+## FCM Silent Push Wake
+
+Firebase Cloud Messaging provides a remote wake mechanism for apps killed by the system or swiped from recents. When an app registers for FCM, Google Play Services (not the app itself) maintains the push channel. A silent data message sent from the server causes GMS to deliver the message to the app, restarting its process if necessary.
+
+FCM wake survives the system killing the process for memory pressure, swiping from recents, and app standby buckets. However, it does **not** survive force-stop: when a user explicitly force-stops an app via Settings > Apps, Android sets `FLAG_STOPPED` on the package, and [FCM messages are dropped](https://firebase.blog/posts/2024/07/understand-fcm-delivery-rates/), not queued. The only way to resume delivery is for the user to manually launch the app again.
+
+Despite the force-stop limitation, FCM is a reliable backup wake channel because most users close apps by swiping from recents (which does not set `FLAG_STOPPED`), not by navigating to Settings to force-stop. Adware families register for FCM from multiple apps, so a server push to any one app can trigger cross-app wake via broadcast or bound service connections.
+
 ## OEM-Specific Persistence
 
 Chinese OEMs (Xiaomi, Huawei, Oppo, Vivo) maintain their own autostart managers that independently restrict background apps. Even with `RECEIVE_BOOT_COMPLETED` and battery optimization disabled, these OEMs may kill the app unless it is whitelisted in their proprietary autostart list.
@@ -396,6 +414,7 @@ Each restriction pushed malware toward more creative solutions. The overall tren
 | WorkManager (self-rescheduling) | Yes | No | Very high | High | 5+ |
 | AlarmManager | No | No | High | Medium | All |
 | Sync adapter | Yes | No | High | Medium | All |
+| FCM silent push | Yes | No (FLAG_STOPPED blocks) | Very high | High | All (requires GMS) |
 | MessageQueue.IdleHandler | No | No | Very high | Low | All |
 | Multi-process keep-alive | No | No (but self-resurrects) | High | High | All |
 | Accessibility service | Yes | Yes (if enabled) | Medium | Very high | 4.1+ |
