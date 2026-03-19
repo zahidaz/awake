@@ -414,8 +414,8 @@ This is not a permission. It does not require user approval at install, does not
 1. App declares `companion_device_setup` feature in manifest
 2. At runtime, scans for any nearby Bluetooth LE device (random beacon, headphones, smartwatch)
 3. Calls `CompanionDeviceManager.associate()` with a filter matching that device
-4. System shows a dialog: "Allow [app] to connect to [BLE MAC address]?"
-5. User taps "Allow" (the MAC address is meaningless to most users)
+4. System shows a dialog: "Allow [app] to access [device name/MAC]?" -- the dialog mentions data access, not background activity privileges
+5. User taps "Allow" (the dialog text is opaque and does not mention BAL)
 6. App is registered as a companion device manager, added to `BAL_ALLOW_ALLOWLISTED_COMPONENT` allowlist
 7. App can now call `startActivity()` from background services on Android 15
 
@@ -423,21 +423,21 @@ The association has no expiry and persists across reboots. The dialog gives no i
 
 ### Two-Step Trampoline Launch
 
-With the BAL exemption, the ad or phishing launch uses a two-step trampoline to display arbitrary UI from a background service:
+With the BAL exemption, observed adware uses a two-step trampoline to display ads from a background service:
 
 **Step 1 -- Background to trampoline** (via `BAL_ALLOW_ALLOWLISTED_COMPONENT`): The foreground service calls `startActivity()` targeting an obfuscated trampoline activity. This is allowed because the app is on the companion device allowlist.
 
-**Step 2 -- Trampoline to payload** (via `BAL_ALLOW_VISIBLE_WINDOW`): The trampoline activity is now visible, so it launches the real payload activity (ad SDK, phishing overlay, etc.). This is allowed because the calling app has a visible window.
+**Step 2 -- Trampoline to ad SDK** (via `BAL_ALLOW_VISIBLE_WINDOW`): The trampoline activity is now visible, so it launches the ad SDK activity. This is also allowed because the calling app now has a visible window.
 
-The two-step pattern is necessary because the BAL exemption applies to the app's own activities, but the real payload is often an ad SDK activity in a different package namespace within the same APK. The trampoline bridges the permission gap.
+The BAL exemption is per-UID, so all activities within the same APK (same UID) share the exemption. The trampoline pattern is not strictly necessary for BAL purposes -- the ad SDK activity in the same APK would also be allowed. The trampoline likely exists because the ad SDK's own launch logic goes through service or broadcast intermediaries that may not carry the BAL exemption context, or because the native code controlling the flow uses a generic launch-then-redirect pattern.
 
 ### Brute-Force Fallback
 
-Apps without a companion association spam `startActivity()` every 30 seconds, relying on volume to overcome probabilistic blocking. With multiple apps in a coordinated fleet (e.g., 14 apps at 30-second intervals), the device generates hundreds of blocked attempts per hour. These apps simultaneously request `CompanionDeviceManager.associate()` dialogs -- if the user accepts any of them, that app joins the allowlist and starts showing fullscreen ads.
+Apps without a companion association spam `startActivity()` every 30 seconds. BAL blocking is deterministic -- without an exemption, every attempt is blocked. The volume is not about overcoming blocking but about ensuring the app launches an ad immediately if circumstances change (e.g., the app briefly enters the foreground via a notification tap, or the user grants a companion association). With multiple apps in a fleet (e.g., 14 apps at 30-second intervals), the device generates hundreds of blocked attempts per hour. These apps simultaneously request `CompanionDeviceManager.associate()` dialogs -- if the user accepts any of them, that app joins the allowlist and starts showing fullscreen ads.
 
 ### Social Engineering the Dialog
 
-The CompanionDevice dialog shows an opaque Bluetooth MAC address with no context about what permissions are being granted. Adware presents multiple dialogs in rapid succession (3 dialogs in under 90 seconds observed in the wild), training the user to tap "Allow" reflexively.
+The CompanionDevice dialog shows an opaque Bluetooth MAC address with no context about what permissions are being granted. Adware can present multiple dialogs in rapid succession, training the user to tap "Allow" reflexively.
 
 ### Detection
 
